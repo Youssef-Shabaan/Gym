@@ -1,0 +1,15 @@
+D:\Gym Project\Gym\Gym.DAL\bin\Debug\net8.0\Gym.DAL.deps.json
+D:\Gym Project\Gym\Gym.DAL\bin\Debug\net8.0\Gym.DAL.runtimeconfig.json
+D:\Gym Project\Gym\Gym.DAL\bin\Debug\net8.0\Gym.DAL.dll
+D:\Gym Project\Gym\Gym.DAL\bin\Debug\net8.0\Gym.DAL.pdb
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.csproj.AssemblyReference.cache
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.AssemblyInfoInputs.cache
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.AssemblyInfo.cs
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.csproj.CoreCompileInputs.cache
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.sourcelink.json
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.dll
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\refint\Gym.DAL.dll
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.pdb
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\Gym.DAL.genruntimeconfig.cache
+D:\Gym Project\Gym\Gym.DAL\obj\Debug\net8.0\ref\Gym.DAL.dll

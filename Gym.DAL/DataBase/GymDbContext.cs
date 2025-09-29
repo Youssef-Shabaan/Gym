@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Gym.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Gym.DAL.DataBase
 {
-    internal class ApplicationDbContext
+    public class GymDbContext : DbContext
     {
+        public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
+        {
+        }
+        public DbSet<Member> members { get; set; }
     }
 }

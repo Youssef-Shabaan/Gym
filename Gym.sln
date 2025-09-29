@@ -5,6 +5,10 @@ VisualStudioVersion = 17.14.36212.18 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gym.PL", "Gym.PL\Gym.PL.csproj", "{A42168D4-F300-4416-A712-1C7377CC6D40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gym.DAL", "Gym.DAL\Gym.DAL.csproj", "{79878CAC-9961-4E25-A937-C1B9E578F5BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gym.BLL", "Gym.BLL\Gym.BLL.csproj", "{B73419BF-4DA7-4AA4-8F67-BDC1E9BD2CFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{A42168D4-F300-4416-A712-1C7377CC6D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A42168D4-F300-4416-A712-1C7377CC6D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A42168D4-F300-4416-A712-1C7377CC6D40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79878CAC-9961-4E25-A937-C1B9E578F5BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79878CAC-9961-4E25-A937-C1B9E578F5BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79878CAC-9961-4E25-A937-C1B9E578F5BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79878CAC-9961-4E25-A937-C1B9E578F5BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B73419BF-4DA7-4AA4-8F67-BDC1E9BD2CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B73419BF-4DA7-4AA4-8F67-BDC1E9BD2CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B73419BF-4DA7-4AA4-8F67-BDC1E9BD2CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B73419BF-4DA7-4AA4-8F67-BDC1E9BD2CFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
