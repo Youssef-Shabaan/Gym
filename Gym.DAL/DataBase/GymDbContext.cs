@@ -11,9 +11,30 @@ namespace Gym.DAL.DataBase
         }
         public DbSet<Member> members { get; set; }
         public DbSet<MemberShip> memberShips { get; set; }
+        public DbSet<Trainer> trainers { get; set; }
+        public DbSet<Session> sessions { get; set; }
+        public DbSet<SessionName> sessionNames { get; set; }    
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Member>()
+                .Property(m => m.Gender)
+                .HasConversion<string>()
+                .HasMaxLength(50)
+                .HasColumnType("nvarchar(50)");
+
+            modelBuilder.Entity<MemberShip>()
+                .Property(m => m.MemberShipType)
+                .HasConversion<string>()
+                .HasMaxLength(50)
+                .HasColumnType("nvarchar(50)");
+
+
+
+
+
+
+
 
             modelBuilder.Entity<Member>()
                 .HasOne(m => m._MemberShip)

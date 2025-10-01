@@ -11,12 +11,13 @@ namespace Gym.DAL.Entities
     public class Member
     {
         public Member() { }
-        public Member(string name, string email, Gender gender, int? age = null, string? phone = null, string? address = null)
+        public Member(string name, string email, Gender gender,string image , int? age = null, string? phone = null, string? address = null)
         {
             Name = name; 
             Email = email;
             Gender = gender;
             Age = age;
+            Image = image;
             Phone = phone;
             Address = address;
             JoinDate = DateTime.Now;
@@ -26,6 +27,7 @@ namespace Gym.DAL.Entities
         public int Id { get; private set; }
         public string Name { get; private set; }
         public string Email { get; private set; }
+        public string Image { get; set; }
         public Gender Gender { get; private set; }
         public int? Age { get; private set; }
         public string? Phone { get; private set; }   
@@ -45,10 +47,11 @@ namespace Gym.DAL.Entities
         {
             if (member != null)
             {
-                Name += member.Name;
-                Email += member.Email;
+                Name = member.Name;
+                Email = member.Email;
                 Gender = member.Gender;
                 Age = member.Age;
+                Image = member.Image;
                 Phone = member.Phone;
                 Address = member.Address;
                 UpdateDate = member.UpdateDate;

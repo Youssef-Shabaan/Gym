@@ -14,4 +14,6 @@ namespace Gym.DAL.Enums
         Monthly,      
         Yearly
     }
+
+    
 }
