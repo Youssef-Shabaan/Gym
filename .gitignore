@@ -1,1 +1,23 @@
+# Build folders
+bin/
+obj/
+
+# VS specific
 .vs/
+*.user
+*.suo
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+#migrations/
+
+# Others
+*.cache
+*.dll
+*.pdb
