@@ -4,6 +4,7 @@ using Gym.DAL.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    partial class GymDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251001165334_AddMemberShipClass")]
+    partial class AddMemberShipClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,9 +55,6 @@ namespace Gym.DAL.Migrations
                     b.Property<DateTime?>("JoinDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MemberShipId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -66,8 +66,6 @@ namespace Gym.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MemberShipId");
 
                     b.ToTable("members");
                 });
@@ -89,20 +87,6 @@ namespace Gym.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("memberShips");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
-                {
-                    b.HasOne("Gym.DAL.Entities.MemberShip", "_MemberShip")
-                        .WithMany("Members")
-                        .HasForeignKey("MemberShipId");
-
-                    b.Navigation("_MemberShip");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.MemberShip", b =>
-                {
-                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

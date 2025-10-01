@@ -6,5 +6,12 @@ using System.Threading.Tasks;
 
 namespace Gym.DAL.Enums
 {
-    public enum Gender { Male, Female};
+    public enum Gender { Male, Female };
+    public enum MemberShipType
+    {
+        PerSession, 
+        Weekly,      
+        Monthly,      
+        Yearly
+    }
 }
