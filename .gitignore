@@ -1,23 +1,49 @@
-# Build folders
+# Build results
 bin/
 obj/
+out/
+Debug/
+Release/
 
-# VS specific
+# Visual Studio files
 .vs/
 *.user
 *.suo
 
+# Rider IDE
+.idea/
+*.iml
+
+# ASP.NET Core publish output
+wwwroot/dist/
+wwwroot/lib/
+publish/
+*.pubxml
+*.pubxml.user
+
 # Logs
 *.log
 
-# NuGet
+# NuGet packages
 *.nupkg
 *.snupkg
 packages/
 
-#migrations/
-
-# Others
+# Other
+*.tmp
 *.cache
-*.dll
+*.dbmdl
+*.jfm
 *.pdb
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Entity Framework
+Migrations/obj/
+
+# Mac/Linux system files
+.DS_Store
+Thumbs.db
