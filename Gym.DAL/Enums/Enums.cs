@@ -9,11 +9,16 @@ namespace Gym.DAL.Enums
     public enum Gender { Male, Female };
     public enum MemberShipType
     {
-        PerSession, 
-        Weekly,      
-        Monthly,      
+        PerSession,
+        Weekly,
+        Monthly,
         Yearly
     }
-
+    public enum PaymentMethod {
+        Cash,
+        CreditCard,
+        DebitCard,
+        MobilePayment
+    }
     
 }

@@ -11,7 +11,7 @@ namespace Gym.DAL.Entities
     {
         public int Id { get; private set; }
 
-        public string Description { get; private set; }
+        public string? Description { get; private set; }
         public DateTime ScheduleTime { get; private set; }
 
 
