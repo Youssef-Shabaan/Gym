@@ -4,6 +4,7 @@ using Gym.DAL.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    partial class GymDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251003131116_AddPaymentAndAttendance")]
+    partial class AddPaymentAndAttendance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,30 +24,6 @@ namespace Gym.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Gym.DAL.Entities.Attendance", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("isPresent")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("memberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("memberId");
-
-                    b.ToTable("attendances");
-                });
 
             modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
                 {
@@ -114,7 +93,7 @@ namespace Gym.DAL.Migrations
 
                     b.HasIndex("sessionId");
 
-                    b.ToTable("memberSessions");
+                    b.ToTable("MemberSession");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberShip", b =>
@@ -164,7 +143,7 @@ namespace Gym.DAL.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("payments");
+                    b.ToTable("Payment");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
@@ -251,17 +230,6 @@ namespace Gym.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("trainers");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.Attendance", b =>
-                {
-                    b.HasOne("Gym.DAL.Entities.Member", "member")
-                        .WithMany()
-                        .HasForeignKey("memberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("member");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
