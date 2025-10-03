@@ -1,4 +1,6 @@
 using Gym.DAL.DataBase;
+using Gym.DAL.Repo.Abstraction;
+using Gym.DAL.Repo.Implementation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gym.PL
@@ -17,6 +19,8 @@ namespace Gym.PL
 
             builder.Services.AddDbContext<GymDbContext>(options =>options.UseSqlServer(connectionString));
 
+            
+            builder.Services.AddScoped<ITrainerRepo, TrainerRepo>();
 
 
 

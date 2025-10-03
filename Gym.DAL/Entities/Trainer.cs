@@ -22,7 +22,7 @@ namespace Gym.DAL.Entities
         public int Id { get; private set; }
         public string Name { get; private set; }
         public string Email { get; private set; }
-        public string Image { get; private set; }
+        public string? Image { get; private set; }
         public string? Phone { get; private set; }
         public DateTime? JoinDate { get; private set; }
         public DateTime? UpdateDate { get; private set; }

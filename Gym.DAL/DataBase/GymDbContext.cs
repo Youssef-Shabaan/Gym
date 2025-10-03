@@ -45,6 +45,10 @@ namespace Gym.DAL.DataBase
                .HasConversion<string>()
                .HasMaxLength(50)
                .HasColumnType("nvarchar(50)");
+            
+            modelBuilder.Entity<Trainer>()
+                .HasIndex(t => t.Email)
+                .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }
