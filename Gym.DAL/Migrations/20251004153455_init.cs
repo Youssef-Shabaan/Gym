@@ -26,26 +26,13 @@ namespace Gym.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "sessionNames",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_sessionNames", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "trainers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JoinDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -65,7 +52,7 @@ namespace Gym.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Age = table.Column<int>(type: "int", nullable: true),
@@ -93,20 +80,14 @@ namespace Gym.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScheduleTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SessionNameId = table.Column<int>(type: "int", nullable: false),
                     TrainerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_sessions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_sessions_sessionNames_SessionNameId",
-                        column: x => x.SessionNameId,
-                        principalTable: "sessionNames",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sessions_trainers_TrainerId",
                         column: x => x.TrainerId,
@@ -188,6 +169,12 @@ namespace Gym.DAL.Migrations
                 column: "memberId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_members_Email",
+                table: "members",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_members_MemberShipId",
                 table: "members",
                 column: "MemberShipId");
@@ -203,14 +190,15 @@ namespace Gym.DAL.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_sessions_SessionNameId",
-                table: "sessions",
-                column: "SessionNameId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_sessions_TrainerId",
                 table: "sessions",
                 column: "TrainerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_trainers_Email",
+                table: "trainers",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -230,9 +218,6 @@ namespace Gym.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "members");
-
-            migrationBuilder.DropTable(
-                name: "sessionNames");
 
             migrationBuilder.DropTable(
                 name: "trainers");

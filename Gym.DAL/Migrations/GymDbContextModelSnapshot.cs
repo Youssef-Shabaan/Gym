@@ -65,7 +65,7 @@ namespace Gym.DAL.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -96,6 +96,9 @@ namespace Gym.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("MemberShipId");
 
@@ -178,39 +181,21 @@ namespace Gym.DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ScheduleTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("SessionNameId")
-                        .HasColumnType("int");
 
                     b.Property<int>("TrainerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionNameId");
-
                     b.HasIndex("TrainerId");
 
                     b.ToTable("sessions");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.SessionName", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("sessionNames");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Trainer", b =>
@@ -226,7 +211,7 @@ namespace Gym.DAL.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -249,6 +234,9 @@ namespace Gym.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("trainers");
                 });
@@ -305,19 +293,11 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
                 {
-                    b.HasOne("Gym.DAL.Entities.SessionName", "_SessionName")
-                        .WithMany()
-                        .HasForeignKey("SessionNameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Gym.DAL.Entities.Trainer", "_Trainer")
                         .WithMany("Sessions")
                         .HasForeignKey("TrainerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("_SessionName");
 
                     b.Navigation("_Trainer");
                 });

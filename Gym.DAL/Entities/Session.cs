@@ -9,20 +9,33 @@ namespace Gym.DAL.Entities
 {
     public class Session
     {
+        public Session() { }
+        public Session(string name, string description, DateTime scheduleTime) 
+        { 
+            Name = name; 
+            Description = description; 
+            ScheduleTime = scheduleTime; 
+        }
         public int Id { get; private set; }
-
+        public string Name { get; private set; }
         public string? Description { get; private set; }
         public DateTime ScheduleTime { get; private set; }
 
 
         // relation ya hussein
-        [ForeignKey("_SessionName")]
-        public int SessionNameId { get; private set; }
-        public SessionName _SessionName { get; private set; }
-
+        
         [ForeignKey("_Trainer")]
-        public int TrainerId { get; set; }
+        public int? TrainerId { get; set; }
         public Trainer _Trainer { get; private set; }
 
+        public bool Update(Session session)
+        {
+            if (session == null) return false;
+            Name = session.Name;
+            Description = session.Description;
+            ScheduleTime = session.ScheduleTime;
+            TrainerId = session.TrainerId;
+            return true;
+        }
     }
 }
