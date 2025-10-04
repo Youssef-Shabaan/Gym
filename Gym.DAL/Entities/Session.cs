@@ -28,5 +28,14 @@ namespace Gym.DAL.Entities
         public int TrainerId { get; set; }
         public Trainer _Trainer { get; private set; }
 
+        public bool Update(Session session)
+        {
+            if (session == null) return false;
+            Name = session.Name; 
+            Description = session.Description;
+            ScheduleTime = session.ScheduleTime;
+            return true;
+        }
+
     }
 }
