@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251003140057_renamePaymentTable")]
-    partial class renamePaymentTable
+    [Migration("20251003161134_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,30 @@ namespace Gym.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Gym.DAL.Entities.Attendance", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isPresent")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("memberId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("memberId");
+
+                    b.ToTable("attendances");
+                });
 
             modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
                 {
@@ -93,7 +117,7 @@ namespace Gym.DAL.Migrations
 
                     b.HasIndex("sessionId");
 
-                    b.ToTable("MemberSession");
+                    b.ToTable("memberSessions");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberShip", b =>
@@ -230,6 +254,17 @@ namespace Gym.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("trainers");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.Attendance", b =>
+                {
+                    b.HasOne("Gym.DAL.Entities.Member", "member")
+                        .WithMany()
+                        .HasForeignKey("memberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("member");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
