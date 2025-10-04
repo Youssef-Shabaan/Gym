@@ -1,6 +1,7 @@
 ﻿using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,6 +89,23 @@ namespace Gym.DAL.Repo.Implementation
                 return(false, null);
             }
             catch( Exception ex )
+            {
+                return (false, null);
+            }
+        }
+
+        public (bool, Trainer?) GetTrainerSession(int id)
+        {
+            try
+            {
+                var TrainerSession = GymDb.trainers.Where(a => a.Id == id)
+                    .Include(a => a.Sessions)
+                    .FirstOrDefault();
+                if(TrainerSession == null) return(false, null);
+                if(!TrainerSession.Sessions.Any()) return(false, null);
+                return(true, TrainerSession);
+            }
+            catch (Exception ex)
             {
                 return (false, null);
             }

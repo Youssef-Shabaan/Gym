@@ -9,11 +9,12 @@ namespace Gym.DAL.Repo.Abstraction
 {
     public interface ITrainerRepo
     {
-        (bool,string) AddTrainer(Trainer trainer);
-        (bool,string) DeletTrainer(int id);
-        (bool,string) UpdateTrainer(Trainer trainer);
-        (bool,IEnumerable<Trainer>) GetAllTrainers();
-        (bool, Trainer) GetTrainerById(int id);
-        (bool, string) RestoreTrainer(int id);
+        (bool,string?) AddTrainer(Trainer trainer);
+        (bool,string?) DeletTrainer(int id);
+        (bool,string?) UpdateTrainer(Trainer trainer);
+        (bool,IEnumerable<Trainer>?) GetAllTrainers();
+        (bool, Trainer?) GetTrainerSession(int id);
+        (bool, Trainer?) GetTrainerById(int id);
+        (bool, string?) RestoreTrainer(int id);
     }
 }
