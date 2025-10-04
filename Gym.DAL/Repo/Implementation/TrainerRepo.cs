@@ -21,37 +21,116 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var result = GymDb.trainers.Add(trainer);
+                GymDb.SaveChanges();
                 if(result.Entity.Id == 0)
                 {
-                    return (false, "Error adding this Trainer");
+                    return (false, "Error adding this Trainer.");
                 }
-                GymDb.SaveChanges();
                 return (true, null);
             }
             catch (Exception ex)
             {
-                return(false, "Error adding this Trainer");
+                return(false, "Error adding this Trainer.");
             }
         }
 
-        public (bool, string) DeletTrainer(int id)
+        public (bool, string?) DeletTrainer(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var trainer = GymDb.trainers.FirstOrDefault(x => x.Id == id);
+                if(trainer != null)
+                {
+                    if(trainer.Delete())
+                    {
+                        GymDb.SaveChanges();
+                        return (true, null);
+                    }
+                    return (false, "This trainer is already deleted.");
+                }
+                return(false, "May be this Trainer not found.");
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message);
+            }
         }
 
-        public (bool, IEnumerable<Trainer>) GetAllTrainers()
+        public (bool, IEnumerable<Trainer>?) GetAllTrainers()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var trainers = GymDb.trainers
+                    .Where(t => !t.IsDeleted)
+                    .ToList();
+
+                if (!trainers.Any())
+                    return (false, null);
+
+                return (true, trainers);
+            }
+            catch (Exception ex)
+            {
+                return (false, null);
+            }
         }
 
-        public (bool, Trainer) GetTrainerById(int id)
+
+        public (bool, Trainer?) GetTrainerById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var trainer = GymDb.trainers.FirstOrDefault(a => a.Id == id); 
+                if(trainer != null)
+                {
+                    return(true, trainer);
+                }
+                return(false, null);
+            }
+            catch( Exception ex )
+            {
+                return (false, null);
+            }
         }
 
-        public (bool, string) UpdateTrainer(Trainer trainer)
+        public (bool, string?) RestoreTrainer(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var trainer = GymDb.trainers.Where(a => a.Id == id).FirstOrDefault();
+                if (trainer == null) return (false, "This trainer not exists.");
+                if(trainer.RestoreTrainer())
+                {
+                    return (true, null);
+                }
+                return (false, "This trainer already exists.");
+            }
+            catch(Exception ex)
+            {
+                return (false, null);
+            }
+        }
+
+        public (bool, string?) UpdateTrainer(Trainer trainer)
+        {
+            try
+            {
+                var oldTrainer = GymDb.trainers.Where(a => a.Id == trainer.Id).FirstOrDefault();
+                if(oldTrainer == null)
+                {
+                    return(false, "May be this Trainer not found.");
+                }
+                if(oldTrainer.EditTrainer(trainer))
+                {
+                    GymDb.SaveChanges();
+                    return (true, null);
+                }
+                return (false, "Some thig goes wrong.");
+            }
+            catch (Exception ex)
+            {
+                return(false, ex.Message);
+            }
         }
     }
 }

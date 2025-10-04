@@ -10,7 +10,7 @@ namespace Gym.DAL.Entities
     public class Trainer
     {
         public Trainer() { }
-        public Trainer(string name, string email,string image, string? phone = null)
+        public Trainer(string name, string email,string? image = null, string? phone = null)
         {
             Name = name; 
             Email = email;

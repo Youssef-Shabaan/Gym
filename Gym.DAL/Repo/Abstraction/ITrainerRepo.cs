@@ -13,6 +13,7 @@ namespace Gym.DAL.Repo.Abstraction
         (bool,string) DeletTrainer(int id);
         (bool,string) UpdateTrainer(Trainer trainer);
         (bool,IEnumerable<Trainer>) GetAllTrainers();
-        (bool, Trainer) GetTrainerById(int id); 
+        (bool, Trainer) GetTrainerById(int id);
+        (bool, string) RestoreTrainer(int id);
     }
 }
