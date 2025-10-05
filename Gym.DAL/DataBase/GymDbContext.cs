@@ -13,7 +13,6 @@ namespace Gym.DAL.DataBase
         public DbSet<MemberShip> memberShips { get; set; }
         public DbSet<Trainer> trainers { get; set; }
         public DbSet<Session> sessions { get; set; }
-        public DbSet<SessionName> sessionNames { get; set; }
         public DbSet<MemberSession> memberSessions { get; set; }
         public DbSet<Payment> payments { get; set; }
         public DbSet<Attendance> attendances { get; set; }
@@ -45,6 +44,14 @@ namespace Gym.DAL.DataBase
                .HasConversion<string>()
                .HasMaxLength(50)
                .HasColumnType("nvarchar(50)");
+
+            modelBuilder.Entity<Member>()
+                .HasIndex(a => a.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<Trainer>()
+                .HasIndex(a => a.Email)
+                .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }

@@ -5,6 +5,12 @@ namespace Gym.DAL.Entities
 {
     public class MemberSession
     {
+        public MemberSession() { }
+        public MemberSession(int memberId, int sessionId) 
+        {
+            this.memberId = memberId;
+            this.sessionId = sessionId;
+        }
 
         [ForeignKey("_Member")]
         public int memberId { get; private set; }
