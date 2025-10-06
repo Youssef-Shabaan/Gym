@@ -24,7 +24,7 @@ namespace Gym.DAL.Repo.Implementation
                 var result = GymDb.trainers.Add(trainer);
                 GymDb.SaveChanges();
 
-                if (result.Entity.Id == 0)
+                if (result.Entity.Trainer_Id == 0)
                     return (false, "Error adding this Trainer");
 
                 return (true, null);
@@ -39,7 +39,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var oldTrainer = GymDb.trainers.FirstOrDefault(a => a.Id == trainer.Id);
+                var oldTrainer = GymDb.trainers.FirstOrDefault(a => a.Trainer_Id == trainer.Trainer_Id);
                 if (oldTrainer == null)
                     return (false, "Trainer not found.");
 
@@ -61,7 +61,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(x => x.Id == id);
+                var trainer = GymDb.trainers.FirstOrDefault(x => x.Trainer_Id == id);
                 if (trainer != null)
                 {
                     if (trainer.Delete())
@@ -83,7 +83,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(x => x.Id == id);
+                var trainer = GymDb.trainers.FirstOrDefault(x => x.Trainer_Id == id);
                 if (trainer == null)
                     return (false, "Trainer not found.");
 
@@ -123,7 +123,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(a => a.Id == id);
+                var trainer = GymDb.trainers.FirstOrDefault(a => a.Trainer_Id == id);
                 if (trainer != null)
                     return (true, trainer);
 
@@ -141,7 +141,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var trainer = GymDb.trainers
                     .Include(t => t.Sessions)
-                    .FirstOrDefault(t => t.Id == trainerId);
+                    .FirstOrDefault(t => t.Trainer_Id == trainerId);
 
                 if (trainer == null || trainer.Sessions == null || !trainer.Sessions.Any())
                     return (false, null);

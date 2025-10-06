@@ -83,7 +83,7 @@ namespace Gym.DAL.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScheduleTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TrainerId = table.Column<int>(type: "int", nullable: false)
+                    TrainerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,8 +92,7 @@ namespace Gym.DAL.Migrations
                         name: "FK_sessions_trainers_TrainerId",
                         column: x => x.TrainerId,
                         principalTable: "trainers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

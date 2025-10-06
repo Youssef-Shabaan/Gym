@@ -1,14 +1,16 @@
 ﻿using Gym.DAL.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace Gym.DAL.DataBase
 {
-    public class GymDbContext : DbContext
+    public class GymDbContext : IdentityDbContext<User>
     {
         public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
         {
         }
+        public DbSet<User> users { get; set; }
         public DbSet<Member> members { get; set; }
         public DbSet<MemberShip> memberShips { get; set; }
         public DbSet<Trainer> trainers { get; set; }
@@ -44,14 +46,6 @@ namespace Gym.DAL.DataBase
                .HasConversion<string>()
                .HasMaxLength(50)
                .HasColumnType("nvarchar(50)");
-
-            modelBuilder.Entity<Member>()
-                .HasIndex(a => a.Email)
-                .IsUnique();
-
-            modelBuilder.Entity<Trainer>()
-                .HasIndex(a => a.Email)
-                .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }

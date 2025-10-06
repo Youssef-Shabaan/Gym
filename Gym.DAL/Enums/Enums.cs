@@ -20,5 +20,11 @@ namespace Gym.DAL.Enums
         DebitCard,
         MobilePayment
     }
-    
+    public enum UserType
+    {
+        Member,
+        Trainer,
+        Admin
+    }
+
 }

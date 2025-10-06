@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251004153455_init")]
-    partial class init
+    [Migration("20251006201539_relation")]
+    partial class relation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,6 +181,12 @@ namespace Gym.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -191,7 +197,7 @@ namespace Gym.DAL.Migrations
                     b.Property<DateTime>("ScheduleTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TrainerId")
+                    b.Property<int?>("TrainerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -267,13 +273,13 @@ namespace Gym.DAL.Migrations
             modelBuilder.Entity("Gym.DAL.Entities.MemberSession", b =>
                 {
                     b.HasOne("Gym.DAL.Entities.Member", "_Member")
-                        .WithMany()
+                        .WithMany("memberSessions")
                         .HasForeignKey("memberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Gym.DAL.Entities.Session", "_Session")
-                        .WithMany()
+                        .WithMany("memberSessions")
                         .HasForeignKey("sessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -298,16 +304,24 @@ namespace Gym.DAL.Migrations
                 {
                     b.HasOne("Gym.DAL.Entities.Trainer", "_Trainer")
                         .WithMany("Sessions")
-                        .HasForeignKey("TrainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TrainerId");
 
                     b.Navigation("_Trainer");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
+                {
+                    b.Navigation("memberSessions");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberShip", b =>
                 {
                     b.Navigation("Members");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
+                {
+                    b.Navigation("memberSessions");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Trainer", b =>

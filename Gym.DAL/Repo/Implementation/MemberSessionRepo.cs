@@ -1,12 +1,7 @@
 ﻿using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -22,7 +17,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var member = GymDb.members.FirstOrDefault(a => a.Id ==  memberId);
+                var member = GymDb.members.FirstOrDefault(a => a.Member_Id ==  memberId);
                 if (member == null) return false;
 
                 var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
@@ -31,6 +26,11 @@ namespace Gym.DAL.Repo.Implementation
                 bool alreadyExists = GymDb.memberSessions
                         .Any(ms => ms.memberId == memberId && ms.sessionId == sessionId);
                 if (alreadyExists) return false;
+
+                if (session.Count >= session.Capacity)
+                    return false;
+                session.Count++;
+
 
                 var newMember = new MemberSession(memberId, sessionId);
                 GymDb.memberSessions.Add(newMember);
@@ -69,7 +69,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var member = GymDb.members.Any(a => a.Id == memberId);
+                var member = GymDb.members.Any(a => a.Member_Id == memberId);
                 if(!member) return(false,null);
 
                 var sessions = GymDb.memberSessions
@@ -90,8 +90,8 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var session = GymDb.sessions.Any(a => a.Id == sessionId);
-                if (!session) return false;
+                var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
+                if (session == null) return false;
 
                 var memberSessions = GymDb.memberSessions
                    .Where(ms => ms.sessionId == sessionId).ToList();
@@ -99,6 +99,7 @@ namespace Gym.DAL.Repo.Implementation
                 if (!memberSessions.Any())
                     return false;
                 GymDb.memberSessions.RemoveRange(memberSessions);
+                session.Count = 0;
                 GymDb.SaveChanges();
 
                 return true;
@@ -113,7 +114,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var memberExists = GymDb.members.Any(m => m.Id == memberId);
+                var memberExists = GymDb.members.Any(m => m.Member_Id == memberId);
                 if (!memberExists) return false;
 
                 var memberSessions = GymDb.memberSessions
@@ -121,6 +122,13 @@ namespace Gym.DAL.Repo.Implementation
                     .ToList();
 
                 if (!memberSessions.Any()) return false;
+
+                foreach (var ms in memberSessions)
+                {
+                    var session = GymDb.sessions.FirstOrDefault(s => s.Id == ms.sessionId);
+                    if (session != null && session.Count > 0)
+                        session.Count--;
+                }
 
                 GymDb.memberSessions.RemoveRange(memberSessions);
                 GymDb.SaveChanges();
@@ -136,7 +144,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var member = GymDb.members.FirstOrDefault(a => a.Id == memberId);
+                var member = GymDb.members.FirstOrDefault(a => a.Member_Id == memberId);
                 if (member == null) return false;
 
                 var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
@@ -145,6 +153,9 @@ namespace Gym.DAL.Repo.Implementation
                 var membersession = GymDb.memberSessions
                     .FirstOrDefault(ms => ms.memberId == memberId && ms.sessionId == sessionId);
                 if (membersession == null) return false;
+
+                if (session.Count > 0)
+                    session.Count--;
 
                 GymDb.memberSessions.Remove(membersession);
                 GymDb.SaveChanges();
