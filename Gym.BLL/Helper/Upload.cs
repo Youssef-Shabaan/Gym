@@ -1,10 +1,11 @@
-﻿
+
 using Microsoft.AspNetCore.Http;
 
 namespace Gym.BLL.Helper
 {
     public static class Upload
     {
+
         public static string UploadFile(string FolderName, IFormFile File)
         {
 
@@ -59,6 +60,5 @@ namespace Gym.BLL.Helper
                 return ex.Message;
             }
         }
-
     }
 }
