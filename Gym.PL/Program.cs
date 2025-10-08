@@ -1,3 +1,4 @@
+using Gym.BLL.Mapper;
 using Gym.BLL.Service.Abstraction;
 using Gym.BLL.Service.Implementation;
 using Gym.DAL.DataBase;
@@ -38,6 +39,9 @@ namespace Gym.PL
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
+
+            // Mapper
+            builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
             var app = builder.Build();
 
