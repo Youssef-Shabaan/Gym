@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Gym.BLL\Gym.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Files\" />
+  </ItemGroup>
+
 </Project>
