@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Microsoft.AspNetCore.Http;
 
 namespace Gym.BLL.Helper
 {
@@ -40,7 +37,6 @@ namespace Gym.BLL.Helper
             }
 
         }
-
 
         public static string RemoveFile(string FolderName, string fileName)
         {
