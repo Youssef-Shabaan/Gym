@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Gym.BLL.Helper
 {
     public static class Upload
     {
+
         public static string UploadFile(string FolderName, IFormFile File)
         {
 
@@ -41,7 +38,6 @@ namespace Gym.BLL.Helper
 
         }
 
-
         public static string RemoveFile(string FolderName, string fileName)
         {
 
@@ -63,6 +59,5 @@ namespace Gym.BLL.Helper
                 return ex.Message;
             }
         }
-
     }
 }
