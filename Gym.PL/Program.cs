@@ -1,4 +1,8 @@
+using Gym.BLL.Service.Abstraction;
+using Gym.BLL.Service.Implementation;
 using Gym.DAL.DataBase;
+using Gym.DAL.Repo.Abstraction;
+using Gym.DAL.Repo.Implementation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gym.PL
@@ -17,9 +21,23 @@ namespace Gym.PL
 
             builder.Services.AddDbContext<GymDbContext>(options =>options.UseSqlServer(connectionString));
 
+            // Repositories Registration
+            builder.Services.AddScoped<IAttendanceRepo, AttendanceRepo>();
+            builder.Services.AddScoped<IMemberRepo, MemberRepo>();
+            builder.Services.AddScoped<IMemberSessionRepo, MemberSessionRepo>();
+            builder.Services.AddScoped<IMemberShipRepo, MemberShipRepo>();
+            builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
+            builder.Services.AddScoped<ISessionRepo, SessionRepo>();
+            builder.Services.AddScoped<ITrainerRepo, TrainerRepo>();
 
-
-
+            // Services Registration
+            builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+            builder.Services.AddScoped<IMemberService, MemberService>();
+            builder.Services.AddScoped<IMemberSessionService, MemberSessionService>();
+            builder.Services.AddScoped<IMemberShipService, MemberShipService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<ITrainerService, TrainerService>();
 
             var app = builder.Build();
 
