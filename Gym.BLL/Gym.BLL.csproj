@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ModelVM\" />
     <Folder Include="Mapper\" />
   </ItemGroup>
 

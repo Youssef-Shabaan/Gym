@@ -12,21 +12,25 @@ namespace Gym.DAL.Entities
     public class Trainer
     {
         public Trainer() { }
-        public Trainer(string name, string image, int age, string address)
+        public Trainer(string name, string image, int age,string? info, string? address, User user)
         {
             Name = name;
             Image = image;
             JoinDate = DateTime.Now;
             IsDeleted = false;
             Age = age;
+            Info = info;
             Address = address;
+            User = user;
+            UserId = user.Id;
         }
         [Key]
         public int Trainer_Id { get; private set; }
         public string Name { get; private set; }
         public int Age { get; private set; }
+        public string? Info { get; private set; }
         public string Image { get; private set; }
-        public string Address { get; set; }
+        public string? Address { get; set; }
         public DateTime? JoinDate { get; private set; }
         public DateTime? UpdateDate { get; private set; }
         public bool IsDeleted { get; private set; }
@@ -42,11 +46,18 @@ namespace Gym.DAL.Entities
         {
             if (trainer == null) return false;
             Name = trainer.Name;
-
             Image = trainer.Image;
             UpdateDate = DateTime.Now;
             Address = trainer.Address;
+            Info = trainer.Info;
             Age = trainer.Age;
+
+            if (trainer.User != null)
+            {
+                User.Email = trainer.User.Email;
+                User.PhoneNumber = trainer.User.PhoneNumber;
+            }
+
             return true;
         }
 

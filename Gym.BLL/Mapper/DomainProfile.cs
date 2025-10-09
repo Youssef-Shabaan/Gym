@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Gym.BLL.ModelVM.Trainer;
+using Gym.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +11,13 @@ namespace Gym.BLL.Mapper
 {
     public class DomainProfile : Profile
     {
+        public DomainProfile() 
+        { 
+            CreateMap<Trainer, GetTrainerVM>()
+                .ForMember(a => a.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber));
+
+            CreateMap<UpdateTrainerVM, Trainer>()
+                .ForPath(a => a.User.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
+        }
     }
 }
