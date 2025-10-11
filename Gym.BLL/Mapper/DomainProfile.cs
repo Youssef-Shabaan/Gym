@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Gym.BLL.ModelVM.Session;
 using Gym.BLL.ModelVM.Member;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.DAL.Entities;
@@ -31,6 +32,10 @@ namespace Gym.BLL.Mapper
 
                 .ForPath(a => a.User.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ReverseMap();
+
+            CreateMap<AddUpdateSessionVM, Session>().ReverseMap();
+
+            CreateMap<Session, GetSessionVM>().ReverseMap();
         }
     }
 }

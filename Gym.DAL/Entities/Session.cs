@@ -9,8 +9,6 @@ namespace Gym.DAL.Entities
 {
     public class Session
     {
-        public int Count { get;  set; } = 0;
-        public int Capacity { get; private set; }
         public Session() { }
         public Session(string name, string description, DateTime scheduleTime, int capactiy) 
         {
@@ -23,6 +21,8 @@ namespace Gym.DAL.Entities
         public string Name { get; private set; }
         public string? Description { get; private set; }
         public DateTime ScheduleTime { get; private set; }
+        public int Count { get;  set; } = 0;
+        public int Capacity { get; private set; }
 
 
         // relation ya hussein
