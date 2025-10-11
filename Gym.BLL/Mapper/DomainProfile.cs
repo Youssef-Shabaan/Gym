@@ -11,7 +11,8 @@ namespace Gym.BLL.Mapper
         public DomainProfile()
         {
             CreateMap<Trainer, GetTrainerVM>()
-                .ForMember(a => a.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber));
+                .ForMember(a => a.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ReverseMap();
 
             CreateMap<UpdateTrainerVM, Trainer>()
                 .ForPath(a => a.User.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
@@ -28,6 +29,8 @@ namespace Gym.BLL.Mapper
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
                 .ReverseMap();
 
+                .ForPath(a => a.User.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ReverseMap();
         }
     }
 }
