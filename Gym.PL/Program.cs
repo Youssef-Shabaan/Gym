@@ -2,8 +2,10 @@ using Gym.BLL.Mapper;
 using Gym.BLL.Service.Abstraction;
 using Gym.BLL.Service.Implementation;
 using Gym.DAL.DataBase;
+using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
 using Gym.DAL.Repo.Implementation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gym.PL
@@ -21,6 +23,11 @@ namespace Gym.PL
             var connectionString = builder.Configuration.GetConnectionString("GymConnection");
 
             builder.Services.AddDbContext<GymDbContext>(options =>options.UseSqlServer(connectionString));
+
+            //Identity Services
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<GymDbContext>()
+                .AddDefaultTokenProviders();
 
             // Repositories Registration
             builder.Services.AddScoped<IAttendanceRepo, AttendanceRepo>();
@@ -58,6 +65,7 @@ namespace Gym.PL
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

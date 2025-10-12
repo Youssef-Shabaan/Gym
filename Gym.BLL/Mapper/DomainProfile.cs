@@ -30,8 +30,7 @@ namespace Gym.BLL.Mapper
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
                 .ReverseMap();
 
-                .ForPath(a => a.User.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ReverseMap();
+               
 
             CreateMap<AddUpdateSessionVM, Session>().ReverseMap();
 

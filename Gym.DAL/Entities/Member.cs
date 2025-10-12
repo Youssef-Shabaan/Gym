@@ -12,7 +12,7 @@ namespace Gym.DAL.Entities
     public class Member
     {
         public Member() { }
-        public Member(string name, Gender gender,string image , int age = null, string? address = null)
+        public Member(string name, Gender gender,string image , int age, string? address = null)
         {
             Name = name; 
             Gender = gender;
