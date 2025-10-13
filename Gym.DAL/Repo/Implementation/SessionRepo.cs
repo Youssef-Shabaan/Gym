@@ -1,11 +1,6 @@
 ﻿using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -91,7 +86,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var PastSessions = GymDb.sessions.Where(a => a.ScheduleTime <  DateTime.Now).ToList();
+                var PastSessions = GymDb.sessions.Where(a => a.EndTime <  DateTime.Now).ToList();
                 if(!PastSessions.Any() || PastSessions == null)
                 {
                     return(false, null);
@@ -108,7 +103,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var sessions = GymDb.sessions.Where(a => a.TrainerId == trainerId).ToList();
+                var sessions = GymDb.sessions.Where(a => a.TrainerId == trainerId.ToString()).ToList();
                 if(!sessions.Any() || sessions == null)
                 {
                     return(false, null);
@@ -125,7 +120,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var UpcomingSessions = GymDb.sessions.Where(a => a.ScheduleTime >= DateTime.Now).ToList();
+                var UpcomingSessions = GymDb.sessions.Where(a => a.StartTime >= DateTime.Now).ToList();
                 if (!UpcomingSessions.Any() || UpcomingSessions == null)
                 {
                     return (false, null);

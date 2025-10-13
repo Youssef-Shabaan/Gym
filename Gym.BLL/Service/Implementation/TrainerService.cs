@@ -36,7 +36,7 @@ namespace Gym.BLL.Service.Implementation
 
                 var imagePath = Upload.UploadFile("Files", trainervm.Image);
 
-                Trainer newTrainer = new Trainer(trainervm.Name, imagePath, trainervm.Age, trainervm.Info, trainervm.Address, user);
+                Trainer newTrainer = new Trainer(trainervm.Name, imagePath, trainervm.Age, trainervm.Info, trainervm.Address, trainervm.Capacity);
                 var trainer = trainerRepo.AddTrainer(newTrainer);
                 if(!trainer.Item1)
                 {
@@ -126,10 +126,9 @@ namespace Gym.BLL.Service.Implementation
                     {
                         Name = session.Name,
                         Description = session.Description,
-                        Count= session.Count,
-                        Capacity= session.Capacity,
-                        ScheduleTime= session.ScheduleTime,
-                        State = session.ScheduleTime < DateTime.Now ? "Finished" : "Not Started Yet"
+                        StartTime= session.StartTime,
+                        EndTime = session.EndTime,
+                        State = session.EndTime < DateTime.Now ? "Past" :(DateTime.Now>session.StartTime?"Playing":"Upcomming")
                     });
                 }
                 return(true, trainerSessions);

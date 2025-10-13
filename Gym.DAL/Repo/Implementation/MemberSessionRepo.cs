@@ -17,22 +17,18 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var member = GymDb.members.FirstOrDefault(a => a.Member_Id == memberId);
+                var member = GymDb.members.FirstOrDefault(a => a.Id == memberId.ToString());
                 if (member == null) return (false, "member is not found");
 
                 var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
                 if (session == null) return (false, "session is not found");
+                var trainer = GymDb.trainers.FirstOrDefault(a => a.Id == session.TrainerId.ToString());   
 
                 bool alreadyExists = GymDb.memberSessions
-                        .Any(ms => ms.memberId == memberId && ms.sessionId == sessionId);
+                        .Any(ms => ms.memberId == memberId.ToString() && ms.sessionId == sessionId);
                 if (alreadyExists) return (false, "already exist");
 
-                if (session.Count >= session.Capacity)
-                    return (false, "session is full");
-                session.Count++;
-
-
-                var newMember = new MemberSession(memberId, sessionId);
+                var newMember = new MemberSession(memberId.ToString(), sessionId);
                 GymDb.memberSessions.Add(newMember);
                 GymDb.SaveChanges();
                 return (true, "your registeration is done");
@@ -69,11 +65,11 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var member = GymDb.members.Any(a => a.Member_Id == memberId);
+                var member = GymDb.members.Any(a => a.Id == memberId.ToString());
                 if (!member) return (false, "member is not found", null);
 
                 var sessions = GymDb.memberSessions
-                    .Where(a => a.memberId == memberId)
+                    .Where(a => a.memberId == memberId.ToString())
                     .Select(a => a._Session).ToList();
                 if (!sessions.Any()) return (false, "member havn't sessions", null);
 
@@ -98,7 +94,7 @@ namespace Gym.DAL.Repo.Implementation
                 if (!memberSessions.Any())
                     return (false, "session is empty");
                 GymDb.memberSessions.RemoveRange(memberSessions);
-                session.Count = 0;
+       
                 GymDb.SaveChanges();
 
                 return (true, "done");
@@ -113,21 +109,15 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var memberExists = GymDb.members.Any(m => m.Member_Id == memberId);
+                var memberExists = GymDb.members.Any(m => m.Id == memberId.ToString());
                 if (!memberExists) return (false, "member is not found");
 
                 var memberSessions = GymDb.memberSessions
-                    .Where(ms => ms.memberId == memberId)
+                    .Where(ms => ms.memberId == memberId.ToString())
                     .ToList();
 
                 if (!memberSessions.Any()) return (false, "member havn't any sessions");
 
-                foreach (var ms in memberSessions)
-                {
-                    var session = GymDb.sessions.FirstOrDefault(s => s.Id == ms.sessionId);
-                    if (session != null && session.Count > 0)
-                        session.Count--;
-                }
 
                 GymDb.memberSessions.RemoveRange(memberSessions);
                 GymDb.SaveChanges();
@@ -143,18 +133,15 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var member = GymDb.members.FirstOrDefault(a => a.Member_Id == memberId);
+                var member = GymDb.members.FirstOrDefault(a => a.Id == memberId.ToString());
                 if (member == null) return (false, "member is not found");
 
                 var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
                 if (session == null) return (false, "session is not found");
 
                 var membersession = GymDb.memberSessions
-                    .FirstOrDefault(ms => ms.memberId == memberId && ms.sessionId == sessionId);
+                    .FirstOrDefault(ms => ms.memberId == memberId.ToString() && ms.sessionId == sessionId);
                 if (membersession == null) return (false, "member is not register in this session");
-
-                if (session.Count > 0)
-                    session.Count--;
 
                 GymDb.memberSessions.Remove(membersession);
                 GymDb.SaveChanges();

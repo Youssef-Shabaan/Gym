@@ -10,25 +10,25 @@ namespace Gym.DAL.Entities
     public class Session
     {
         public Session() { }
-        public Session(string name, string description, DateTime scheduleTime, int capactiy) 
+        public Session(string name, string description, DateTime StartTime,DateTime EndTime, int capactiy) 
         {
             Name = name; 
             Description = description; 
-            ScheduleTime = scheduleTime;
-            this.Capacity = capactiy;
+            this.StartTime = StartTime;
+            this.EndTime = EndTime;
+            
         }
         public int Id { get; private set; }
         public string Name { get; private set; }
         public string? Description { get; private set; }
-        public DateTime ScheduleTime { get; private set; }
-        public int Count { get;  set; } = 0;
-        public int Capacity { get; private set; }
+        public DateTime StartTime { get; private set; }
+        public DateTime EndTime { get; private set; }
 
 
         // relation ya hussein
         
         [ForeignKey("_Trainer")]
-        public int? TrainerId { get; set; }
+        public string TrainerId { get; set; }
         public Trainer _Trainer { get; private set; }
         public List<MemberSession> memberSessions { get; private set; }
         public bool Update(Session session)
@@ -36,7 +36,8 @@ namespace Gym.DAL.Entities
             if (session == null) return false;
             Name = session.Name;
             Description = session.Description;
-            ScheduleTime = session.ScheduleTime;
+            StartTime = session.StartTime;
+            EndTime = session.EndTime;
             TrainerId = session.TrainerId;
             return true;
         }

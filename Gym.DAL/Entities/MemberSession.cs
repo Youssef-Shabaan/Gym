@@ -6,14 +6,14 @@ namespace Gym.DAL.Entities
     public class MemberSession
     {
         public MemberSession() { }
-        public MemberSession(int memberId, int sessionId) 
+        public MemberSession(string memberId, int sessionId) 
         {
             this.memberId = memberId;
             this.sessionId = sessionId;
         }
 
         [ForeignKey("_Member")]
-        public int memberId { get; private set; }
+        public string memberId { get; private set; }
         public Member _Member { get; private set; }
         [ForeignKey("_Session")]
         public int sessionId { get; private set; }

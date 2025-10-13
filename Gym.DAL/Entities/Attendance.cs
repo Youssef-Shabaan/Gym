@@ -10,7 +10,7 @@ namespace Gym.DAL.Entities
         public int id { get;private set; }
         public DateTime date { get; private set; }
         [ForeignKey("member")]
-        public int memberId { get; private set; }
+        public string memberId { get; private set; }
         public Member member { get; private set; }
         public bool isPresent { get; private set; }
         public bool EditAttendance(Attendance attendance)

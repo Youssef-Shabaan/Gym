@@ -10,7 +10,7 @@ namespace Gym.DAL.Entities
         public decimal Amount { get; private set; }
         public DateTime PaymentDate { get; private set; }
         [ForeignKey("Member")]
-        public int MemberId { get; private set; }
+        public string MemberId { get; private set; }
         public Member Member { get; private set; }
         public PaymentMethod paymentMethod { get; private set; }
         public bool EditPayment(Payment payment) {

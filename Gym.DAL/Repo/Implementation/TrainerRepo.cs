@@ -2,9 +2,6 @@
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -23,10 +20,6 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var result = GymDb.trainers.Add(trainer);
                 GymDb.SaveChanges();
-
-                if (result.Entity.Trainer_Id == 0)
-                    return (false, "Error adding this Trainer");
-
                 return (true, null);
             }
             catch (Exception ex)
@@ -39,7 +32,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var oldTrainer = GymDb.trainers.FirstOrDefault(a => a.Trainer_Id == trainer.Trainer_Id);
+                var oldTrainer = GymDb.trainers.FirstOrDefault(a => a.Id == trainer.Id);
                 if (oldTrainer == null)
                     return (false, "Trainer not found.");
 
@@ -61,7 +54,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(x => x.Trainer_Id == id);
+                var trainer = GymDb.trainers.FirstOrDefault(x => x.Id == id.ToString());
                 if (trainer != null)
                 {
                     if (trainer.Delete())
@@ -83,7 +76,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(x => x.Trainer_Id == id);
+                var trainer = GymDb.trainers.FirstOrDefault(x => x.Id == id.ToString());
                 if (trainer == null)
                     return (false, "Trainer not found.");
 
@@ -123,7 +116,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(a => a.Trainer_Id == id);
+                var trainer = GymDb.trainers.FirstOrDefault(a => a.Id == id.ToString());
                 if (trainer != null)
                     return (true, trainer);
 
@@ -141,7 +134,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var trainer = GymDb.trainers
                     .Include(t => t.Sessions)
-                    .FirstOrDefault(t => t.Trainer_Id == trainerId);
+                    .FirstOrDefault(t => t.Id == trainerId.ToString());
 
                 if (trainer == null || trainer.Sessions == null || !trainer.Sessions.Any())
                     return (false, null);

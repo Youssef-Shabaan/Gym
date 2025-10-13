@@ -27,5 +27,6 @@ namespace Gym.BLL.ModelVM.Trainer
 
         [Required, DataType(DataType.Password)]
         public string Password { get; set; }
+        public int Capacity { get; set; }
     }
 }

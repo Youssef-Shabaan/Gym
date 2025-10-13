@@ -1,18 +1,13 @@
 ﻿using Gym.DAL.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gym.DAL.Entities
 {
-    public class Member
+    public class Member : User
     {
         public Member() { }
-        public Member(string name, Gender gender,string image , int age, string? address = null)
+        public Member(string name, Gender gender,string image , int age, string? address = null):base(UserType.Member)
         {
             Name = name; 
             Gender = gender;
@@ -22,8 +17,6 @@ namespace Gym.DAL.Entities
             JoinDate = DateTime.Now;
             IsDeleted = false;
         }
-        [Key]
-        public int Member_Id { get; private set; }
         public string Name { get; private set; }
         public string Image { get; set; }
         public Gender Gender { get; private set; }
@@ -39,9 +32,6 @@ namespace Gym.DAL.Entities
         public int? MemberShipId { get; private set; }
         public MemberShip _MemberShip { get; private set; }
         public List<MemberSession> memberSessions { get; private set; }
-        [ForeignKey("User")]
-        public string UserId { get; private set; }
-        public User User { get; private set; }
         public bool EditMember(Member member)
         {
             if (member != null)
@@ -52,6 +42,8 @@ namespace Gym.DAL.Entities
                 Image = member.Image;
                 Address = member.Address;
                 UpdateDate = member.UpdateDate;
+                base.Email = member.Email;
+                base.PhoneNumber = member.PhoneNumber;
                 return true;
             }
             return false;

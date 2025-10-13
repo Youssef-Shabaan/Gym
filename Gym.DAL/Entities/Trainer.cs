@@ -1,18 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using System;
-using System.Collections.Generic;
+﻿using Gym.DAL.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Gym.DAL.Entities
 {
-    public class Trainer
+    public class Trainer : User
     {
         public Trainer() { }
-        public Trainer(string name, string image, int age,string? info, string? address, User user)
+        public Trainer(string name, string image, int age, string? info, string? address, int capacity): base(UserType.Trainer)
         {
             Name = name;
             Image = image;
@@ -21,11 +16,8 @@ namespace Gym.DAL.Entities
             Age = age;
             Info = info;
             Address = address;
-            User = user;
-            UserId = user.Id;
+            Capacity = capacity;
         }
-        [Key]
-        public int Trainer_Id { get; private set; }
         public string Name { get; private set; }
         public int Age { get; private set; }
         public string? Info { get; private set; }
@@ -35,13 +27,13 @@ namespace Gym.DAL.Entities
         public DateTime? UpdateDate { get; private set; }
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOn { get; private set; }
+        public int Count { get; set; } = 0;
+        public int Capacity { get; private set; }
 
 
         //relation ya hussein
         public IEnumerable<Session> Sessions { get; private set; }
-        [ForeignKey("User")]
-        public string UserId { get; private set; }
-        public User User { get; private set; }
+
         public bool EditTrainer(Trainer trainer)
         {
             if (trainer == null) return false;
@@ -51,19 +43,15 @@ namespace Gym.DAL.Entities
             Address = trainer.Address;
             Info = trainer.Info;
             Age = trainer.Age;
-
-            if (trainer.User != null)
-            {
-                User.Email = trainer.User.Email;
-                User.PhoneNumber = trainer.User.PhoneNumber;
-            }
-
+            Capacity = trainer.Capacity;
+            base.Email = trainer.Email;
+            base.PhoneNumber = trainer.PhoneNumber;
             return true;
         }
 
         public bool Delete()
         {
-            if(!IsDeleted)
+            if (!IsDeleted)
             {
                 IsDeleted = true;
                 DeletedOn = DateTime.Now;

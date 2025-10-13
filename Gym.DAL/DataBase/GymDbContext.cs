@@ -38,14 +38,22 @@ namespace Gym.DAL.DataBase
                 .WithMany(s => s.Members)
                 .HasForeignKey(m => m.MemberShipId);
 
-             modelBuilder.Entity<MemberSession>()
-                .HasKey(ms => new { ms.memberId, ms.sessionId });
+            modelBuilder.Entity<MemberSession>()
+               .HasKey(ms => new { ms.memberId, ms.sessionId });
 
-            modelBuilder.Entity<Payment>()
-               .Property(m => m.paymentMethod)
-               .HasConversion<string>()
-               .HasMaxLength(50)
-               .HasColumnType("nvarchar(50)");
+            
+            modelBuilder.Entity<MemberSession>()
+                .HasOne(ms => ms._Member)
+                .WithMany(m => m.memberSessions)
+                .HasForeignKey(ms => ms.memberId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MemberSession>()
+                .HasOne(ms => ms._Session)
+                .WithMany(s => s.memberSessions)
+                .HasForeignKey(ms => ms.sessionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
             base.OnModelCreating(modelBuilder);
         }

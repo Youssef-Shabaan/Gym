@@ -26,32 +26,6 @@ namespace Gym.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserType = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "memberShips",
                 columns: table => new
                 {
@@ -84,6 +58,59 @@ namespace Gym.DAL.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserType = table.Column<int>(type: "int", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    Member_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Member_Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Member_Age = table.Column<int>(type: "int", nullable: true),
+                    Member_Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Member_JoinDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Member_UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Member_IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleltedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    MemberShipId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Age = table.Column<int>(type: "int", nullable: true),
+                    Info = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JoinDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Count = table.Column<int>(type: "int", nullable: true),
+                    Capacity = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_memberShips_MemberShipId",
+                        column: x => x.MemberShipId,
+                        principalTable: "memberShips",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -172,107 +199,23 @@ namespace Gym.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "trainers",
-                columns: table => new
-                {
-                    Trainer_Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JoinDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_trainers", x => x.Trainer_Id);
-                    table.ForeignKey(
-                        name: "FK_trainers_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "members",
-                columns: table => new
-                {
-                    Member_Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JoinDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleltedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    MemberShipId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_members", x => x.Member_Id);
-                    table.ForeignKey(
-                        name: "FK_members_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_members_memberShips_MemberShipId",
-                        column: x => x.MemberShipId,
-                        principalTable: "memberShips",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "sessions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Count = table.Column<int>(type: "int", nullable: false),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ScheduleTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TrainerId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_sessions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_sessions_trainers_TrainerId",
-                        column: x => x.TrainerId,
-                        principalTable: "trainers",
-                        principalColumn: "Trainer_Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "attendances",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    memberId = table.Column<int>(type: "int", nullable: false),
+                    memberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     isPresent = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_attendances", x => x.id);
                     table.ForeignKey(
-                        name: "FK_attendances_members_memberId",
+                        name: "FK_attendances_AspNetUsers_memberId",
                         column: x => x.memberId,
-                        principalTable: "members",
-                        principalColumn: "Member_Id",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -284,17 +227,40 @@ namespace Gym.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MemberId = table.Column<int>(type: "int", nullable: false),
-                    paymentMethod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    paymentMethod = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_payments_members_MemberId",
+                        name: "FK_payments_AspNetUsers_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "members",
-                        principalColumn: "Member_Id",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "sessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TrainerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_sessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_sessions_AspNetUsers_TrainerId",
+                        column: x => x.TrainerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -302,24 +268,22 @@ namespace Gym.DAL.Migrations
                 name: "memberSessions",
                 columns: table => new
                 {
-                    memberId = table.Column<int>(type: "int", nullable: false),
+                    memberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     sessionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_memberSessions", x => new { x.memberId, x.sessionId });
                     table.ForeignKey(
-                        name: "FK_memberSessions_members_memberId",
+                        name: "FK_memberSessions_AspNetUsers_memberId",
                         column: x => x.memberId,
-                        principalTable: "members",
-                        principalColumn: "Member_Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_memberSessions_sessions_sessionId",
                         column: x => x.sessionId,
                         principalTable: "sessions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -355,6 +319,11 @@ namespace Gym.DAL.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_MemberShipId",
+                table: "AspNetUsers",
+                column: "MemberShipId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -365,16 +334,6 @@ namespace Gym.DAL.Migrations
                 name: "IX_attendances_memberId",
                 table: "attendances",
                 column: "memberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_members_MemberShipId",
-                table: "members",
-                column: "MemberShipId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_members_UserId",
-                table: "members",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_memberSessions_sessionId",
@@ -390,11 +349,6 @@ namespace Gym.DAL.Migrations
                 name: "IX_sessions_TrainerId",
                 table: "sessions",
                 column: "TrainerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_trainers_UserId",
-                table: "trainers",
-                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -431,16 +385,10 @@ namespace Gym.DAL.Migrations
                 name: "sessions");
 
             migrationBuilder.DropTable(
-                name: "members");
-
-            migrationBuilder.DropTable(
-                name: "trainers");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "memberShips");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
         }
     }
 }

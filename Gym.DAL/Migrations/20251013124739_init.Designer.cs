@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251008233843_init")]
+    [Migration("20251013124739_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -39,8 +39,9 @@ namespace Gym.DAL.Migrations
                     b.Property<bool>("isPresent")
                         .HasColumnType("bit");
 
-                    b.Property<int>("memberId")
-                        .HasColumnType("int");
+                    b.Property<string>("memberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("id");
 
@@ -49,65 +50,10 @@ namespace Gym.DAL.Migrations
                     b.ToTable("attendances");
                 });
 
-            modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
-                {
-                    b.Property<int>("Member_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Member_Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleltedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("JoinDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("MemberShipId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Member_Id");
-
-                    b.HasIndex("MemberShipId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("members");
-                });
-
             modelBuilder.Entity("Gym.DAL.Entities.MemberSession", b =>
                 {
-                    b.Property<int>("memberId")
-                        .HasColumnType("int");
+                    b.Property<string>("memberId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("sessionId")
                         .HasColumnType("int");
@@ -151,16 +97,15 @@ namespace Gym.DAL.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("paymentMethod")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("paymentMethod")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -177,76 +122,28 @@ namespace Gym.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ScheduleTime")
+                    b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TrainerId")
-                        .HasColumnType("int");
+                    b.Property<string>("TrainerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TrainerId");
 
                     b.ToTable("sessions");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.Trainer", b =>
-                {
-                    b.Property<int>("Trainer_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Trainer_Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("JoinDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Trainer_Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("trainers");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.User", b =>
@@ -260,6 +157,11 @@ namespace Gym.DAL.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -315,6 +217,10 @@ namespace Gym.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("User");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -450,6 +356,115 @@ namespace Gym.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
+                {
+                    b.HasBaseType("Gym.DAL.Entities.User");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleltedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("JoinDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MemberShipId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasIndex("MemberShipId");
+
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.Property("Address")
+                                .HasColumnName("Member_Address");
+
+                            t.Property("Age")
+                                .HasColumnName("Member_Age");
+
+                            t.Property("Image")
+                                .HasColumnName("Member_Image");
+
+                            t.Property("IsDeleted")
+                                .HasColumnName("Member_IsDeleted");
+
+                            t.Property("JoinDate")
+                                .HasColumnName("Member_JoinDate");
+
+                            t.Property("Name")
+                                .HasColumnName("Member_Name");
+
+                            t.Property("UpdateDate")
+                                .HasColumnName("Member_UpdateDate");
+                        });
+
+                    b.HasDiscriminator().HasValue("Member");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.Trainer", b =>
+                {
+                    b.HasBaseType("Gym.DAL.Entities.User");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Info")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("JoinDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasDiscriminator().HasValue("Trainer");
+                });
+
             modelBuilder.Entity("Gym.DAL.Entities.Attendance", b =>
                 {
                     b.HasOne("Gym.DAL.Entities.Member", "member")
@@ -461,35 +476,18 @@ namespace Gym.DAL.Migrations
                     b.Navigation("member");
                 });
 
-            modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
-                {
-                    b.HasOne("Gym.DAL.Entities.MemberShip", "_MemberShip")
-                        .WithMany("Members")
-                        .HasForeignKey("MemberShipId");
-
-                    b.HasOne("Gym.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("_MemberShip");
-                });
-
             modelBuilder.Entity("Gym.DAL.Entities.MemberSession", b =>
                 {
                     b.HasOne("Gym.DAL.Entities.Member", "_Member")
                         .WithMany("memberSessions")
                         .HasForeignKey("memberId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Gym.DAL.Entities.Session", "_Session")
                         .WithMany("memberSessions")
                         .HasForeignKey("sessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("_Member");
@@ -512,20 +510,11 @@ namespace Gym.DAL.Migrations
                 {
                     b.HasOne("Gym.DAL.Entities.Trainer", "_Trainer")
                         .WithMany("Sessions")
-                        .HasForeignKey("TrainerId");
-
-                    b.Navigation("_Trainer");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.Trainer", b =>
-                {
-                    b.HasOne("Gym.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("TrainerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("_Trainer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -581,7 +570,11 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
                 {
-                    b.Navigation("memberSessions");
+                    b.HasOne("Gym.DAL.Entities.MemberShip", "_MemberShip")
+                        .WithMany("Members")
+                        .HasForeignKey("MemberShipId");
+
+                    b.Navigation("_MemberShip");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberShip", b =>
@@ -590,6 +583,11 @@ namespace Gym.DAL.Migrations
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
+                {
+                    b.Navigation("memberSessions");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
                 {
                     b.Navigation("memberSessions");
                 });
