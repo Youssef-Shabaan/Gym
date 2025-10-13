@@ -24,7 +24,7 @@ namespace Gym.PL
 
             builder.Services.AddDbContext<GymDbContext>(options =>options.UseSqlServer(connectionString));
 
-            //Identity Services
+            // Identity Services
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<GymDbContext>()
                 .AddDefaultTokenProviders();

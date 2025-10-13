@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251013124739_init")]
+    [Migration("20251013125548_init")]
     partial class init
     {
         /// <inheritdoc />

@@ -15,13 +15,28 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
+                bool hasConflict = GymDb.sessions.Any(s =>
+                s.TrainerId == session.TrainerId &&
+                (
+                    (session.StartTime >= s.StartTime && session.StartTime < s.EndTime) ||
+                    (session.EndTime > s.StartTime && session.EndTime <= s.EndTime) ||
+                    (session.StartTime <= s.StartTime && session.EndTime >= s.EndTime)
+                ));
+
+                if (hasConflict)
+                {
+                    return (false, "Trainer already has another session at this time.");
+                }
+
                 var result = GymDb.sessions.Add(session);
                 GymDb.SaveChanges();
-                if(result.Entity.Id == 0)
+
+                if (result.Entity.Id == 0)
                 {
                     return (false, "Error adding this session.");
                 }
-                return(true, null);
+
+                return (true, null);
             }
             catch (Exception ex)
             {
@@ -141,6 +156,16 @@ namespace Gym.DAL.Repo.Implementation
                 if(OldSession == null)
                 {
                     return (false, "This session not found.");
+                }
+                bool hasConflict = GymDb.sessions.Any(a => a.TrainerId ==  session.TrainerId && a.Id != session.Id &&
+                (
+                    (session.StartTime >= a.StartTime && session.StartTime < a.EndTime) ||
+                    (session.EndTime > a.StartTime && session.EndTime <= a.EndTime) ||
+                    (session.StartTime <= a.StartTime && session.EndTime >= a.EndTime)
+                ));
+                if (hasConflict)
+                {
+                    return (false, "Trainer already has another session at this time.");
                 }
                 OldSession.Update(session);
                 GymDb.SaveChanges();

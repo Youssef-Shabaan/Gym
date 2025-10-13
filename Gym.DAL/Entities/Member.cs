@@ -7,7 +7,8 @@ namespace Gym.DAL.Entities
     public class Member : User
     {
         public Member() { }
-        public Member(string name, Gender gender,string image , int age, string? address = null):base(UserType.Member)
+        public Member(string name, Gender gender,string image , int age, string? address, string phone, string email)
+            :base(UserType.Member, phone, email)
         {
             Name = name; 
             Gender = gender;

@@ -1,4 +1,6 @@
 ﻿
+using Gym.BLL.ModelVM.Session;
+
 namespace Gym.BLL.ModelVM.Trainer
 {
     public class GetTrainerVM
@@ -9,5 +11,6 @@ namespace Gym.BLL.ModelVM.Trainer
         public int Age { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public ICollection<GetSessionVM> Sessions { get; set; }
     }
 }

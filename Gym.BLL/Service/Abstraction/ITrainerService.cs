@@ -14,7 +14,7 @@ namespace Gym.BLL.Service.Abstraction
         (bool, IEnumerable<GetTrainerVM>?) GetAllTrainers();
         (bool, GetTrainerVM?) GetTrainerById(int id);
 
-        (bool, IEnumerable<GetTrainerSessionVM>?) GetTrainerSessions(int trainerId);
+        (bool, string, IEnumerable<GetTrainerSessionVM>?) GetTrainerSessions(int trainerId);
 
         (bool, string?) RestoreTrainer(int id);
     }

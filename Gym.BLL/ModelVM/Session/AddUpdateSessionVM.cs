@@ -10,10 +10,10 @@ namespace Gym.BLL.ModelVM.Session
 
         public string? Description { get;  set; }
 
-        [Required(ErrorMessage = "Schedule Time is required")]
-        public DateTime ScheduleTime { get;  set; }
+        [Required(ErrorMessage = "Start time is required")]
+        public DateTime StartTime { get;  set; }
 
-        [Required(ErrorMessage = "Capacity is required")]
-        public int Capacity { get;  set; }
+        [Required(ErrorMessage = "End time is required")]
+        public DateTime EndTime { get;  set; }
     }
 }

@@ -7,7 +7,8 @@ namespace Gym.DAL.Entities
     public class Trainer : User
     {
         public Trainer() { }
-        public Trainer(string name, string image, int age, string? info, string? address, int capacity): base(UserType.Trainer)
+        public Trainer(string name, string image, int age, string? info, string? address, int capacity, string phone, string email)
+                : base(UserType.Trainer, phone, email)
         {
             Name = name;
             Image = image;

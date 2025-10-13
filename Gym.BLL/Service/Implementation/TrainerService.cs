@@ -25,25 +25,32 @@ namespace Gym.BLL.Service.Implementation
         {
             try
             {
-                User user = new User() { Email = trainervm.Email, PhoneNumber = trainervm.PhoneNumber, UserName = trainervm.Email};
+                var imagePath = Upload.UploadFile("Files", trainervm.Image);
 
-                var result = await userManager.CreateAsync(user, trainervm.Password);
+                var newTrainer = new Trainer(
+                    trainervm.Name,
+                    imagePath,
+                    trainervm.Age,
+                    trainervm.Info,
+                    trainervm.Address,
+                    trainervm.Capacity,
+                    trainervm.PhoneNumber,
+                    trainervm.Email
+                );
+
+                var result = await userManager.CreateAsync(newTrainer, trainervm.Password);
 
                 if (!result.Succeeded)
                 {
                     return (false, "Error in creation new trainer");
                 }
 
-                var imagePath = Upload.UploadFile("Files", trainervm.Image);
+                //var trainer = trainerRepo.AddTrainer(newTrainer);
+                //if (!trainer.Item1)
+                //    return (false, trainer.Item2);
 
-                Trainer newTrainer = new Trainer(trainervm.Name, imagePath, trainervm.Age, trainervm.Info, trainervm.Address, trainervm.Capacity);
-                var trainer = trainerRepo.AddTrainer(newTrainer);
-                if(!trainer.Item1)
-                {
-                    return(false, trainer.Item2);
-                }
                 return (true, null);
-                
+
             }
             catch (Exception ex)
             {
@@ -77,7 +84,7 @@ namespace Gym.BLL.Service.Implementation
                 {
                     return(false, null);
                 }
-                var trainersVM = mapper.Map<IEnumerable<GetTrainerVM>>(trainers);
+                var trainersVM = mapper.Map<IEnumerable<GetTrainerVM>>(trainers.Item2);
                 return (true, trainersVM);
             }
             catch (Exception ex)
@@ -95,7 +102,7 @@ namespace Gym.BLL.Service.Implementation
                 {
                     return (false, null);
                 }
-                var trainersVM = mapper.Map<GetTrainerVM>(trainers);
+                var trainersVM = mapper.Map<GetTrainerVM>(trainers.Item2);
                 return (true, trainersVM);
             }
             catch (Exception ex)
@@ -109,14 +116,14 @@ namespace Gym.BLL.Service.Implementation
             return trainerRepo.GetTrainerCount();
         }
 
-        public (bool, IEnumerable<GetTrainerSessionVM>?) GetTrainerSessions(int trainerId)
+        public (bool, string, IEnumerable<GetTrainerSessionVM>?) GetTrainerSessions(int trainerId)
         {
             try
             {
                 var trainer = trainerRepo.GetTrainerSessions(trainerId);
                 if(!trainer.Item1)
                 {
-                    return(false, null);
+                    return(false,"There are no sessions for this trainer.", null);
                 }
                 var trainerSessions = new List<GetTrainerSessionVM>();
                 foreach (var session in trainer.Item2.Sessions)
@@ -131,11 +138,11 @@ namespace Gym.BLL.Service.Implementation
                         State = session.EndTime < DateTime.Now ? "Past" :(DateTime.Now>session.StartTime?"Playing":"Upcomming")
                     });
                 }
-                return(true, trainerSessions);
+                return(true,null, trainerSessions);
             }
             catch(Exception ex)
             {
-                return (false, null);
+                return (false,ex.Message, null);
             }
         }
 
@@ -152,7 +159,7 @@ namespace Gym.BLL.Service.Implementation
             }
             catch (Exception ex)
             {
-                return(true, ex.Message);
+                return(false, ex.Message);
             }
         }
 

@@ -116,7 +116,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(a => a.Id == id.ToString());
+                var trainer = GymDb.trainers.Include(a => a.Sessions).FirstOrDefault(a => a.Id == id.ToString());
                 if (trainer != null)
                     return (true, trainer);
 

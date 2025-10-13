@@ -8,7 +8,5 @@ namespace Gym.BLL.ModelVM.Trainer
         public DateTime StartTime { get; set; }  
         public DateTime EndTime { get; set; }  
         public string State { get; set; }
-        public int Count { get; set; }
-        public int Capacity { get; set; }
     }
 }
