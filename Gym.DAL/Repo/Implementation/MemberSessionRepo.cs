@@ -18,20 +18,20 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var member = GymDb.members.FirstOrDefault(a => a.Id == memberId.ToString());
-                if (member == null) return (false, "member is not found");
+                if (member == null) return (false, "Member is not found");
 
                 var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
-                if (session == null) return (false, "session is not found");
+                if (session == null) return (false, "Session is not found");
                 var trainer = GymDb.trainers.FirstOrDefault(a => a.Id == session.TrainerId.ToString());   
 
                 bool alreadyExists = GymDb.memberSessions
                         .Any(ms => ms.memberId == memberId.ToString() && ms.sessionId == sessionId);
-                if (alreadyExists) return (false, "already exist");
+                if (alreadyExists) return (false, "Already exist");
 
                 var newMember = new MemberSession(memberId.ToString(), sessionId);
                 GymDb.memberSessions.Add(newMember);
                 GymDb.SaveChanges();
-                return (true, "your registeration is done");
+                return (true, "Your registeration is done");
 
             }
             catch (Exception ex)
@@ -45,13 +45,13 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var session = GymDb.sessions.Any(a => a.Id == sessionId);
-                if (!session) return (false, "session is not found", null);
+                if (!session) return (false, "Session is not found", null);
 
                 var members = GymDb.memberSessions
                     .Where(ms => ms.sessionId == sessionId)
                     .Select(ms => ms._Member)
                     .ToList();
-                if (!members.Any()) return (false, "session is empty", null);
+                if (!members.Any()) return (false, "Session is empty", null);
 
                 return (true, "done", members);
             }
@@ -66,14 +66,14 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var member = GymDb.members.Any(a => a.Id == memberId.ToString());
-                if (!member) return (false, "member is not found", null);
+                if (!member) return (false, "Member is not found", null);
 
                 var sessions = GymDb.memberSessions
                     .Where(a => a.memberId == memberId.ToString())
                     .Select(a => a._Session).ToList();
-                if (!sessions.Any()) return (false, "member havn't sessions", null);
+                if (!sessions.Any()) return (false, "Member havn't sessions", null);
 
-                return (true, "done", sessions);
+                return (true, "Done", sessions);
             }
             catch (Exception ex)
             {
