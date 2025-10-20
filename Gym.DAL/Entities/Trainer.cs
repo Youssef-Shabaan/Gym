@@ -45,7 +45,6 @@ namespace Gym.DAL.Entities
             Info = trainer.Info;
             Age = trainer.Age;
             Capacity = trainer.Capacity;
-            base.Email = trainer.Email;
             base.PhoneNumber = trainer.PhoneNumber;
             return true;
         }

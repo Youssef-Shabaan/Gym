@@ -3,6 +3,7 @@ using Gym.BLL.ModelVM.Session;
 using Gym.BLL.ModelVM.Member;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.DAL.Entities;
+using Gym.BLL.ModelVM.MemberShip;
 
 namespace Gym.BLL.Mapper
 {
@@ -32,6 +33,9 @@ namespace Gym.BLL.Mapper
 
             CreateMap<AddUpdateSessionVM, Session>().ReverseMap();
             CreateMap<Session, GetSessionVM>().ReverseMap();
+
+            CreateMap<GetAllMemberShipVM, MemberShip>().ReverseMap();
+            CreateMap<GetMemberShipVM, MemberShip>().ReverseMap();
         }
     }
 }
