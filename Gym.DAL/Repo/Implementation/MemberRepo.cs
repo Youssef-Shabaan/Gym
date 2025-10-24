@@ -28,7 +28,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var result = DB.members.Where(m => m.Id == id.ToString()).FirstOrDefault();
+                var result = DB.members.Where(m => m.MemberId == id).FirstOrDefault();
                 if (result == null) return false;
                 DB.members.Remove(result);
                 DB.SaveChanges();
@@ -45,13 +45,13 @@ namespace Gym.DAL.Repo.Implementation
 
         public Member GetById(int id)
         {
-            var result = DB.members.Where(m => m.Id == id.ToString()).FirstOrDefault();
+            var result = DB.members.Where(m => m.MemberId == id).FirstOrDefault();
             return result;
         }
 
         public bool Update(Member newMember)
         {
-            var result = DB.members.Where(m => m.Id == newMember.Id).FirstOrDefault();
+            var result = DB.members.Where(m => m.UserId == newMember.UserId).FirstOrDefault();
             if (result == null) return false;
             var ok = result.EditMember(newMember);
             if (!ok) return false;

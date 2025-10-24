@@ -118,7 +118,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var sessions = GymDb.sessions.Where(a => a.TrainerId == trainerId.ToString()).ToList();
+                var sessions = GymDb.sessions.Where(a => a.TrainerId == trainerId).ToList();
                 if(!sessions.Any() || sessions == null)
                 {
                     return(false, null);

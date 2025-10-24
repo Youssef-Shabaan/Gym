@@ -28,7 +28,7 @@ namespace Gym.DAL.Entities
         // relation ya hussein
         
         [ForeignKey("_Trainer")]
-        public string TrainerId { get; set; }
+        public int TrainerId { get; set; }
         public Trainer _Trainer { get; private set; }
         public List<MemberSession> memberSessions { get; private set; }
         public bool Update(Session session)

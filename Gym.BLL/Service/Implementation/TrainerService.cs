@@ -21,42 +21,46 @@ namespace Gym.BLL.Service.Implementation
             this.mapper = mapper;
         }
 
-        public async Task<(bool, string?)> AddTrainer(AddTrainerVM trainervm)
+        // =============================
+        public Task<(bool, string?)> AddTrainer(AddTrainerVM trainer)
         {
-            try
-            {
-                var imagePath = Upload.UploadFile("Files", trainervm.Image);
-
-                var newTrainer = new Trainer(
-                    trainervm.Name,
-                    imagePath,
-                    trainervm.Age,
-                    trainervm.Info,
-                    trainervm.Address,
-                    trainervm.Capacity,
-                    trainervm.PhoneNumber,
-                    trainervm.Email
-                );
-
-                var result = await userManager.CreateAsync(newTrainer, trainervm.Password);
-
-                if (!result.Succeeded)
-                {
-                    return (false, "Error in creation new trainer");
-                }
-
-                //var trainer = trainerRepo.AddTrainer(newTrainer);
-                //if (!trainer.Item1)
-                //    return (false, trainer.Item2);
-
-                return (true, null);
-
-            }
-            catch (Exception ex)
-            {
-                return(false, null);
-            }
+            throw new NotImplementedException();
         }
+
+        //public async Task<(bool, string?)> AddTrainer(AddTrainerVM trainervm)
+        //{
+        //    try
+        //    {
+        //        var imagePath = Upload.UploadFile("Files", trainervm.Image);
+
+        //        var newTrainer = new Trainer(
+        //            trainervm.Name,
+        //            imagePath,
+        //            trainervm.Age,
+        //            trainervm.Info,
+        //            trainervm.Address,
+        //            trainervm.Capacity
+        //        );    
+
+        //        var result = await userManager.CreateAsync(newTrainer, trainervm.Password);
+
+        //        if (!result.Succeeded)
+        //        {
+        //            return (false, "Error in creation new trainer");
+        //        }
+
+        //        //var trainer = trainerRepo.AddTrainer(newTrainer);
+        //        //if (!trainer.Item1)
+        //        //    return (false, trainer.Item2);
+
+        //        return (true, null);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return(false, null);
+        //    }
+        //}
 
         public (bool, string?) DeleteTrainer(int id)
         {

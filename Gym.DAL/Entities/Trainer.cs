@@ -1,14 +1,14 @@
 ﻿using Gym.DAL.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Gym.DAL.Entities
 {
-    public class Trainer : User
+    public class Trainer
     {
         public Trainer() { }
-        public Trainer(string name, string image, int age, string? info, string? address, int capacity, string phone, string email)
-                : base(UserType.Trainer, phone, email)
+        public Trainer(string name, string image, int age, string? info, string? address, int capacity)
         {
             Name = name;
             Image = image;
@@ -19,6 +19,8 @@ namespace Gym.DAL.Entities
             Address = address;
             Capacity = capacity;
         }
+        [Key]
+        public int TrainerId { get; private set; }
         public string Name { get; private set; }
         public int Age { get; private set; }
         public string? Info { get; private set; }
@@ -33,6 +35,9 @@ namespace Gym.DAL.Entities
 
 
         //relation ya hussein
+        [ForeignKey("User")]
+        public string userId { get; private set; }
+        public User User { get; private set; }
         public IEnumerable<Session> Sessions { get; private set; }
 
         public bool EditTrainer(Trainer trainer)
@@ -45,7 +50,6 @@ namespace Gym.DAL.Entities
             Info = trainer.Info;
             Age = trainer.Age;
             Capacity = trainer.Capacity;
-            base.PhoneNumber = trainer.PhoneNumber;
             return true;
         }
 

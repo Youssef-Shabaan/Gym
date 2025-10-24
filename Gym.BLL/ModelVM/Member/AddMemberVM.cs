@@ -12,7 +12,7 @@ namespace Gym.BLL.ModelVM.Member
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@gmail\.com$", ErrorMessage = "Email must be a Gmail address (example@gmail.com)")]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Phone is required")]

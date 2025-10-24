@@ -4,12 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gym.DAL.Entities
 {
-    public class Member : User
+    public class Member
     {
         public Member() { }
-        public Member(string name, Gender gender,string image , int age, string? address, string phone, string email)
-            :base(UserType.Member, phone, email)
-        {
+        public Member(string name, Gender gender,string image , int age, string? address)
+            {
             Name = name; 
             Gender = gender;
             Age = age;
@@ -18,6 +17,8 @@ namespace Gym.DAL.Entities
             JoinDate = DateTime.Now;
             IsDeleted = false;
         }
+        [Key]
+        public int MemberId { get; private set; }
         public string Name { get; private set; }
         public string Image { get; set; }
         public Gender Gender { get; private set; }
@@ -29,6 +30,9 @@ namespace Gym.DAL.Entities
         public DateTime? DeleltedOn { get; private set; }
 
         //relation ship ya hussein
+        [ForeignKey("User")]
+        public string UserId { get; private set; }
+        public User User { get; private set; }
         [ForeignKey("_MemberShip")]
         public int? MemberShipId { get; private set; }
         public MemberShip _MemberShip { get; private set; }
@@ -43,8 +47,6 @@ namespace Gym.DAL.Entities
                 Image = member.Image;
                 Address = member.Address;
                 UpdateDate = member.UpdateDate;
-                base.Email = member.Email;
-                base.PhoneNumber = member.PhoneNumber;
                 return true;
             }
             return false;

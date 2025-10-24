@@ -32,7 +32,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var oldTrainer = GymDb.trainers.FirstOrDefault(a => a.Id == trainer.Id);
+                var oldTrainer = GymDb.trainers.FirstOrDefault(a => a.userId == trainer.userId);
                 if (oldTrainer == null)
                     return (false, "Trainer not found.");
 
@@ -54,7 +54,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(x => x.Id == id.ToString());
+                var trainer = GymDb.trainers.FirstOrDefault(x => x.TrainerId == id);
                 if (trainer != null)
                 {
                     if (trainer.Delete())
@@ -76,7 +76,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.FirstOrDefault(x => x.Id == id.ToString());
+                var trainer = GymDb.trainers.FirstOrDefault(x => x.TrainerId == id);
                 if (trainer == null)
                     return (false, "Trainer not found.");
 
@@ -116,7 +116,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.Include(a => a.Sessions).FirstOrDefault(a => a.Id == id.ToString());
+                var trainer = GymDb.trainers.Include(a => a.Sessions).FirstOrDefault(a => a.TrainerId == id);
                 if (trainer != null)
                     return (true, trainer);
 
@@ -134,7 +134,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var trainer = GymDb.trainers
                     .Include(t => t.Sessions)
-                    .FirstOrDefault(t => t.Id == trainerId.ToString());
+                    .FirstOrDefault(t => t.TrainerId == trainerId);
 
                 if (trainer == null || trainer.Sessions == null || !trainer.Sessions.Any())
                     return (false, null);
