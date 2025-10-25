@@ -12,9 +12,13 @@ namespace Gym.BLL.Mapper
         public DomainProfile()
         {
             CreateMap<Trainer, GetTrainerVM>()
+                .ForMember(dest => dest.Email,opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.PhoneNumber,opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(dest => dest.Sessions,opt => opt.MapFrom(src => src.Sessions))
                 .ReverseMap();
 
             CreateMap<UpdateTrainerVM, Trainer>().ReverseMap();
+
 
             CreateMap<Member, GetMemberVM>()
                 .ReverseMap();
