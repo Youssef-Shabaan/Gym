@@ -10,13 +10,6 @@ namespace Gym.BLL.ModelVM.Trainer
         [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage ="Email is required")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@gmail\.com$", ErrorMessage = "Email must be a Gmail address (example@gmail.com)")]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = "Phone is required")]
-        public string PhoneNumber { get; set; }
-
         [Range(18, 40, ErrorMessage = "Age must be between 18 and 40")]
         public int Age { get; set; }
 
@@ -25,8 +18,6 @@ namespace Gym.BLL.ModelVM.Trainer
         
         public IFormFile Image { get; set; }
 
-        [Required, DataType(DataType.Password)]
-        public string Password { get; set; }
         public int Capacity { get; set; }
     }
 }

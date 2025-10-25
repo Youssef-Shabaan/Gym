@@ -8,7 +8,7 @@ namespace Gym.DAL.Entities
     {
         public Member() { }
         public Member(string name, Gender gender,string image , int age, string? address)
-            {
+        {
             Name = name; 
             Gender = gender;
             Age = age;

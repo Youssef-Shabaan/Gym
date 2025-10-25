@@ -53,7 +53,7 @@ namespace Gym.DAL.Repo.Implementation
                     .ToList();
                 if (!members.Any()) return (false, "Session is empty", null);
 
-                return (true, "done", members);
+                return (true, "Done", members);
             }
             catch (Exception ex)
             {
@@ -86,18 +86,18 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
-                if (session == null) return (false, "session is not found");
+                if (session == null) return (false, "Session is not found");
 
                 var memberSessions = GymDb.memberSessions
                    .Where(ms => ms.sessionId == sessionId).ToList();
 
                 if (!memberSessions.Any())
-                    return (false, "session is empty");
+                    return (false, "Session is empty");
                 GymDb.memberSessions.RemoveRange(memberSessions);
        
                 GymDb.SaveChanges();
 
-                return (true, "done");
+                return (true, "Done");
             }
             catch (Exception ex)
             {
@@ -110,18 +110,18 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var memberExists = GymDb.members.Any(m => m.MemberId == memberId);
-                if (!memberExists) return (false, "member is not found");
+                if (!memberExists) return (false, "Member is not found");
 
                 var memberSessions = GymDb.memberSessions
                     .Where(ms => ms.memberId == memberId)
                     .ToList();
 
-                if (!memberSessions.Any()) return (false, "member havn't any sessions");
+                if (!memberSessions.Any()) return (false, "Member havn't any sessions");
 
 
                 GymDb.memberSessions.RemoveRange(memberSessions);
                 GymDb.SaveChanges();
-                return (true, "done");
+                return (true, "Done");
             }
             catch (Exception ex)
             {
@@ -134,18 +134,18 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var member = GymDb.members.FirstOrDefault(a => a.MemberId == memberId);
-                if (member == null) return (false, "member is not found");
+                if (member == null) return (false, "Member is not found");
 
                 var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
-                if (session == null) return (false, "session is not found");
+                if (session == null) return (false, "Session is not found");
 
                 var membersession = GymDb.memberSessions
                     .FirstOrDefault(ms => ms.memberId == memberId && ms.sessionId == sessionId);
-                if (membersession == null) return (false, "member is not register in this session");
+                if (membersession == null) return (false, "Member is not register in this session");
 
                 GymDb.memberSessions.Remove(membersession);
                 GymDb.SaveChanges();
-                return (true, "done");
+                return (true, "Done");
             }
             catch (Exception ex)
             {

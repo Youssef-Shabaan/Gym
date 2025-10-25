@@ -9,7 +9,6 @@ namespace Gym.BLL.ModelVM.Trainer
         public string Address { get; set; }
         public string Info { get; set; }
         public IFormFile Image { get; set; }
-        public string PhoneNumber { get; set; }
         public int Capacity { get; set; }
     }
 }

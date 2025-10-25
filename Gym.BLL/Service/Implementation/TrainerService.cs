@@ -22,9 +22,19 @@ namespace Gym.BLL.Service.Implementation
         }
 
         // =============================
-        public Task<(bool, string?)> AddTrainer(AddTrainerVM trainer)
+        public (bool, string?) AddTrainer(AddTrainerVM trainer)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var newTrainer = mapper.Map<Trainer>(trainer);
+                var result = trainerRepo.AddTrainer(newTrainer);
+                if (!result.Item1) return (false, result.Item2);
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
         }
 
         //public async Task<(bool, string?)> AddTrainer(AddTrainerVM trainervm)
