@@ -5,7 +5,7 @@ namespace Gym.DAL.Repo.Abstraction
 {
     public interface IAttendanceRepo
     {
-        List<Attendance> GetAll();
+        (bool, List<Attendance>) GetAttendanceMemberForSession(int sessionId);
         Attendance GetById(int id);
         bool Create(Attendance newAttendance);
         bool Update(Attendance newAttendance);

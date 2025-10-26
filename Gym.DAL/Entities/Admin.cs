@@ -7,6 +7,7 @@ namespace Gym.DAL.Entities
 {
     public class Admin
     {
+        public Admin() { }
         public Admin(string name, string image, Gender gender, int age, string address, string userid) {
             this.Name = name;
             this.Image = image;
