@@ -2,6 +2,7 @@
 using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -28,7 +29,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var result = DB.attendances.Where(m => m.id == id).FirstOrDefault();
+                var result = DB.attendances.Where(m => m.Id == id).FirstOrDefault();
                 if (result == null) return false;
                 DB.attendances.Remove(result);
                 DB.SaveChanges();
@@ -37,15 +38,28 @@ namespace Gym.DAL.Repo.Implementation
             catch { return false; }
         }
 
-        public List<Attendance> GetAll()
+        public (bool, List<Attendance>) GetAttendanceMemberForSession(int sessionId)
         {
-            var result = DB.attendances.ToList();
-            return result;
+            try
+            {
+                var result = DB.attendances.Where(a => a.SessionId == sessionId)
+                                    .Include(a => a.member).ToList(); 
+                
+                if (!result.Any() || result.Count() == 0)
+                {
+                    return (false, null);
+                }
+                return(true, result);
+            }
+            catch
+            {
+                return(false, null);
+            }
         }
 
         public Attendance GetById(int id)
         {
-            var result = DB.attendances.Where(m => m.id == id).FirstOrDefault();
+            var result = DB.attendances.Include(m => m.member).Where(m => m.Id == id).FirstOrDefault();
             return result;
         }
 
@@ -53,7 +67,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var result = DB.attendances.Where(m => m.id == newAttendance.id).FirstOrDefault();
+                var result = DB.attendances.FirstOrDefault(m => m.Id == newAttendance.Id);
                 if (result == null) return false;
                 var ok = result.EditAttendance(newAttendance);
                 if (!ok) return false;
