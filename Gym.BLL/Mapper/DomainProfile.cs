@@ -6,6 +6,7 @@ using Gym.DAL.Entities;
 using Gym.BLL.ModelVM.MemberShip;
 using Gym.BLL.ModelVM.User;
 using AutoMapper.Execution;
+using Gym.BLL.ModelVM.Admin;
 
 namespace Gym.BLL.Mapper
 {
@@ -23,8 +24,8 @@ namespace Gym.BLL.Mapper
 
 
             CreateMap<Gym.DAL.Entities.Member, GetMemberVM>()
-    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
 
 
             CreateMap<AddMemberVM, Gym.DAL.Entities.Member>()
@@ -42,6 +43,18 @@ namespace Gym.BLL.Mapper
             CreateMap<GetMemberShipVM, MemberShip>().ReverseMap();
 
             CreateMap<GetUserVM, User>().ReverseMap();
+
+            CreateMap<Admin, GetAdminVM>()
+              .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+              .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
+
+            CreateMap<AddAdminVM, Admin>()
+                .ForMember(dest => dest.Image, opt => opt.Ignore())
+                .ForMember(dest => dest.UserId, opt => opt.Ignore());
+
+            CreateMap<EditAdminVM, Admin>()
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ImagePath ?? src.ImagePath))
+                .ForMember(dest => dest.UserId, opt => opt.Ignore());
         }
     }
 }
