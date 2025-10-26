@@ -1,30 +1,56 @@
 ﻿
 using AutoMapper;
+using Gym.BLL.Helper;
 using Gym.BLL.ModelVM.Member;
 using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Microsoft.AspNetCore.Identity;
 
 namespace Gym.BLL.Service.Implementation
 {
     public class MemberService : IMemberService
     {
-        public readonly IMemberRepo _memberRepo;
-        public readonly IMapper _mapper;
-        public MemberService(IMemberRepo _memberRepo, IMapper _mapper)
+        private readonly IMemberRepo _memberRepo;
+        private readonly IMapper _mapper;
+        private readonly UserManager<User> userManager;
+
+        public MemberService(IMemberRepo _memberRepo, IMapper _mapper, UserManager<User> userManager)
         {
             this._memberRepo = _memberRepo;
             this._mapper = _mapper;
+            this.userManager = userManager;
         }
-        public (bool, string) Create(AddMemberVM newmember)
+        public async Task<(bool, string)> Create(AddMemberVM newmember)
         {
             try
             {
-                var mapped = _mapper.Map<Member>(newmember);
-                var result = _memberRepo.Create(mapped);
-                if (!result)
+                // Create User
+                var user = new User()
                 {
-                    return (false, "Faild to Add");
+                    Email = newmember.Email,
+                    PhoneNumber = newmember.PhoneNumber,
+                    UserName = newmember.UserName
+                };
+
+                // Save User
+                var result = await userManager.CreateAsync(user, newmember.Password);
+
+                // Check if User Created
+                if (!result.Succeeded)
+                {
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    return (false, errors);
+                }
+
+                // Create Member
+                var imagepath = Upload.UploadFile("Files", newmember.Image);
+                var member = new Member(newmember.Name, newmember.Gender, imagepath, newmember.Age, newmember.Address, user.Id);
+                var addmember = _memberRepo.Create(member);
+                if(!addmember)
+                {
+                    await userManager.DeleteAsync(user);
+                    return (false, "Faild to Add Member");
                 }
                 return (true, "Added Successfully");
             }
@@ -34,15 +60,29 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
-        public (bool, string) Delete(int id)
+
+        public async Task<(bool, string)> Delete(int id)
         {
             try
             {
-                var result = _memberRepo.Delete(id);
-                if (!result)
-                {
-                    return (false, "Faild to Delete");
-                }
+                var member = _memberRepo.GetById(id);
+                if (member == null)
+                    return (false, "Not Found");
+
+                string userId = member.UserId;
+
+                var delete = _memberRepo.Delete(id);
+                if (!delete)
+                    return (false, "Failed to Delete Member");
+
+                var user = await userManager.FindByIdAsync(userId);
+                if (user == null)
+                    return (false, "User Not Found");
+
+                var result = await userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                    return (false, "Failed to Delete User");
+
                 return (true, "Deleted Successfully");
             }
             catch (Exception ex)
@@ -50,6 +90,7 @@ namespace Gym.BLL.Service.Implementation
                 return (false, ex.Message);
             }
         }
+
 
         public (bool, string, List<GetMemberVM>) GetAll()
         {
@@ -89,17 +130,21 @@ namespace Gym.BLL.Service.Implementation
             {
                 var member = _memberRepo.GetById(id);
                 if (member == null)
+                    return (false, "Member not found");
+
+                if (curr.Image != null)
                 {
-                    return (false, "Not Found");
-                }
-                _mapper.Map(curr, member);
-                var save = _memberRepo.Update(member);
-                if (!save)
-                {
-                    return (false, "Failed to Update");
+                    var imagePath = Upload.UploadFile("Files", curr.Image);
+                    curr.ImagePath = imagePath;
                 }
 
-                return (true, "Updated Successfully");
+                _mapper.Map(curr, member);
+
+                var success = _memberRepo.Update(member);
+                if (!success)
+                    return (false, "Failed to update member");
+
+                return (true, "Updated successfully");
 
             }
             catch (Exception ex)

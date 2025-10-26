@@ -18,6 +18,7 @@ namespace Gym.DAL.DataBase
         public DbSet<MemberSession> memberSessions { get; set; }
         public DbSet<Payment> payments { get; set; }
         public DbSet<Attendance> attendances { get; set; }
+        public DbSet<Admin> admins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

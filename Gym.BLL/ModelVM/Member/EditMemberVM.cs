@@ -7,8 +7,6 @@ namespace Gym.BLL.ModelVM.Member
 {
     public class EditMemberVM
     {
-        [Required]
-        public int Member_Id { get; set; }
 
         [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
         public string? Name { get; set; }
@@ -19,7 +17,7 @@ namespace Gym.BLL.ModelVM.Member
         public Gender? Gender { get; set; }
 
         public string? Address { get; set; }
-
+        public string? ImagePath { get; set; }
         public IFormFile? Image { get; set; }
 
         public string? Info { get; set; }

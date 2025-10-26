@@ -8,7 +8,7 @@ namespace Gym.DAL.Entities
     public class Trainer
     {
         public Trainer() { }
-        public Trainer(string name, string image, int age, string? info, string? address, int capacity)
+        public Trainer(string name, string image, int age, string? info, string? address, int capacity, string UserId)
         {
             Name = name;
             Image = image;
@@ -18,6 +18,7 @@ namespace Gym.DAL.Entities
             Info = info;
             Address = address;
             Capacity = capacity;
+            userId = UserId;
         }
         [Key]
         public int TrainerId { get; private set; }

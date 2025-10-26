@@ -94,7 +94,7 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
-        public (bool, IEnumerable<Trainer>?) GetAllTrainers()
+        public (bool, List<Trainer>?) GetAllTrainers()
         {
             try
             {

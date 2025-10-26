@@ -1,4 +1,5 @@
 ﻿
+using Gym.BLL.ModelVM.Member;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.DAL.Entities;
 
@@ -6,16 +7,10 @@ namespace Gym.BLL.Service.Abstraction
 {
     public interface ITrainerService
     {
-        (bool, string?) AddTrainer(AddTrainerVM trainer);
-        (bool, string?) UpdateTrainer(UpdateTrainerVM trainer);
-        (bool, string?) DeleteTrainer(int id);
-        int GetTrainerCount();
-
-        (bool, IEnumerable<GetTrainerVM>?) GetAllTrainers();
-        (bool, GetTrainerVM?) GetTrainerById(int id);
-
-        (bool, string, IEnumerable<GetTrainerSessionVM>?) GetTrainerSessions(int trainerId);
-
-        (bool, string?) RestoreTrainer(int id);
+        (bool, string, List<GetTrainerVM>) GetAll();
+        (bool, string, GetTrainerVM) GetByID(int id);
+        Task<(bool, string)> Delete(int id);
+        (bool, string) Update(int id, UpdateTrainerVM curr);
+        Task<(bool, string)> Create(AddTrainerVM newmember);
     }
 }

@@ -15,6 +15,9 @@ namespace Gym.BLL.ModelVM.Member
         [EmailAddress]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "UserName is required")]
+        public string UserName { get; set; }
+
         [Required(ErrorMessage = "Phone is required")]
         public string PhoneNumber { get; set; }
 

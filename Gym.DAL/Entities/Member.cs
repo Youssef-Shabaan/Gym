@@ -7,7 +7,7 @@ namespace Gym.DAL.Entities
     public class Member
     {
         public Member() { }
-        public Member(string name, Gender gender,string image , int age, string? address)
+        public Member(string name, Gender gender,string image , int age, string? address, string UserId)
         {
             Name = name; 
             Gender = gender;
@@ -16,6 +16,7 @@ namespace Gym.DAL.Entities
             Address = address;
             JoinDate = DateTime.Now;
             IsDeleted = false;
+            this.UserId = UserId;
         }
         [Key]
         public int MemberId { get; private set; }

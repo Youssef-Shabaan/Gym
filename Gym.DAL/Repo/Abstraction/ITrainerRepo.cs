@@ -15,7 +15,7 @@ namespace Gym.DAL.Repo.Abstraction
         int GetTrainerCount();
 
 
-        (bool, IEnumerable<Trainer>?) GetAllTrainers();
+        (bool, List<Trainer>?) GetAllTrainers();
         (bool, Trainer?) GetTrainerById(int id);
 
         (bool, Trainer?) GetTrainerSessions(int trainerId);

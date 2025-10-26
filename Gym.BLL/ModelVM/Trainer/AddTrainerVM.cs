@@ -19,5 +19,15 @@ namespace Gym.BLL.ModelVM.Trainer
         public IFormFile Image { get; set; }
 
         public int Capacity { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Phone is required")]
+        public string PhoneNumber { get; set; }
+        [Required, DataType(DataType.Password)]
+        public string Password { get; set; }
+        [Required(ErrorMessage = "UserName is required")]
+        public string UserName { get; set; }
     }
 }

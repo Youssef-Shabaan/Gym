@@ -4,6 +4,8 @@ using Gym.BLL.ModelVM.Member;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.DAL.Entities;
 using Gym.BLL.ModelVM.MemberShip;
+using Gym.BLL.ModelVM.User;
+using AutoMapper.Execution;
 
 namespace Gym.BLL.Mapper
 {
@@ -12,22 +14,24 @@ namespace Gym.BLL.Mapper
         public DomainProfile()
         {
             CreateMap<Trainer, GetTrainerVM>()
-                .ForMember(dest => dest.Email,opt => opt.MapFrom(src => src.User.Email))
-                .ForMember(dest => dest.PhoneNumber,opt => opt.MapFrom(src => src.User.PhoneNumber))
-                .ForMember(dest => dest.Sessions,opt => opt.MapFrom(src => src.Sessions))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(dest => dest.Sessions, opt => opt.MapFrom(src => src.Sessions))
                 .ReverseMap();
 
             CreateMap<UpdateTrainerVM, Trainer>().ReverseMap();
 
 
-            CreateMap<Member, GetMemberVM>()
-                .ReverseMap();
+            CreateMap<Gym.DAL.Entities.Member, GetMemberVM>()
+    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
 
-            CreateMap<AddMemberVM, Member>()
+
+            CreateMap<AddMemberVM, Gym.DAL.Entities.Member>()
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
                 .ReverseMap();
 
-            CreateMap<EditMemberVM, Member>()
+            CreateMap<EditMemberVM, Gym.DAL.Entities.Member>()
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
                 .ReverseMap();
 
@@ -36,6 +40,8 @@ namespace Gym.BLL.Mapper
 
             CreateMap<GetAllMemberShipVM, MemberShip>().ReverseMap();
             CreateMap<GetMemberShipVM, MemberShip>().ReverseMap();
+
+            CreateMap<GetUserVM, User>().ReverseMap();
         }
     }
 }
