@@ -12,7 +12,7 @@ namespace Gym.PL
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +37,8 @@ namespace Gym.PL
             builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
             builder.Services.AddScoped<ISessionRepo, SessionRepo>();
             builder.Services.AddScoped<ITrainerRepo, TrainerRepo>();
+            builder.Services.AddScoped<IUserRepo, UserRepo>();
+            builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 
             // Services Registration
             builder.Services.AddScoped<IAttendanceService, AttendanceService>();
@@ -46,9 +48,47 @@ namespace Gym.PL
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
 
             // Mapper
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+
+            async Task CreateRolesAndAdmin(IServiceProvider serviceProvider)
+            {
+                var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+                // Define roles
+                string[] roles = { "Admin", "Member", "Trainer" };
+
+                // Create roles if they don't exist
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                }
+
+                //// Create a default admin user (optional)
+                //string adminEmail = "admin@gym.com";
+                //string adminPassword = "Admin@123";
+
+                //var adminUser = await userManager.FindByEmailAsync(adminEmail);
+                //if (adminUser == null)
+                //{
+                //    var newAdmin = new User
+                //    {
+                //        UserName = adminEmail,
+                //        Email = adminEmail,
+                //        EmailConfirmed = true
+                //    };
+
+                //    var result = await userManager.CreateAsync(newAdmin, adminPassword);
+                //    if (result.Succeeded)
+                //    {
+                //        await userManager.AddToRoleAsync(newAdmin, "Admin");
+                //    }
+                //}
+            }
 
             var app = builder.Build();
 
@@ -71,6 +111,13 @@ namespace Gym.PL
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            // Create roles when the app starts
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                await CreateRolesAndAdmin(services);
+            }
 
             app.Run();
         }

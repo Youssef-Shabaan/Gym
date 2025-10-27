@@ -43,6 +43,9 @@ namespace Gym.BLL.Service.Implementation
                     return (false, errors);
                 }
 
+                // Add role
+                await userManager.AddToRoleAsync(user, "Member");
+
                 // Create Member
                 var imagepath = Upload.UploadFile("Files", newmember.Image);
                 var member = new Member(newmember.Name, newmember.Gender, imagepath, newmember.Age, newmember.Address, user.Id);

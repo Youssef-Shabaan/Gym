@@ -64,6 +64,21 @@
                                         </ul>
                                     </li>
                                     <li><a href="contact.html">Contact</a></li>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                            <li>
+                                <a asp-controller="Profile" asp-action="Index">Hello, @User.Identity.Name</a>
+                            </li>
+                            <li>
+                                    <a  asp-controller="Account" asp-action="Logout" method="get">Logout</a>
+                                        
+                            </li>
+                                    }
+                                    else
+                                    {
+                            <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                            <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                                    }
                                 </ul>
                             </nav>
                         </div>          
@@ -191,3 +206,4 @@
 
 </body>
 </html>
+@RenderSection("Scripts", required: false)
