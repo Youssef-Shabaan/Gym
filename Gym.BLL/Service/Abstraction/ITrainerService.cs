@@ -9,7 +9,9 @@ namespace Gym.BLL.Service.Abstraction
     {
         (bool, string, List<GetTrainerVM>) GetAll();
         (bool, string, GetTrainerVM) GetByID(int id);
-        Task<(bool, string)> Delete(int id);
+        (bool, string, GetTrainerVM) GetByUserID(string id);
+
+		Task<(bool, string)> Delete(int id);
         (bool, string) Update(int id, UpdateTrainerVM curr);
         Task<(bool, string)> Create(AddTrainerVM newmember);
     }

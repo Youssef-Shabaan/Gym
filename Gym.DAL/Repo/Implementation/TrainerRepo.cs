@@ -127,6 +127,21 @@ namespace Gym.DAL.Repo.Implementation
                 return (false, null);
             }
         }
+        public (bool, Trainer?) GetTrainerByUserId(string id)
+        {
+            try
+            {
+                var trainer = GymDb.trainers.Include(a => a.Sessions).FirstOrDefault(a => a.userId == id);
+                if (trainer != null)
+                    return (true, trainer);
+
+                return (false, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, null);
+            }
+        }
 
         public (bool, Trainer?) GetTrainerSessions(int trainerId)
         {

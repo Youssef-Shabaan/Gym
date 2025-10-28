@@ -54,6 +54,15 @@ namespace Gym.DAL.Repo.Implementation
             }
             catch (Exception ex) { return null; }
         }
+        public Admin GetByUserId(string id)
+        {
+            try
+            {
+                var result = _context.admins.FirstOrDefault(a => a.UserId == id);
+                return result;
+            }
+            catch (Exception ex) { return null; }
+        }
 
         public bool Update(Admin newAdmin)
         {

@@ -122,6 +122,23 @@ namespace Gym.BLL.Service.Implementation
                 return (false, ex.Message, null);
             }
         }
+        public (bool, string, GetAdminVM) GetByUserID(string id)
+        {
+            try
+            {
+                var result = adminRepo.GetByUserId(id);
+                if (result == null)
+                {
+                    return (false, "Not Found", null);
+                }
+                var mapped = mapper.Map<GetAdminVM>(result);
+                return (true, "Done", mapped);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
 
         public (bool, string) Update(int id, EditAdminVM curr)
         {

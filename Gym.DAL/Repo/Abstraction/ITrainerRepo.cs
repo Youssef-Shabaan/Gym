@@ -17,8 +17,10 @@ namespace Gym.DAL.Repo.Abstraction
 
         (bool, List<Trainer>?) GetAllTrainers();
         (bool, Trainer?) GetTrainerById(int id);
+        (bool, Trainer?) GetTrainerByUserId(string id);
 
-        (bool, Trainer?) GetTrainerSessions(int trainerId);
+
+		(bool, Trainer?) GetTrainerSessions(int trainerId);
 
         (bool, string?) RestoreTrainer(int id);
     }

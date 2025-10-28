@@ -123,6 +123,23 @@ namespace Gym.BLL.Service.Implementation
                 return (false, ex.Message, null);
             }
         }
+        public (bool, string, GetTrainerVM) GetByUserID(string id)
+        {
+            try
+            {
+                var result = trainerRepo.GetTrainerByUserId(id);
+                if (result.Item2 == null)
+                {
+                    return (false, "Not Found", null);
+                }
+                var mapped = mapper.Map<GetTrainerVM>(result.Item2);
+                return (true, "Done", mapped);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
 
         public (bool, string) Update(int id, UpdateTrainerVM curr)
         {

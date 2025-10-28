@@ -7,7 +7,9 @@ namespace Gym.DAL.Repo.Abstraction
     {
         List<Member> GetAll();
         Member GetById(int id);
-        bool Create(Member newMember);
+        Member GetByUserId(string id);
+
+		bool Create(Member newMember);
         bool Update(Member newMember);
         bool Delete(int id);
     }

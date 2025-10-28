@@ -48,6 +48,11 @@ namespace Gym.DAL.Repo.Implementation
             var result = DB.members.Where(m => m.MemberId == id).FirstOrDefault();
             return result;
         }
+        public Member GetByUserId(string id)
+        {
+            var result = DB.members.Where(m => m.UserId == id).FirstOrDefault();
+            return result;
+        }
 
         public bool Update(Member newMember)
         {

@@ -7,12 +7,14 @@ namespace Gym.DAL.Entities
     public class Member
     {
         public Member() { }
-        public Member(string name, Gender gender,string image , int age, string? address, string UserId)
+        public Member(string name, Gender gender, string image, int age, string? address, string UserId)
         {
-            Name = name; 
+            Name = name;
             Gender = gender;
             Age = age;
-            Image = image;
+            if (image != null) Image = image;
+            else if (gender == Gender.Male) Image = "avatar_man.png";
+            else Image = "avatar_woman.png";
             Address = address;
             JoinDate = DateTime.Now;
             IsDeleted = false;
@@ -27,7 +29,7 @@ namespace Gym.DAL.Entities
         public string? Address { get; private set; }
         public DateTime? JoinDate { get; private set; }
         public DateTime? UpdateDate { get; private set; }
-        public bool IsDeleted { get; private set; } 
+        public bool IsDeleted { get; private set; }
         public DateTime? DeleltedOn { get; private set; }
 
         //relation ship ya hussein
@@ -54,7 +56,7 @@ namespace Gym.DAL.Entities
         }
         public bool Delete()
         {
-            if(!IsDeleted)
+            if (!IsDeleted)
             {
                 IsDeleted = true;
                 DeleltedOn = DateTime.Now;

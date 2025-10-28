@@ -126,6 +126,23 @@ namespace Gym.BLL.Service.Implementation
                 return (false, ex.Message, null);
             }
         }
+        public (bool, string, GetMemberVM) GetByUserID(string id)
+        {
+            try
+            {
+                var result = _memberRepo.GetByUserId(id);
+                if (result == null)
+                {
+                    return (false, "Not Found", null);
+                }
+                var mapped = _mapper.Map<GetMemberVM>(result);
+                return (true, "Done", mapped);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
 
         public (bool, string) Update(int id, EditMemberVM curr)
         {
