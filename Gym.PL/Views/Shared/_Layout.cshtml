@@ -41,60 +41,74 @@
 	<header>
 		<!-- Header Start -->
 		<div class="header-area header-transparent">
-			<div class="main-header header-sticky">
-				<div class="container-fluid">
-					<div class="menu-wrapper d-flex align-items-center justify-content-between">
-						<!-- Logo -->
-						<div class="logo">
-							<a href="index.html"><img src="~/assets/img/logo/logo.png" alt=""></a>
-						</div>
-						<!-- Main-menu -->
-						<div class="main-menu f-right d-none d-lg-block">
-							<nav>
-								<ul id="navigation">
-									<li><a href="index.html">Home</a></li>
-									<li><a href="about.html">About</a></li>
-									<li><a href="courses.html">Courses</a></li>
-									<li><a href="pricing.html">Pricing</a></li>
-									<li><a href="gallery.html">Gallery</a></li>
-									<li><a href="blog.html">Blog</a>
-										<ul class="submenu">
-											<li><a href="blog.html">Blog</a></li>
-											<li><a href="blog_details.html">Blog Details</a></li>
-											<li><a href="elements.html">Elements</a></li>
-										</ul>
-									</li>
-									<li><a href="contact.html">Contact</a></li>
-									@if (User.Identity.IsAuthenticated)
-									{
-									<li>
-										<a asp-controller="Profile" asp-action="Index">Hello, @User.Identity.Name</a>
-									</li>
-									<li>
-											<a  asp-controller="Account" asp-action="Logout" method="get">Logout</a>
+	<div class="main-header header-sticky">
+		<div class="container-fluid">
+			<div class="menu-wrapper d-flex align-items-center justify-content-between">
 
-									</li>
-									}
-									else
-									{
-									<li><a asp-controller="Account" asp-action="Login">Login</a></li>
-									<li><a asp-controller="Account" asp-action="Register">Register</a></li>
-									}
-								</ul>
-							</nav>
-						</div>          
-						<!-- Header-btn -->
-						<div class="header-btns d-none d-lg-block f-right">
-						   <a href="contact.html" class="btn">Contact me</a>
-					   </div>
-					   <!-- Mobile Menu -->
-					   <div class="col-12">
-						<div class="mobile_menu d-block d-lg-none"></div>
-					</div>
+				<!-- Logo -->
+				<div class="logo">
+					<a href="index.html"><img src="~/assets/img/logo/logo.png" alt=""></a>
 				</div>
+
+				<!-- Main Menu (Left) -->
+				<div class="main-menu f-right d-none d-lg-block">
+					<nav>
+						<ul id="navigation">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="courses.html">Courses</a></li>
+							<li><a href="pricing.html">Pricing</a></li>
+							<li><a href="gallery.html">Gallery</a></li>
+							<li><a href="blog.html">Blog</a>
+								<ul class="submenu">
+									<li><a href="blog.html">Blog</a></li>
+									<li><a href="blog_details.html">Blog Details</a></li>
+									<li><a href="elements.html">Elements</a></li>
+								</ul>
+							</li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+					</nav>
+				</div>
+
+				<!-- Right side: Contact + Account Menu -->
+				<div class="d-flex align-items-center">
+
+					<!-- Contact Button -->
+					<div class="header-btns d-none d-lg-block me-3">
+						<a href="contact.html" class="btn">Contact me</a>
+					</div>
+
+					<!-- Account Menu (Right-most, same style as main nav) -->
+					<div class="main-menu f-right d-none d-lg-block">
+						<nav>
+							<ul id="account-nav">
+										@if (User.Identity.IsAuthenticated)
+										{
+										<li><a asp-controller="Profile" asp-action="Index">Hello, @User.Identity.Name</a></li>
+										<li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+										}
+										else
+										{
+										<li><a asp-controller="Account" asp-action="Login">Login</a></li>
+										<li><a asp-controller="Account" asp-action="Register">Register</a></li>
+										}
+							</ul>
+						</nav>
+					</div>
+
+				</div>
+
+				<!-- Mobile Menu -->
+				<div class="col-12">
+					<div class="mobile_menu d-block d-lg-none"></div>
+				</div>
+
 			</div>
 		</div>
 	</div>
+</div>
+
 	<!-- Header End -->
 </header>
 	@RenderBody()

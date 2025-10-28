@@ -56,53 +56,64 @@
                                 </div>
                                  
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label style ="color:white;" asp-for="Email" class="control-label"></label>
                                     <input style ="color:white;" asp-for="Email" class="form-control" />
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label style ="color:white;" asp-for="UserName" class="control-label"></label>
                                     <input style ="color:white;" asp-for="UserName" class="form-control" />
                                     <span asp-validation-for="UserName" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label style ="color:white;" asp-for="Password" class="control-label"></label>
                                     <input style ="color:white;" asp-for="Password" class="form-control" />
                                     <span  asp-validation-for="Password" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label style ="color:white;" asp-for="PhoneNumber" class="control-label"></label>
                                     <input style ="color:white;" asp-for="PhoneNumber" class="form-control" />
                                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label style ="color:white;" asp-for="Age" class="control-label"></label>
                                     <input style ="color:white;" asp-for="Age" class="form-control" />
                                     <span asp-validation-for="Age" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label style ="color:white;" asp-for="Gender" class="control-label"></label>
-                                    <input style ="color:white;" asp-for="Gender" class="form-control" />
-                                    <span asp-validation-for="Gender" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-12">
+                   
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label style ="color:white;" asp-for="Address" class="control-label"></label>
                                     <input style ="color:white;" asp-for="Address" class="form-control" />
                                     <span  asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label style="color:white;" asp-for="Gender" class="control-label d-block"></label>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" asp-for="Gender" value="Male" id="genderMale">
+                                        <label class="form-check-label" for="genderMale" style="color:white;">Male</label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" asp-for="Gender" value="Female" id="genderFemale">
+                                        <label class="form-check-label" for="genderFemale" style="color:white;">Female</label>
+                                    </div>
+
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
                                 </div>
                             </div>
                             
