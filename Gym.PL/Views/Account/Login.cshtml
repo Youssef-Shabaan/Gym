@@ -2,38 +2,108 @@
 
 @{
     ViewData["Title"] = "Login";
-    Layout = null;
 }
-
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+<style>
+    .text-danger:empty {
+        background: none !important;
+        padding: 0 !important;
+    }
+    .text-danger:not(:empty) {
+        background-color: rgba(255, 0, 0, 0.1);
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+    }
+</style>
+<main>
+    <!--? Hero Start -->
+    <div class="slider-area2">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 pt-70">
+                            <h2>Login</h2>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-
+    <!-- Hero End -->
+    <!--?  Contact Area start  -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="d-none d-sm-block mb-5 pb-4">
+                
+            <div class="row">
+                <div class="col-12">
+                    <h2 style ="color:white;" class="contact-title">Login To Your Account</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form class="form-contact contact_form" asp-action="Login">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-2"
+     style="font-size: 18px; font-weight: 500;"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label style ="color:white;" asp-for="UserName" class="control-label"></label>
+                                    <input style ="color:white;" asp-for="UserName" class="form-control" />
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                                 
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label style ="color:white;" asp-for="Password" class="control-label"></label>
+                                    <input style ="color:white;" asp-for="Password" class="form-control" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                               <div class="form-check form-switch">
+                                    <input class="form-check-input" asp-for="RememberMe" id="rememberMe" />
+                                    <label style ="padding-left:10px" class="form-check-label text-white" for="rememberMe">
+                                                                            @Html.DisplayNameFor(model => model.RememberMe)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <button type="submit" class="button button-contactForm boxed-btn">Login</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-3 offset-lg-1">
+                    <div class="media contact-info">
+                        <span class="contact-info__icon"><i class="ti-home"></i></span>
+                        <div class="media-body">
+                            <h3 style ="color:white;">Buttonwood, California.</h3>
+                            <p>Rosemead, CA 91770</p>
+                        </div>
+                    </div>
+                    <div class="media contact-info">
+                        <span class="contact-info__icon"><i class="ti-tablet"></i></span>
+                        <div class="media-body">
+                            <h3 style ="color:white;">+1 253 565 2365</h3>
+                            <p>Mon to Fri 9am to 6pm</p>
+                        </div>
+                    </div>
+                    <div class="media contact-info">
+                        <span class="contact-info__icon"><i class="ti-email"></i></span>
+                        <div class="media-body">
+                            <h3 style ="color:white;">support@colorlib.com</h3>
+                            <p>Send us your query anytime!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Area End -->
+   
+</main>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

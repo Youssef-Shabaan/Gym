@@ -53,7 +53,7 @@ namespace Gym.PL.Controllers
                 } 
             }
             ModelState.AddModelError("", "username or password error");
-            return View();
+            return View(login);
         }
         [HttpGet]
         public async Task<IActionResult> Logout()
