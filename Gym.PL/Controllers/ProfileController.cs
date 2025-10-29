@@ -38,7 +38,7 @@ namespace Gym.PL.Controllers
 				return View("MemberProfile", member.Item3);
 			}
 
-			return RedirectToAction("AccessDenied", "Account");
+			return RedirectToAction("Login", "Account");
 		}
 
 	}
