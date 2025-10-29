@@ -135,29 +135,37 @@ namespace Gym.PL.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyEmail(VerifyEmailVM model)
         {
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var user = await userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "User not found!");
+                    return View(model);
+                }
+
+                var resultToken = await userManager.GeneratePasswordResetTokenAsync(user);
+
+                var restLink = Url.Action("ChangePassword", "Account", new { email = model.Email, token = resultToken }, Request.Scheme);
+
+                var subject = "Reset Password";
+                var body = $"Please reset your password by clicking here <a href='{restLink}'>Reset Password</a>";
+
+                await emailService.SendEmailAsync(model.Email, subject, body);
+
+                return RedirectToAction("EmailSent", "Account");
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Somthing went error in sending email operation";
                 return View(model);
             }
-
-            var user = await userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                ModelState.AddModelError("", "User not found!");
-                return View(model);
-            }
-
-            var resultToken = await userManager.GeneratePasswordResetTokenAsync(user);
-
-            var restLink = Url.Action("ChangePassword", "Account", new { email = model.Email, token = resultToken }, Request.Scheme);
-
-            var subject = "Reset Password";
-            var body = $"Please reset your password by clicking here <a href='{restLink}'>Reset Password</a>";
-
-            await emailService.SendEmailAsync(model.Email, subject, body);
-
-            return RedirectToAction("EmailSent", "Account");
-
         }
 
 
