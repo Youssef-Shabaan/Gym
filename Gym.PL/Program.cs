@@ -1,3 +1,4 @@
+using Gym.BLL.EmailSetting;
 using Gym.BLL.Mapper;
 using Gym.BLL.Service.Abstraction;
 using Gym.BLL.Service.Implementation;
@@ -49,6 +50,11 @@ namespace Gym.PL
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+
+            // Email Settings
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddTransient<IEmailService, EmailService>();
+
 
             // Mapper
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
