@@ -1,17 +1,45 @@
 ﻿@{
     ViewData["Title"] = "Email Sent";
-    Layout = null;
 }
 
-<div class="account-container">
-    <div class="account-box">
-        <h2 class="text-center mb-4">Email Send</h2>
-        <p class="text-center">A verification email has been sent to your email address. Please check your inbox </p>
-        <div class="text-center mt-2">
-            <a asp-controller="Account" asp-action="Login" class="text-decoration-none mt-2">Back To Login</a>
+<style>
+    .account-card {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 40px 30px;
+        max-width: 600px;
+        margin: 100px auto;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .account-card h2 {
+        color: white;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .account-card p {
+        color: #ddd;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+</style>
+
+<main>
+
+    <section class="contact-section">
+        <div class="container">
+            <div class="account-card">
+                <h2>Email Sent Successfully</h2>
+                <p>A verification email has been sent to your email address.<br />
+                   Please check your inbox to verify your account.</p>
+                <a asp-controller="Account" class="btn" asp-action="Login">Back To Login</a>
+            </div>
         </div>
-    </div>
-</div>
+    </section>
+</main>
 
 @section Scripts {
     @{
