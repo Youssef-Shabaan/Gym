@@ -12,11 +12,16 @@ namespace Gym.PL.Controllers
         private readonly IMemberService memberService;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        public AccountController(IMemberService memberService, UserManager<User> userManager, SignInManager<User> signInManager)
+        private readonly IEmailService emailService;
+        public AccountController(IMemberService memberService, 
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager
+            ,IEmailService emailService)
         {
             this.memberService = memberService;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.emailService = emailService;
         }
         [HttpGet]
         public IActionResult Register()
@@ -61,5 +66,101 @@ namespace Gym.PL.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
+
+
+        // ----------------------------------------
+        [HttpGet]
+        public IActionResult ChangePassword(string email, string token)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("VerifyEmail", "Account");
+            }
+
+            var model = new ChangePasswordVM { Email = email, Token = token };
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Something went wrong");
+                return View(model);
+            }
+
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "User not found!");
+                return View(model);
+            }
+
+            var resetResult = await userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
+            if (!resetResult.Succeeded)
+            {
+                foreach (var error in resetResult.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View(model);
+        }
+
+        // ---------------------------------------------------
+
+        [HttpGet]
+        public IActionResult EmailSent()
+        {
+            return View();
+        }
+
+        // ---------------------------------------------
+        [HttpGet]
+        public IActionResult VerifyEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifyEmail(VerifyEmailVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "User not found!");
+                return View(model);
+            }
+
+            var resultToken = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            var restLink = Url.Action("ChangePassword", "Account", new { emailService = model.Email, token = resultToken }, Request.Scheme);
+
+            var subject = "Reset Password";
+            var body = $"Please reset your password by clicking here <a href='{restLink}'>Reset Password</a>";
+
+            await emailService.SendEmailAsync(model.Email, subject, body);
+
+            return RedirectToAction("EmailSent", "Account");
+
+        }
+
+
+
     }
 }
