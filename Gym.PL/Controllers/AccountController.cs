@@ -149,7 +149,7 @@ namespace Gym.PL.Controllers
 
             var resultToken = await userManager.GeneratePasswordResetTokenAsync(user);
 
-            var restLink = Url.Action("ChangePassword", "Account", new { emailService = model.Email, token = resultToken }, Request.Scheme);
+            var restLink = Url.Action("ChangePassword", "Account", new { email = model.Email, token = resultToken }, Request.Scheme);
 
             var subject = "Reset Password";
             var body = $"Please reset your password by clicking here <a href='{restLink}'>Reset Password</a>";
