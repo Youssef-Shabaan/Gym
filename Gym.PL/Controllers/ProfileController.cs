@@ -25,12 +25,12 @@ namespace Gym.PL.Controllers
 			if (User.IsInRole("Admin"))
 			{
 				var admin =  _adminService.GetByUserID(currentUser.Id);
-				return View("AdminProfile", admin);
+				return View("AdminProfile", admin.Item3);
 			}
 			else if (User.IsInRole("Trainer"))
 			{
 				var trainer =  _trainerService.GetByUserID(currentUser.Id);
-				return View("TrainerProfile", trainer);
+				return View("TrainerProfile", trainer.Item3);
 			}
 			else if (User.IsInRole("Member"))
 			{

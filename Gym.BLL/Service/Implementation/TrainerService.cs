@@ -47,7 +47,7 @@ namespace Gym.BLL.Service.Implementation
 
                 // Create Trainer
                 var imagepath = Upload.UploadFile("Files", newtrainer.Image);
-                var trainer = new Trainer(newtrainer.Name, imagepath, newtrainer.Age, newtrainer.Info, newtrainer.Address, newtrainer.Capacity, user.Id);
+                var trainer = new Trainer(newtrainer.Name, imagepath, newtrainer.Gender, newtrainer.Age, newtrainer.Info, newtrainer.Address, newtrainer.Capacity, user.Id);
                 var addtrainer = trainerRepo.AddTrainer(trainer);
                 if (!addtrainer.Item1)
                 {

@@ -58,11 +58,11 @@ namespace Gym.PL
 
             // Mapper
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
-
             async Task CreateRolesAndAdmin(IServiceProvider serviceProvider)
             {
                 var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+                var dbContext = serviceProvider.GetRequiredService<GymDbContext>();
 
                 // Define roles
                 string[] roles = { "Admin", "Member", "Trainer" };
@@ -74,27 +74,33 @@ namespace Gym.PL
                         await roleManager.CreateAsync(new IdentityRole(role));
                 }
 
-                //// Create a default admin user (optional)
-                //string adminEmail = "admin@gym.com";
-                //string adminPassword = "Admin@123";
+                // Create a default admin user
+                string adminEmail = "admin@gym.com";
+                string adminPassword = "Admin@123";
 
-                //var adminUser = await userManager.FindByEmailAsync(adminEmail);
-                //if (adminUser == null)
-                //{
-                //    var newAdmin = new User
-                //    {
-                //        UserName = adminEmail,
-                //        Email = adminEmail,
-                //        EmailConfirmed = true
-                //    };
+                var adminUser = await userManager.FindByEmailAsync(adminEmail);
+                if (adminUser == null)
+                {
+                    var newAdminUser = new User
+                    {
+                        UserName = "Admin",
+                        Email = adminEmail,
+                        EmailConfirmed = true
+                    };
 
-                //    var result = await userManager.CreateAsync(newAdmin, adminPassword);
-                //    if (result.Succeeded)
-                //    {
-                //        await userManager.AddToRoleAsync(newAdmin, "Admin");
-                //    }
-                //}
+                    var result = await userManager.CreateAsync(newAdminUser, adminPassword);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(newAdminUser, "Admin");
+
+                        // Create related Admin entity
+                        var adminEntity = new Admin("System Admin", null, DAL.Enums.Gender.Male, 20, "Qena", newAdminUser.Id);
+                        await dbContext.admins.AddAsync(adminEntity);
+                        await dbContext.SaveChangesAsync();
+                    }
+                }
             }
+
 
             var app = builder.Build();
 

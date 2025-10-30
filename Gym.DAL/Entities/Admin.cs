@@ -7,10 +7,12 @@ namespace Gym.DAL.Entities
 {
     public class Admin
     {
-        public Admin() { }
+        public Admin() { } 
         public Admin(string name, string image, Gender gender, int age, string address, string userid) {
             this.Name = name;
-            this.Image = image;
+            if (image != null) Image = image;
+            else if (gender == Gender.Male) Image = "avatar_man.png";
+            else Image = "avatar_woman.png";
             this.Gender = gender;
             this.Age = age;
             this.Address = address;

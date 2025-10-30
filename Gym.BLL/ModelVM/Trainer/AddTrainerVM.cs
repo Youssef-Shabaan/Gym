@@ -1,4 +1,5 @@
 ﻿
+using Gym.DAL.Enums;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,7 +16,8 @@ namespace Gym.BLL.ModelVM.Trainer
 
         public string Info { get; set; }
         public string Address { get; set; }
-        
+        [Required(ErrorMessage = "Gender is required")]
+        public Gender Gender { get; set; }
         public IFormFile Image { get; set; }
 
         public int Capacity { get; set; }

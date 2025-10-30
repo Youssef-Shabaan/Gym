@@ -1,6 +1,7 @@
 ﻿using Gym.DAL.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 
 
 namespace Gym.DAL.Entities
@@ -8,10 +9,12 @@ namespace Gym.DAL.Entities
     public class Trainer
     {
         public Trainer() { }
-        public Trainer(string name, string image, int age, string? info, string? address, int capacity, string UserId)
+        public Trainer(string name, string image, Gender gender, int age, string? info, string? address, int capacity, string UserId)
         {
             Name = name;
-            Image = image;
+            if (image != null) Image = image;
+            else if (gender == Gender.Male) Image = "avatar_man.png";
+            else Image = "avatar_woman.png";
             JoinDate = DateTime.Now;
             IsDeleted = false;
             Age = age;
@@ -25,6 +28,7 @@ namespace Gym.DAL.Entities
         public string Name { get; private set; }
         public int Age { get; private set; }
         public string? Info { get; private set; }
+        public Gender Gender { get; private set; }
         public string Image { get; private set; }
         public string? Address { get; set; }
         public DateTime? JoinDate { get; private set; }

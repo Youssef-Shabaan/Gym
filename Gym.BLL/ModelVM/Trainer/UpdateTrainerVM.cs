@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Gym.DAL.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Gym.BLL.ModelVM.Trainer
 {
@@ -10,6 +11,7 @@ namespace Gym.BLL.ModelVM.Trainer
         public string Info { get; set; }
         public string? ImagePath { get; set; }
         public IFormFile Image { get; set; }
+        public Gender? Gender { get; set; }
         public int Capacity { get; set; }
     }
 }
