@@ -84,6 +84,29 @@
                             <button type="submit" class="button button-contactForm boxed-btn">Login</button>
                         </div>
                     </form>
+                        @* start google registeration *@
+                        <div class="text-center mt-4 mb-3">
+                            <span style="color: white; font-size: 18px;">Or Sign in with</span>
+                        </div>
+
+                        <!-- Google Login -->
+                        <form asp-controller="Account" asp-action="ExternalLogin" method="post" class="text-center">
+                            <input type="hidden" name="provider" value="Google" />
+                            <button type="submit" class="btn" style="
+                            background-color: #4285F4;
+                            color: white;
+                            padding: 10px 20px;
+                            border-radius: 8px;
+                            font-weight: 500;
+                            font-size: 16px;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 8px;">
+                                <i class="fab fa-google" style="font-size:18px;"></i>
+                                Google
+                            </button>
+                        </form>
+                        @* end ya huss *@
                 </div>
                 <div class="col-lg-3 offset-lg-1">
                     <div class="media contact-info">
