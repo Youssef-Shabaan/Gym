@@ -14,7 +14,6 @@ namespace Gym.PL.Controllers
     public class AccountController : Controller
     {
         private readonly IMemberService memberService;
-        private readonly IMemberRepo memberRepo;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IEmailService emailService;
@@ -23,13 +22,12 @@ namespace Gym.PL.Controllers
             UserManager<User> userManager
             , SignInManager<User> signInManager
             , IEmailService emailService
-            , IMemberRepo memberRepo)
+            )
         {
             this.memberService = memberService;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.emailService = emailService;
-            this.memberRepo = memberRepo;
         }
         [HttpGet]
         public IActionResult Register()
@@ -229,8 +227,15 @@ namespace Gym.PL.Controllers
                 string? address = null;
                 var age = 0;
 
-                var member = new Member(name, gender, image, age, address, user.Id);
-                memberRepo.Create(member);
+                //var member = new Member(name, gender, image, age, address, user.Id);
+                //memberRepo.Create(member);
+                var AddMember = await memberService.CreateMemberForEmail(name, gender, image, age, address, user.Id);
+
+                if(!AddMember.Item1)
+                {
+                    TempData["AddMemberForEmail"] = AddMember.Item2;
+                    return RedirectToAction(nameof(Register));
+                }
 
                 return RedirectToAction("Index", "Home");
             }

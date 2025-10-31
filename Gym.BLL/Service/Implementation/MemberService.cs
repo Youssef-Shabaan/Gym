@@ -4,6 +4,7 @@ using Gym.BLL.Helper;
 using Gym.BLL.ModelVM.Member;
 using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
+using Gym.DAL.Enums;
 using Gym.DAL.Repo.Abstraction;
 using Microsoft.AspNetCore.Identity;
 
@@ -65,6 +66,25 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
+        public async Task<(bool, string)> CreateMemberForEmail(string name, Gender gender, string image, int age, string address, string userId)
+        {
+            try
+            {
+                var newMember = new Member(name, gender, image, age, address, userId);
+                var result = _memberRepo.Create(newMember);
+                if(!result)
+                {
+                    var user = await userManager.FindByIdAsync(userId);
+                    await userManager.DeleteAsync(user);
+                    return (false, "Faild to Add Member");
+                }
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
 
         public async Task<(bool, string)> Delete(int id)
         {
