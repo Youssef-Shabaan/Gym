@@ -1,0 +1,79 @@
+﻿@using Gym.BLL.ModelVM.Member
+@model List<GetMemberVM>
+<style>
+    .custom-btn {
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #970101 !important;
+        border-color: #970101 !important;
+    }
+</style>
+@{
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
+
+@if (Model == null)
+{
+        <h1>@ViewBag.ErrorMessage or No Members</h1>
+}
+else
+{
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Members</h1>
+                <a href="#" class="custom-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-user-plus fa-sm text-white-50"></i>
+                Add Member
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">All Members</h6>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        @{int i = 1;}
+                        <table id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Address</th>
+                                    <th>Image</th>
+                                    <th>Join Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var member in Model)
+                            {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@member.Name</td>
+                                            <td>@member.Email</td>
+                                            <td>@member.UserName</td>
+                                            <td>@member.Age</td>
+                                            <td>@member.Gender</td>
+                                            <td>@member.Address</td>
+                                            <td>@member.Image</td>
+                                            <td>@member.JoinDate?.ToString("yyyy-MM-dd")</td>
+                                        </tr>
+                                i++;
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+}

@@ -2,6 +2,7 @@
 using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -39,7 +40,7 @@ namespace Gym.DAL.Repo.Implementation
 
         public List<Member> GetAll()
         {
-            var result = DB.members.ToList();
+            var result = DB.members.Include(m => m.User).ToList();
             return result;
         }
 
