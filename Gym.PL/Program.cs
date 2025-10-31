@@ -17,13 +17,20 @@ namespace Gym.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // load config files and environment variables
+            builder.Configuration
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            
+
             //connection string
             var connectionString = builder.Configuration.GetConnectionString("GymConnection");
 
-            builder.Services.AddDbContext<GymDbContext>(options =>options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<GymDbContext>(options => options.UseSqlServer(connectionString));
 
             // Identity Services
             builder.Services.AddIdentity<User, IdentityRole>()
@@ -54,6 +61,19 @@ namespace Gym.PL
             // Email Settings
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.AddTransient<IEmailService, EmailService>();
+
+
+            // Sign with google
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            }).AddGoogle(options =>
+            {
+                options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            });
+
 
 
             // Mapper
