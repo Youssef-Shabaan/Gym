@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251026175034_init")]
+    [Migration("20251030205437_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -75,24 +75,29 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.Attendance", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("date")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("isPresent")
+                    b.Property<bool>("IsPresent")
                         .HasColumnType("bit");
 
-                    b.Property<int>("memberId")
+                    b.Property<int>("MemberId")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("memberId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("SessionId");
 
                     b.ToTable("attendances");
                 });
@@ -268,6 +273,9 @@ namespace Gym.DAL.Migrations
 
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -513,9 +521,17 @@ namespace Gym.DAL.Migrations
                 {
                     b.HasOne("Gym.DAL.Entities.Member", "member")
                         .WithMany()
-                        .HasForeignKey("memberId")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Gym.DAL.Entities.Session", "Session")
+                        .WithMany("Attendances")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Session");
 
                     b.Navigation("member");
                 });
@@ -652,6 +668,8 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
                 {
+                    b.Navigation("Attendances");
+
                     b.Navigation("memberSessions");
                 });
 

@@ -207,6 +207,7 @@ namespace Gym.DAL.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Info = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JoinDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -286,27 +287,6 @@ namespace Gym.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "attendances",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    memberId = table.Column<int>(type: "int", nullable: false),
-                    isPresent = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_attendances", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_attendances_members_memberId",
-                        column: x => x.memberId,
-                        principalTable: "members",
-                        principalColumn: "MemberId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "payments",
                 columns: table => new
                 {
@@ -326,6 +306,34 @@ namespace Gym.DAL.Migrations
                         principalTable: "members",
                         principalColumn: "MemberId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "attendances",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsPresent = table.Column<bool>(type: "bit", nullable: false),
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    SessionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_attendances", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_attendances_members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "members",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_attendances_sessions_SessionId",
+                        column: x => x.SessionId,
+                        principalTable: "sessions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -395,9 +403,14 @@ namespace Gym.DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_attendances_memberId",
+                name: "IX_attendances_MemberId",
                 table: "attendances",
-                column: "memberId");
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_attendances_SessionId",
+                table: "attendances",
+                column: "SessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_members_MemberShipId",
