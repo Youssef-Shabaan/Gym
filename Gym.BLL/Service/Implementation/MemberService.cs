@@ -51,7 +51,7 @@ namespace Gym.BLL.Service.Implementation
                 string imagepath = null;
                 if(newmember.Image!=null)
                    imagepath = Upload.UploadFile("Files", newmember.Image);
-                var member = new Member(newmember.Name, newmember.Gender, imagepath, newmember.Age, newmember.Address, user.Id);
+                var member = new Member(newmember.FisrtName+" "+newmember.LastName, newmember.Gender, imagepath, newmember.Age, newmember.Address, user.Id);
                 var addmember = _memberRepo.Create(member);
                 if(!addmember)
                 {

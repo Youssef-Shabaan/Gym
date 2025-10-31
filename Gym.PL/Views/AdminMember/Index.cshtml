@@ -11,6 +11,7 @@
     }
 </style>
 @{
+    ViewData["Title"] = "Member";
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
 
@@ -23,7 +24,7 @@ else
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Members</h1>
-                <a href="#" class="custom-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <a asp-controller="AdminMember" asp-action="Create" class="custom-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                 <i class="fas fa-user-plus fa-sm text-white-50"></i>
                 Add Member
             </a>
@@ -43,30 +44,45 @@ else
                         <table id="myTable">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Username</th>
-                                    <th>Age</th>
-                                    <th>Gender</th>
-                                    <th>Address</th>
-                                    <th>Image</th>
-                                    <th>Join Date</th>
+                                    <th style ="text-align:center">Id</th>
+                                    <th style ="text-align:left">Name</th>
+                                    <th style ="text-align:left">Email</th>
+                                    <th style ="text-align:left">Username</th>
+                                    <th style ="text-align:center">Age</th>
+                                    <th style ="text-align:left">Gender</th>
+                                    <th style ="text-align:left">Address</th>
+                                    <th style ="text-align:left">Image</th>
+                                    <th style ="text-align:left">Join Date</th>
+                                    <th style ="text-align:center">Operations</th>
                                 </tr>
                             </thead>
                             <tbody>
                             @foreach (var member in Model)
                             {
                                         <tr>
-                                            <td>@i</td>
-                                            <td>@member.Name</td>
-                                            <td>@member.Email</td>
-                                            <td>@member.UserName</td>
-                                            <td>@member.Age</td>
-                                            <td>@member.Gender</td>
-                                            <td>@member.Address</td>
-                                            <td>@member.Image</td>
-                                            <td>@member.JoinDate?.ToString("yyyy-MM-dd")</td>
+                                            <td style ="text-align:center">@i</td>
+                                            <td style ="text-align:left">@member.Name</td>
+                                            <td style ="text-align:left">@member.Email</td>
+                                            <td style ="text-align:left">@member.UserName</td>
+                                            <td style ="text-align:center">@member.Age</td>
+                                            <td style ="text-align:left">@member.Gender</td>
+                                            <td style ="text-align:left">@member.Address</td>
+                                            <td style="text-align:center">
+                                        @if (string.IsNullOrEmpty(member.Image) || member.Image == "avatar_man.png" || member.Image == "avatar_woman.png")
+                                                {
+                                                                 <span class="text-muted">No Image</span>
+                                                }
+                                                else
+                                                {
+                            <a href="javascript:void(0);" class="text-primary" onclick="showImageModal('@Url.Content("~/Files/" + member.Image)')">Preview</a>
+                                                }
+                                            </td>
+
+                                            <td style ="text-align:left">@member.JoinDate?.ToString("dd-MM-yyyy")</td>
+                                            <td style ="text-align:center">
+                                                <a href="#" style = "color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
+                                                <a href="#" style = "color:#858796; margin:0 10px"> <i  class="fas fa-trash fa-sm "></i></a>
+                                            </td>
                                         </tr>
                                 i++;
                             }
@@ -77,3 +93,18 @@ else
             </div>
         </div>
 }
+<!-- Image Preview Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content text-center p-3">
+      <img id="previewImage" src="" alt="Member Image" class="img-fluid rounded" />
+    </div>
+  </div>
+</div>
+
+<script>
+  function showImageModal(imgSrc) {
+      document.getElementById('previewImage').src = imgSrc;
+      $('#imageModal').modal('show');
+  }
+</script>
