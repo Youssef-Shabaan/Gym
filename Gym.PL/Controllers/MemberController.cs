@@ -25,7 +25,7 @@ namespace Gym.PL.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles =("Member"))]
+        [Authorize(Roles =("Admin,Member"))]
         public IActionResult Edit(int id)
         {
             var member = _memberService.GetByID(id);
@@ -36,9 +36,10 @@ namespace Gym.PL.Controllers
             }
 
             var UserId = User.Claims.FirstOrDefault(c => c.Type==ClaimTypes.NameIdentifier);
-            var userId = UserId.Value; 
+            var userId = UserId.Value;
+            var isAdmin = User.IsInRole("Admin");
 
-            if(member.Item3.UserId != userId)
+            if(member.Item3.UserId != userId && !isAdmin)
             {
                 return Unauthorized();
             }
@@ -60,8 +61,9 @@ namespace Gym.PL.Controllers
         {
             var UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
             var userId = UserId.Value;
+            var isAdmin = User.IsInRole("Admin");
 
-            if (editMember.UserId != userId)
+            if (editMember.UserId != userId && !isAdmin)
             {
                 return Unauthorized();
             }
