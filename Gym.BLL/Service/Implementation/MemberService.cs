@@ -180,7 +180,7 @@ namespace Gym.BLL.Service.Implementation
                     curr.ImagePath = imagePath;
                 }
 
-                _mapper.Map(curr, member);
+                member.EditInfo(curr.Name, curr.Age, curr.Gender, curr.Address, curr.ImagePath);
 
                 var success = _memberRepo.Update(member);
                 if (!success)

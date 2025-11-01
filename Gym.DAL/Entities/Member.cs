@@ -40,6 +40,14 @@ namespace Gym.DAL.Entities
         public int? MemberShipId { get; private set; }
         public MemberShip _MemberShip { get; private set; }
         public List<MemberSession> memberSessions { get; private set; }
+        public void EditInfo(string Name, int Age, Gender Gender, string Address, string ImagePath = null) {
+            this.Name   = Name;
+            this.Age = Age;
+            this.Gender = Gender;
+            this.Address = Address;
+            if (!string.IsNullOrEmpty(ImagePath))
+                this.Image = ImagePath;
+        }
         public bool EditMember(Member member)
         {
             if (member != null)
