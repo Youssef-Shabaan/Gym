@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Gym.PL.Controllers
 {
-	[Authorize(Roles = "Admin")]
-	public class AdminMemberController : Controller
+    [Authorize(Roles = "Admin")]
+    public class AdminMemberController : Controller
     {
         private readonly IMemberService _memberService;
         public AdminMemberController(IMemberService memberService)
         {
-			_memberService = memberService;
-		}
+            _memberService = memberService;
+        }
         public IActionResult Index()
         {
             var members = _memberService.GetAll();
-            ViewBag.ErrorMessage = members.Item2;
+            TempData["ErrorMessage"] = members.Item2;
             return View(members.Item3);
         }
         [HttpGet]
@@ -38,5 +38,15 @@ namespace Gym.PL.Controllers
             }
             return View(addMemberVM);
         }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _memberService.Delete(id);
+            if (result.Item1)
+                return RedirectToAction("Index");
+            TempData["ErrorMessage"] = result.Item2;
+            return RedirectToAction("Index");
+        }
+
     }
 }

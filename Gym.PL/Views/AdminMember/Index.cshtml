@@ -15,12 +15,11 @@
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
 
-@if (Model == null)
+@if (TempData["ErrorMessage"] != null && TempData["ErrorMessage"].ToString() != "Done")
 {
-        <h1>@ViewBag.ErrorMessage or No Members</h1>
+            <h1>@TempData["ErrorMessage"]</h1>
 }
-else
-{
+
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Members</h1>
@@ -40,7 +39,9 @@ else
 
                     <!-- Card Body -->
                     <div class="card-body">
-                        @{int i = 1;}
+                @{
+                    int i = 1;
+                }
                         <table id="myTable">
                             <thead>
                                 <tr>
@@ -57,42 +58,43 @@ else
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach (var member in Model)
-                            {
-                                        <tr>
-                                            <td style ="text-align:center">@i</td>
-                                            <td style ="text-align:left">@member.Name</td>
-                                            <td style ="text-align:left">@member.Email</td>
-                                            <td style ="text-align:left">@member.UserName</td>
-                                            <td style ="text-align:center">@member.Age</td>
-                                            <td style ="text-align:left">@member.Gender</td>
-                                            <td style ="text-align:left">@member.Address</td>
-                                            <td style="text-align:center">
-                                        @if (string.IsNullOrEmpty(member.Image) || member.Image == "avatar_man.png" || member.Image == "avatar_woman.png")
-                                                {
-                                                                 <span class="text-muted">No Image</span>
-                                                }
-                                                else
-                                                {
-                            <a href="javascript:void(0);" class="text-primary" onclick="showImageModal('@Url.Content("~/Files/" + member.Image)')">Preview</a>
-                                                }
-                                            </td>
+                        @foreach (var member in Model)
+                        {
+                                            <tr>
+                                                <td style ="text-align:center">@i</td>
+                                                <td style ="text-align:left">@member.Name</td>
+                                                <td style ="text-align:left">@member.Email</td>
+                                                <td style ="text-align:left">@member.UserName</td>
+                                                <td style ="text-align:center">@member.Age</td>
+                                                <td style ="text-align:left">@member.Gender</td>
+                                                <td style ="text-align:left">@member.Address</td>
+                                                <td style="text-align:center">
+                                    @if (string.IsNullOrEmpty(member.Image) || member.Image == "avatar_man.png" || member.Image == "avatar_woman.png")
+                                    {
+                                                                         <span class="text-muted">No Image</span>
+                                    }
+                                    else
+                                    {
+                                    <a href="javascript:void(0);" class="text-primary" onclick="showImageModal('@Url.Content("~/Files/" + member.Image)')">Preview</a>
+                                    }
+                                                </td>
 
-                                            <td style ="text-align:left">@member.JoinDate?.ToString("dd-MM-yyyy")</td>
-                                            <td style ="text-align:center">
-                                                <a href="#" style = "color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
-                                                <a href="#" style = "color:#858796; margin:0 10px"> <i  class="fas fa-trash fa-sm "></i></a>
-                                            </td>
-                                        </tr>
-                                i++;
-                            }
+                                                <td style ="text-align:left">@member.JoinDate?.ToString("dd-MM-yyyy")</td>
+                                                <td style ="text-align:center">
+                                                            <a asp-controller="AdminMember" asp-action="Edit" asp-route-id="@member.MemberId" style = "color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
+                                                        <a href="#" class="delete-btn" data-id="@member.MemberId" data-toggle="modal" data-target="#deleteConfirmModal" style="color:#858796; margin:0 10px">
+                                                            <i class="fas fa-trash fa-sm"></i>
+                                                        </a>
+                                                </td>
+                                            </tr>
+                            i++;
+                        }
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-}
 <!-- Image Preview Modal -->
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -101,7 +103,34 @@ else
     </div>
   </div>
 </div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Are you sure you want to delete this member?</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
 
+        <a id="confirmDeleteBtn" class="btn btn-danger" asp-controller="AdminMember" asp-action="Delete">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const memberId = this.getAttribute('data-id');
+            const deleteBtn = document.getElementById('confirmDeleteBtn');
+            deleteBtn.setAttribute('href', `/AdminMember/Delete/${memberId}`);
+        });
+    });
+</script>
 <script>
   function showImageModal(imgSrc) {
       document.getElementById('previewImage').src = imgSrc;
