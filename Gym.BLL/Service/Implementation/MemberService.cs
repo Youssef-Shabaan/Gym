@@ -182,6 +182,7 @@ namespace Gym.BLL.Service.Implementation
 
                 var mapMember = _mapper.Map(curr, member);
 
+
                 var success = _memberRepo.Update(mapMember, curr.PhoneNumber);
                 if (!success)
                     return (false, "Failed to update member");
