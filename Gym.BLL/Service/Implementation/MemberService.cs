@@ -2,6 +2,7 @@
 using AutoMapper;
 using Gym.BLL.Helper;
 using Gym.BLL.ModelVM.Member;
+using Gym.BLL.ModelVM.ModifyPhotos;
 using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
 using Gym.DAL.Enums;
@@ -16,12 +17,16 @@ namespace Gym.BLL.Service.Implementation
         private readonly IMapper _mapper;
         private readonly UserManager<User> userManager;
 
+
         public MemberService(IMemberRepo _memberRepo, IMapper _mapper, UserManager<User> userManager)
         {
             this._memberRepo = _memberRepo;
             this._mapper = _mapper;
             this.userManager = userManager;
         }
+
+        
+
         public async Task<(bool, string)> Create(AddMemberVM newmember)
         {
             try
@@ -166,23 +171,18 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
-        public (bool, string) Update(int id, EditMemberVM curr)
+        public (bool, string) Update(EditMemberVM curr)
         {
             try
             {
-                var member = _memberRepo.GetById(id);
+                var member = _memberRepo.GetById(curr.Id);
                 if (member == null)
                     return (false, "Member not found");
 
-                if (curr.Image != null)
-                {
-                    var imagePath = Upload.UploadFile("Files", curr.Image);
-                    curr.ImagePath = imagePath;
-                }
 
-                _mapper.Map(curr, member);
+                var mapMember = _mapper.Map(curr, member);
 
-                var success = _memberRepo.Update(member);
+                var success = _memberRepo.Update(mapMember, curr.PhoneNumber);
                 if (!success)
                     return (false, "Failed to update member");
 
@@ -193,6 +193,26 @@ namespace Gym.BLL.Service.Implementation
             {
                 return (false, ex.Message);
             }
+        }
+
+        public bool ChangePhoto(ChangePhotoVM changePhotoVM)
+        {
+            try
+            {
+                var imagePath = Upload.UploadFile("Files", changePhotoVM.ImagePath);
+                changePhotoVM.Image = imagePath;
+                var memberPhoto = _mapper.Map<Member>(changePhotoVM);
+                return _memberRepo.ChangePhoto(memberPhoto);
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public void DeletePhoto(int id)
+        {
+            _memberRepo.DeletePhoto(id);
         }
     }
 }

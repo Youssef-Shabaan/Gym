@@ -4,6 +4,7 @@ using Gym.BLL.ModelVM.Admin;
 using Gym.BLL.ModelVM.Attendance;
 using Gym.BLL.ModelVM.Member;
 using Gym.BLL.ModelVM.MemberShip;
+using Gym.BLL.ModelVM.ModifyPhotos;
 using Gym.BLL.ModelVM.Session;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.BLL.ModelVM.User;
@@ -23,10 +24,17 @@ namespace Gym.BLL.Mapper
 
             CreateMap<UpdateTrainerVM, Trainer>().ReverseMap();
 
+            CreateMap<ChangePhotoVM, DAL.Entities.Member>()
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
+                .ForMember(dest => dest.MemberId, opt => opt.MapFrom(src => src.Id));
+
 
             CreateMap<Gym.DAL.Entities.Member, GetMemberVM>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ReverseMap();
 
 
             CreateMap<AddMemberVM, Gym.DAL.Entities.Member>()
@@ -35,6 +43,7 @@ namespace Gym.BLL.Mapper
 
             CreateMap<EditMemberVM, Gym.DAL.Entities.Member>()
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
+                .ForPath(dest => dest.User.PhoneNumber, opt => opt.Ignore())
                 .ReverseMap();
 
             CreateMap<AddUpdateSessionVM, Session>().ReverseMap();

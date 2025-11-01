@@ -55,7 +55,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var result = DB.users.Where(m => m.Id == newUser.Id).FirstOrDefault();
                 if (result == null) return false;
-                var ok = result.EditUser(newUser);
+                var ok = result.EditUser("");
                 if (!ok) return false;
                 DB.SaveChanges();
                 return true;

@@ -13,9 +13,9 @@ namespace Gym.DAL.Entities
             this.Email = email;
             this.UserName = email;
         }
-        public bool EditUser(User user)
+        public bool EditUser(string phone)
         {
-            if (user == null) return false;
+            this.PhoneNumber = phone;
             return true;
         }
     }
