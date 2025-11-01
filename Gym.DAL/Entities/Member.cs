@@ -1,6 +1,8 @@
 ﻿using Gym.DAL.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Gym.DAL.Entities
 {
@@ -40,19 +42,35 @@ namespace Gym.DAL.Entities
         public int? MemberShipId { get; private set; }
         public MemberShip _MemberShip { get; private set; }
         public List<MemberSession> memberSessions { get; private set; }
-        public bool EditMember(Member member)
+        public bool EditMember(Member member, string phoneNumber)
         {
             if (member != null)
             {
                 Name = member.Name;
-                Gender = member.Gender;
                 Age = member.Age;
-                Image = member.Image;
+               
                 Address = member.Address;
                 UpdateDate = member.UpdateDate;
+                User.PhoneNumber = phoneNumber;
                 return true;
             }
             return false;
+        }
+
+        public bool ChangePhoto(Member mebmerImage)
+        {
+            if (mebmerImage.Image != null)
+            {
+                Image = mebmerImage.Image;
+                return true;
+            }
+            return false;
+        }
+
+        public void DeletePhoto()
+        {
+            if (Gender == Gender.Male) Image = "avatar_man.png";
+            else Image = "avatar_woman.png";
         }
         public bool Delete()
         {

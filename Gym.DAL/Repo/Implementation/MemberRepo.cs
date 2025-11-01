@@ -13,6 +13,23 @@ namespace Gym.DAL.Repo.Implementation
         {
             this.DB = DB;
         }
+
+        public bool ChangePhoto(Member MemberImagePath)
+        {
+            try
+            {
+                var member = DB.members.FirstOrDefault(m => m.MemberId == MemberImagePath.MemberId);
+                if (member == null) return false;
+                var result = member.ChangePhoto(MemberImagePath);
+                DB.SaveChanges();
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                return false;
+            }
+        }
+
         public bool Create(Member newMember)
         {
             try
@@ -38,6 +55,13 @@ namespace Gym.DAL.Repo.Implementation
             catch { return false; }
         }
 
+        public void DeletePhoto(int id)
+        {
+            var member = DB.members.FirstOrDefault(m => m.MemberId == id);
+            member.DeletePhoto();
+            DB.SaveChanges();
+        }
+
         public List<Member> GetAll()
         {
             var result = DB.members.Include(m => m.User).ToList();
@@ -46,7 +70,7 @@ namespace Gym.DAL.Repo.Implementation
 
         public Member GetById(int id)
         {
-            var result = DB.members.Where(m => m.MemberId == id).FirstOrDefault();
+            var result = DB.members.Include(m => m.User).Where(m => m.MemberId == id).FirstOrDefault();
             return result;
         }
         public Member GetByUserId(string id)
@@ -55,11 +79,11 @@ namespace Gym.DAL.Repo.Implementation
             return result;
         }
 
-        public bool Update(Member newMember)
+        public bool Update(Member newMember, string phoneNumber)
         {
             var result = DB.members.Where(m => m.UserId == newMember.UserId).FirstOrDefault();
             if (result == null) return false;
-            var ok = result.EditMember(newMember);
+            var ok = result.EditMember(newMember, phoneNumber);
             if (!ok) return false;
             DB.SaveChanges();
             return true;

@@ -9,8 +9,12 @@ namespace Gym.DAL.Repo.Abstraction
         Member GetById(int id);
         Member GetByUserId(string id);
 
+        bool ChangePhoto(Member MemberImagePath);
+
 		bool Create(Member newMember);
-        bool Update(Member newMember);
+        bool Update(Member newMember, string phonNumber);
         bool Delete(int id);
+
+        void DeletePhoto(int id);
     }
 }
