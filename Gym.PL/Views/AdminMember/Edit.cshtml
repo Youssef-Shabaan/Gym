@@ -1,0 +1,78 @@
+﻿@model Gym.BLL.ModelVM.Member.EditMemberVM
+
+@{
+    ViewData["Title"] = "Edit Member";
+    Layout = "~/Views/Shared/_AdminDashboardCRUD.cshtml";
+}
+<style>
+    .custom-btn {
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #970101 !important;
+        border-color: #970101 !important;
+    }
+</style>
+@if (ViewBag.ErrorMessage != null)
+{
+                    <h1>@ViewBag.ErrorMessage</h1>
+}
+ <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Members</h1>
+                <a asp-controller="AdminMember" asp-action="Index" class="custom-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i>
+                Back
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Member</h6>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <form class="col-12" asp-action="Edit" asp-controller="AdminMember" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(model=>model.UserId)
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="Age" class="control-label"></label>
+                    <input asp-for="Age" class="form-control" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="custom-btn btn btn-primary" />
+            </div>
+
+        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<!--===========================-->

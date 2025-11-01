@@ -2,6 +2,7 @@
 using Gym.BLL.Service.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Gym.PL.Controllers
 {
@@ -47,6 +48,42 @@ namespace Gym.PL.Controllers
             TempData["ErrorMessage"] = result.Item2;
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var member = _memberService.GetByID(id);
 
+            if (!member.Item1)
+            {
+                return NotFound();
+            }
+            
+            var editMember = new EditMemberVM()
+            {
+                UserId = member.Item3.UserId,
+                Id = id,
+                Name = member.Item3.Name,
+                Age = member.Item3.Age,
+                Address = member.Item3.Address,
+                PhoneNumber = member.Item3.PhoneNumber
+            };
+            return View(editMember);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(EditMemberVM editMember)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = _memberService.Update(editMember);
+                if (!result.Item1)
+                {
+                    ViewBag.ErrorMessage = result.Item2;
+                    return View();
+                }
+                return RedirectToAction("Index");
+            }
+            return View(editMember);
+        }
     }
 }

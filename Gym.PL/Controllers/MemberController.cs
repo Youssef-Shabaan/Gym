@@ -25,7 +25,7 @@ namespace Gym.PL.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles =("Admin,Member"))]
+        [Authorize(Roles =("Member"))]
         public IActionResult Edit(int id)
         {
             var member = _memberService.GetByID(id);

@@ -81,7 +81,7 @@ namespace Gym.DAL.Repo.Implementation
 
         public bool Update(Member newMember, string phoneNumber)
         {
-            var result = DB.members.Where(m => m.UserId == newMember.UserId).FirstOrDefault();
+            var result = DB.members.Where(m => m.MemberId == newMember.MemberId).FirstOrDefault();
             if (result == null) return false;
             var ok = result.EditMember(newMember, phoneNumber);
             if (!ok) return false;
