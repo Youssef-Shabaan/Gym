@@ -4,6 +4,7 @@ namespace Gym.BLL.ModelVM.Member
 {
     public class GetMemberVM
     {
+        public string UserId { get; set; }  
         public int MemberId { get; set; }
 
         public string Name { get; set; }
@@ -23,5 +24,7 @@ namespace Gym.BLL.ModelVM.Member
         public string? Email { get; set; }
 
         public string? UserName { get; set; }
+
+        public string? PhoneNumber { get; set; }
     }
 }

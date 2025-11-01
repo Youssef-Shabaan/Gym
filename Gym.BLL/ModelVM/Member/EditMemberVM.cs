@@ -7,18 +7,21 @@ namespace Gym.BLL.ModelVM.Member
 {
     public class EditMemberVM
     {
-        public int MemberId { get; set; }
+        public string UserId { get; set; }
+        public int Id { get; set; } 
 
         [Required(ErrorMessage = "Name is required")]
         [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
-        public string Name { get; set; }
-        [Range(18, 40, ErrorMessage = "Age must be between 18 and 40")]
-        public int Age { get; set; }
-        [Required(ErrorMessage = "Gender is required")]
-        public Gender Gender { get; set; }
-        public string Address { get; set; }
-        public string ImagePath { get; set; }
-        public IFormFile? Image { get; set; }
+        public string? Name { get; set; }
+
+        [Range(18, 60, ErrorMessage = "Age must be between 18 and 60")]
+        public int? Age { get; set; }
+
+        public string? Address { get; set; }
+
+
+        [Required(ErrorMessage = "Phone number is required.")]
+        public string? PhoneNumber { get; set; }
 
     }
 }
