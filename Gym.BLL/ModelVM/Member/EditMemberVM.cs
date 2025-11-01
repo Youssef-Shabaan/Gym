@@ -10,6 +10,7 @@ namespace Gym.BLL.ModelVM.Member
         public string UserId { get; set; }
         public int Id { get; set; } 
 
+        [Required(ErrorMessage = "Name is required")]
         [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
         public string? Name { get; set; }
 
