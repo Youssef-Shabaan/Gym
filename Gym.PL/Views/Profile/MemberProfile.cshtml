@@ -3,6 +3,124 @@
 @{
     ViewData["Title"] = "Member Profile";
 }
+<style>
+.custom-btn,
+  .custom-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 10px 25px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  /* الزر الأساسي */
+  .custom-btn {
+    background-color: #ff1313;
+    border: none;
+    color: white;
+    box-shadow: 0 0 10px rgba(255, 19, 19, 0.3);
+  }
+
+  .custom-btn:hover {
+    background-color: #e60f0f;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 19, 19, 0.5);
+  }
+
+  /* الزر الخارجي (اختيار الصورة) */
+  .custom-btn-outline {
+    border: 2px solid #ff1313;
+    color: #ff1313;
+    background: transparent;
+  }
+
+  .custom-btn-outline:hover {
+    background-color: #ff1313;
+    color: #fff;
+    transform: scale(1.05);
+  }
+.edit-photo-btn {
+  width: 30px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  color: #0d6efd;
+  font-size: 12px;
+}
+
+.edit-photo-btn i {
+  font-size: 13px;
+}
+
+.edit-photo-btn:hover {
+  background-color: #0d6efd;
+  transform: scale(1.05);
+  color: white;
+}
+
+.position-relative:hover .edit-icon {
+  display: block !important;
+}
+
+.dropdown-menu {
+  background-color: #1c1c1c;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  padding: 8px 0;
+  min-width: 180px;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item {
+  color: #e0e0e0;
+  font-size: 14px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #0d6efd;
+  color: #fff;
+  transform: scale(1.03);
+}
+
+.dropdown-item i {
+  font-size: 14px;
+  width: 18px;
+  text-align: center;
+}
+
+.dropdown-item .text-primary {
+  color: #0d6efd !important;
+}
+.dropdown-item .text-danger {
+  color: #dc3545 !important;
+}
+
+.dropdown-item:hover i {
+  color: #fff !important;
+}
+.dropdown-divider {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin: 5px 0;
+}
+
+</style>
 
 <main>
    
@@ -25,17 +143,50 @@
             padding: 20px;
         ">
           <div class="card-body text-center">
-            <img src="~/Files/@Model.Image" 
-                 alt="avatar"
-                 class="rounded-circle img-fluid mb-3" 
-                 style="width: 150px; border: 3px solid #0d6efd;">
+            <div class="position-relative d-inline-block">
+    <img src="~/Files/@Model.Image"
+         alt="avatar"
+     class="rounded-circle img-fluid mb-3"
+     style="
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border: 3px solid #0d6efd;
+        transition: 0.3s;
+     "
+     id="profileImage">
+
+    <!-- Edit button -->
+<div class="edit-icon dropdown" style="
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: none;
+">
+ <button class="edit-photo-btn dropdown-toggle" 
+        type="button" id="dropdownMenuButton"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        </button>
+
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePhotoModal">
+  <i class="fas fa-upload text-primary mr-2"></i> Change Photo
+</a>
+
+    <div class="dropdown-divider"></div>
+  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#confirmDeleteModal">
+  <i class="fas fa-trash text-danger mr-2"></i> Delete Photo
+</a>
+</div>
+
+</div>
+</div>
+
             <h1 class="my-3 text-light">@Model.Name</h1>
             <p class="text-muted mb-1">Member</p>
             <p class="text-muted mb-4">@Model.Address</p>
            <div class="d-flex justify-content-center mb-2 gap-3">
                 <a style ="margin:4px" asp-controller="Member" asp-action="Edit" asp-route-id="@Model.MemberId" class="btn">Edit Info</a>
-                <a style ="margin:4px" asp-controller="Member" asp-action="ChangePhoto" asp-route-id="@Model.MemberId" class="btn">Change Photo</a>
-                <a style ="margin:4px" asp-controller="Member" asp-action="DeletePhoto" asp-route-id="@Model.MemberId" class="btn">Delete Photo</a>
             </div>
           </div>
         </div>
@@ -102,3 +253,103 @@
 </section>
 
 </main>
+<div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="
+        background-color: #1c1c1c;
+        color: #e0e0e0;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.7);
+      ">
+      <div class="modal-header border-0">
+        <h4 class="modal-title text-white fw-bold" id="changePhotoModalLabel" 
+            style="font-size: 1.6rem; letter-spacing: 0.5px;">
+          Change Profile Photo
+        </h4>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+<div class="modal-body text-center" style="padding: 25px;">
+  <!-- الصورة الحالية -->
+  <img id="previewImage" src="~/Files/@Model.Image" alt="Current Photo"
+       style="width: 160px; height: 160px; object-fit: cover; border-radius: 50%;
+              border: 3px solid #0d6efd; margin-bottom: 25px; transition: 0.3s;" />
+
+  <form asp-controller="Member" asp-action="ChangePhoto" method="post" enctype="multipart/form-data">
+
+<input type="hidden" name="Id" value="@Model.MemberId" />
+<input type="file" id="photoInput" name="ImagePath" accept="image/*" style="display: none;" required />
+
+    <!-- زرار اختيار الصورة -->
+    <label for="photoInput" class="custom-btn-outline mb-3">
+      <i class="fas fa-image"></i> Choose New Photo
+    </label>
+
+    <!-- زرار الرفع -->
+    <div>
+      <button type="submit" class="custom-btn">
+        <i class="fas fa-upload"></i> Upload
+      </button>
+    </div>
+  </form>
+</div>
+    </div>
+  </div>
+</div>
+
+<!-- سكربت المعاينة -->
+<script>
+  document.getElementById('photoInput').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById('previewImage').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+        <!-- Modal تأكيد الحذف -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="
+        background-color: #1c1c1c;
+        color: #e0e0e0;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.7);
+      ">
+      <div class="modal-header border-0">
+        <h4 class="modal-title text-white fw-bold" id="confirmDeleteModalLabel" 
+            style="font-size: 1.5rem; letter-spacing: 0.5px;">
+          Confirm Delete
+        </h4>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body text-center" style="padding: 30px;">
+        <i class="fas fa-exclamation-triangle mb-3" style="font-size: 50px; color: #ff1313;"></i>
+        <h5 style ="font-size: 15px; margin-top: 10px;"class="text-light mb-4">Are you sure you want to delete your profile photo?</h5>
+
+        <div class="d-flex justify-content-center gap-3">
+          <button style = "margin: 10px;" type="button" class="custom-btn-outline" data-dismiss="modal">
+            Cancel
+          </button>
+
+          <form asp-controller="Member" asp-action="DeletePhoto" asp-route-id="@Model.MemberId" method="post">
+  <button type="submit" class="custom-btn" style="margin: 10px;">
+    Delete
+  </button>
+</form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

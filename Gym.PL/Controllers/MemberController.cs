@@ -80,13 +80,6 @@ namespace Gym.PL.Controllers
             }
             return View(editMember);
         }
-
-        [HttpGet]
-        public IActionResult ChangePhoto(int id)
-        {
-            ChangePhotoVM changePhotoVM = new ChangePhotoVM() { Id = id };
-            return View(changePhotoVM);
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ChangePhoto(ChangePhotoVM changePhoto)
@@ -95,7 +88,7 @@ namespace Gym.PL.Controllers
             return RedirectToAction("Index", "Profile");
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult DeletePhoto(int id)
         {
             _memberService.DeletePhoto(id);
