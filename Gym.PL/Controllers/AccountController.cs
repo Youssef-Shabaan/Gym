@@ -79,7 +79,7 @@ namespace Gym.PL.Controllers
         }
 
 
-        // ----------------------------------------
+        // ---------------------------This for forgot Password ------------------
         [HttpGet]
         public IActionResult ChangePassword(string email, string token)
         {
@@ -244,5 +244,43 @@ namespace Gym.PL.Controllers
             return RedirectToAction(nameof(Login));
         }
 
+        [HttpGet]
+        [Authorize]
+        public IActionResult ChangeAccountPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeAccountPassword(ChangeAccountPasswordVM model)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await userManager.GetUserAsync(User);
+                if (user == null)
+                    return RedirectToAction("Login");
+
+                var checkOld = await userManager.CheckPasswordAsync(user, model.OldPassword);
+                if (!checkOld)
+                {
+                    ModelState.AddModelError("", "Old password is incorrect");
+                    return View(model);
+                }
+
+                var result = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+                if (result.Succeeded)
+                {
+                    TempData["Success"] = "Password changed successfully!";
+                    return RedirectToAction("Index", "Profile");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
+        }
     }
 }
