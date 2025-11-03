@@ -1,56 +1,129 @@
 ﻿@model Gym.BLL.ModelVM.Member.EditMemberVM
-
 @{
     ViewData["Title"] = "Edit";
-    Layout = null;
 }
-
-<h1>Edit</h1>
-<hr />
-
-@if (ViewBag.ErrorMessage != null)
-{
-    <p>@ViewBag.ErrorMessage</p>
-}
-else
-{
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Edit" enctype="multipart/form-data">
-                @Html.HiddenFor(m => m.UserId)
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+<section style="
+    background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, #121212 10%, #121212 90%, rgba(0,0,0,0.95) 100%);
+    color: #e0e0e0;
+    margin-top: 115px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    ">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card mb-4" style="
+                    background-color: #1c1c1c;
+                    border: none;
+                    border-radius: 15px;
+                    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+                    padding: 30px;
+                    ">
+                    <div class="card-body">
+                        <h2 class="text-center text-light mb-4" style="font-size: 26px;">Edit Your Info</h2>
+                        <hr style="border-color: #333;">
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <p class="text-danger text-center">@ViewBag.ErrorMessage</p>
+                        }
+                        else
+                        {
+                            <form asp-action="Edit" enctype="multipart/form-data">
+                                @Html.HiddenFor(m => m.UserId)
+                                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                                <style>
+                                    input.form-control {
+                                    background-color: #2a2a2a !important;
+                                    color: #e0e0e0 !important;
+                                    border: 1px solid #444 !important;
+                                    border-radius: 10px !important;
+                                    padding: 12px 16px !important;
+                                    width: 100% !important;
+                                    transition: none !important;
+                                    font-size: 16px !important;
+                                    }
+                                    input.form-control:focus {
+                                    background-color: #2a2a2a !important;
+                                    color: #e0e0e0 !important;
+                                    border: 1px solid #555 !important;
+                                    box-shadow: none !important;
+                                    }
+                                    label {
+                                    font-size: 16px;
+                                    margin-bottom: 6px;
+                                    }
+                                    .custom-btn {
+                                    background-color: #ff1313;
+                                    color: white;
+                                    padding: 12px 25px;
+                                    border-radius: 10px;
+                                    border: none;
+                                    transition: 0.3s;
+                                    box-shadow: 0 0 10px rgba(255, 19, 19, 0.3);
+                                    font-size: 17px;
+                                    cursor: pointer;
+                                    }
+                                    .custom-btn:hover {
+                                    background-color: #e60f0f;
+                                    transform: scale(1.05);
+                                    box-shadow: 0 0 15px rgba(255, 19, 19, 0.5);
+                                    }
+                                    .custom-btn-outline {
+                                    border: 2px solid #ff1313;
+                                    color: #ff1313;
+                                    background: transparent;
+                                    padding: 10px 22px;
+                                    border-radius: 10px;
+                                    transition: 0.3s;
+                                    font-size: 16px;
+                                    display: inline-block;
+                                    }
+                                    .custom-btn-outline:hover {
+                                    background-color: #ff1313;
+                                    color: #fff;
+                                    transform: scale(1.05);
+                                    }
+                                </style>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Name" class="control-label text-light"></label>
+                                    <input style="height: 50px;" asp-for="Name" class="form-control" />
+                                    <span style="font-size: 15px;" asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Age" class="control-label text-light"></label>
+                                    <input style="height: 50px;" asp-for="Age" class="form-control" />
+                                    <span style="font-size: 15px;" asp-validation-for="Age" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Address" class="control-label text-light"></label>
+                                    <input style="height: 50px;" asp-for="Address" class="form-control" />
+                                    <span style="font-size: 15px;" asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="PhoneNumber" class="control-label text-light"></label>
+                                    <input style="height: 50px;" asp-for="PhoneNumber" class="form-control" />
+                                    <span style="font-size: 15px;" asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="custom-btn">
+                                    <i class="fas fa-save"></i> Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        }
+                        <div class="text-center mt-4">
+                            <a asp-controller="Account" asp-action="ChangeAccountPassword" class="custom-btn-outline">
+                            <i class="fas fa-key"></i> Change Password
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Age" class="control-label"></label>
-                    <input asp-for="Age" class="form-control" />
-                    <span asp-validation-for="Age" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PhoneNumber" class="control-label"></label>
-                    <input asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-}
-
-<div>
-    <a asp-controller="Account" asp-action="ChangeAccountPassword">Change Password</a>
-</div>
-
+</section>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

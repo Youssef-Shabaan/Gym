@@ -1,25 +1,22 @@
 ﻿@using Gym.BLL.ModelVM.Account
 @model VerifyEmailVM
-
 @{
     ViewData["Title"] = "Verify Email";
 }
 <style>
     .text-danger:empty {
-        background: none !important;
-        padding: 0 !important;
+    background: none !important;
+    padding: 0 !important;
     }
     .text-danger:not(:empty) {
-        background-color: rgba(255, 0, 0, 0.1);
-        padding: 5px 10px;
-        border-radius: 6px;
-        font-size: 15px;
-        font-weight: 500;
+    background-color: rgba(255, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
     }
 </style>
-
 <main>
-    <!--? Hero Start -->
     <div class="slider-area2">
         <div class="slider-height2 d-flex align-items-center">
             <div class="container">
@@ -33,63 +30,54 @@
             </div>
         </div>
     </div>
-    <!-- Hero End -->
-
-    <!--?  Contact Area start  -->
     <section class="contact-section">
         <div class="container">
             <div class="d-none d-sm-block mb-5 pb-4"></div>
-
             <div class="row">
                 <div class="col-12">
                     <h2 style="color:white;" class="contact-title">Verify Your Email</h2>
                 </div>
-
                 <div class="col-lg-8">
                     @if (ViewBag.ErrorMessage != null)
                     {
-                            <div class="alert alert-danger mt-2">
+                        <div class="alert alert-danger mt-2">
                             @ViewBag.ErrorMessage
-                            </div>
-                            <div class="form-group mt-3">
-                                <a asp-controller="Account" asp-action="VerifyEmail"
-                                   class="button button-contactForm boxed-btn">Back</a>
-                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <a asp-controller="Account" asp-action="VerifyEmail"
+                                class="button button-contactForm boxed-btn">Back</a>
+                        </div>
                     }
                     else
                     {
-                            <form class="form-contact contact_form" asp-action="VerifyEmail" method="post">
+                        <form class="form-contact contact_form" asp-action="VerifyEmail" method="post">
                             @Html.AntiForgeryToken()
-                                <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-2"
-                                     style="font-size: 18px; font-weight: 500;"></div>
-
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label style="color:white;" asp-for="Email" class="control-label"></label>
-                                            <input style="color:white;" asp-for="Email" class="form-control" />
-                                            <span asp-validation-for="Email" class="text-danger"></span>
-                                        </div>
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-2"
+                                style="font-size: 18px; font-weight: 500;"></div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="Email" class="control-label"></label>
+                                        <input style="color:white;" asp-for="Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
                                     </div>
                                 </div>
-
-                                <div class="form-group mt-3">
-                                    <button type="submit" class="button button-contactForm boxed-btn">Verify</button>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="button button-contactForm boxed-btn">Verify</button>
+                            </div>
+                            <div class="col-12" style="padding-left:0">
+                                <div class="form-group mt-2">
+                                    <a asp-controller="Account" asp-action="Login"
+                                        class="text-decoration-none"
+                                        style="color:white; font-size:16px; display:inline-block; margin-top:5px;">
+                                    Back to Login
+                                    </a>
                                 </div>
-
-                                <div class="col-12" style="padding-left:0">
-                                    <div class="form-group mt-2">
-                                        <a asp-controller="Account" asp-action="Login"
-                                           class="text-decoration-none"
-                                           style="color:white; font-size:16px; display:inline-block; margin-top:5px;">
-                                            Back to Login
-                                        </a>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
+                        </form>
                     }
                 </div>
-
                 <div class="col-lg-3 offset-lg-1">
                     <div class="media contact-info">
                         <span class="contact-info__icon"><i class="ti-home"></i></span>
@@ -116,9 +104,7 @@
             </div>
         </div>
     </section>
-    <!-- Contact Area End -->
 </main>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -8,6 +8,7 @@ namespace Gym.BLL.ModelVM.Account
     {
         [Required(ErrorMessage ="Old password is required")]
         [DisplayName("Old Password")]
+        [DataType(DataType.Password)]
         public string OldPassword { get; set; }
 
         [Required(ErrorMessage ="New password is required")]

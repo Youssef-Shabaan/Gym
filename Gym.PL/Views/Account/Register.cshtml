@@ -1,25 +1,21 @@
 ﻿@model Gym.BLL.ModelVM.Member.AddMemberVM
-
 @{
     ViewData["Title"] = "Register";
 }
-
 <style>
     .text-danger:empty {
-        background: none !important;
-        padding: 0 !important;
+    background: none !important;
+    padding: 0 !important;
     }
     .text-danger:not(:empty) {
-        background-color: rgba(255, 0, 0, 0.1);
-        padding: 5px 10px;
-        border-radius: 6px;
-        font-size: 15px;
-        font-weight: 500;
+    background-color: rgba(255, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
     }
 </style>
-
 <main>
-    <!--? Hero Start -->
     <div class="slider-area2">
         <div class="slider-height2 d-flex align-items-center">
             <div class="container">
@@ -33,20 +29,17 @@
             </div>
         </div>
     </div>
-    <!-- Hero End -->
-    <!--?  Contact Area start  -->
     <section class="contact-section">
         <div class="container">
-            <div class="d-none d-sm-block mb-5 pb-4">
-                
+        <div class="d-none d-sm-block mb-5 pb-4">
             <div class="row">
                 <div class="col-12">
                     <h2 style ="color:white;" class="contact-title">Create Your Account</h2>
                 </div>
                 <div class="col-lg-8">
                     <form class="form-contact contact_form" asp-action="Register">
-                            <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-2"
-     style="font-size: 18px; font-weight: 500;"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-2"
+                            style="font-size: 18px; font-weight: 500;"></div>
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
@@ -54,7 +47,6 @@
                                     <input style ="color:white;" asp-for="FisrtName" class="form-control" />
                                     <span  asp-validation-for="FisrtName" class="text-danger"></span>
                                 </div>
-                                 
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
@@ -91,7 +83,6 @@
                                     <span asp-validation-for="Age" class="text-danger"></span>
                                 </div>
                             </div>
-                   
                             <div class="col-6">
                                 <div class="form-group">
                                     <label style ="color:white;" asp-for="Address" class="control-label"></label>
@@ -102,42 +93,33 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label style="color:white;" asp-for="Gender" class="control-label d-block"></label>
-
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" asp-for="Gender" value="Male" id="genderMale">
                                         <label class="form-check-label" for="genderMale" style="color:white;">Male</label>
                                     </div>
-
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" asp-for="Gender" value="Female" id="genderFemale">
                                         <label class="form-check-label" for="genderFemale" style="color:white;">Female</label>
                                     </div>
-
                                     <span asp-validation-for="Gender" class="text-danger"></span>
                                 </div>
                             </div>
-                            
                         </div>
                         <div style="margin-bottom: 1rem;" class="form-group mt-3">
                             <button type="submit" class="button button-contactForm  boxed-btn w-100">Register</button>
                         </div>
                     </form>
-
-                    @* start google registeration *@
-                       <div class="form-group mt-3">
-                            <span class="text-decoration-none"
-                   style="color:white; font-size:16px; display:inline-block; margin-top:5px;">Or Sign in with</span>
-                        </div>
-
-                        <!-- Google Login -->
-                       <form asp-controller="Account" asp-action="ExternalLogin" method="post">
-                            <input type="hidden" name="provider" value="Google" />
-                            <button type="submit" class="button button-contactForm boxed-btn w-100">
-                                <i class="fab fa-google" style="font-size:18px;"></i>
-                                Google
-                            </button>
-                        </form>
-                        @* end ya huss *@
+                    <div class="form-group mt-3">
+                        <span class="text-decoration-none"
+                            style="color:white; font-size:16px; display:inline-block; margin-top:5px;">Or Sign in with</span>
+                    </div>
+                    <form asp-controller="Account" asp-action="ExternalLogin" method="post">
+                        <input type="hidden" name="provider" value="Google" />
+                        <button type="submit" class="button button-contactForm boxed-btn w-100">
+                        <i class="fab fa-google" style="font-size:18px;"></i>
+                        Google
+                        </button>
+                    </form>
                 </div>
                 <div class="col-lg-3 offset-lg-1">
                     <div class="media contact-info">
@@ -165,9 +147,9 @@
             </div>
         </div>
     </section>
-    <!-- Contact Area End -->
-   
 </main>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
