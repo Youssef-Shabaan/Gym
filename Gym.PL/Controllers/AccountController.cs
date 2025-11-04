@@ -233,8 +233,9 @@ namespace Gym.PL.Controllers
 
                 if(!AddMember.Item1)
                 {
-                    TempData["AddMemberForEmail"] = AddMember.Item2;
                     await signInManager.SignOutAsync();
+                    await userManager.DeleteAsync(user);
+                    TempData["AddMemberForEmail"] = AddMember.Item2;
                     return RedirectToAction(nameof(Register));
                 }
 
