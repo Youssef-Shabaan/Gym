@@ -17,7 +17,7 @@ namespace Gym.BLL.ModelVM.Account
         public string NewPassword { get; set; }
 
         [Required]
-        [Compare("NewPassword", ErrorMessage = "Passwords do not match")]
+        [Compare("NewPassword", ErrorMessage = "Password does not match")]
         [DisplayName("Confirm Password")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
