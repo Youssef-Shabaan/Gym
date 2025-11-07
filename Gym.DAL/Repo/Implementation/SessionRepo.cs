@@ -1,6 +1,7 @@
 ﻿using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -67,7 +68,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var sessions = GymDb.sessions.ToList();
+                var sessions = GymDb.sessions.Include(t => t._Trainer).ToList();
                 if(!sessions.Any())
                 {
                     return(false, null);
@@ -84,7 +85,9 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var session = GymDb.sessions.Where(a =>a.Id == id).FirstOrDefault();    
+                var session = GymDb.sessions.Include(t => t._Trainer).ThenInclude(u => u.User)
+                    .Where(a =>a.Id == id).FirstOrDefault();  
+                
                 if(session == null)
                 {
                     return (false, null);

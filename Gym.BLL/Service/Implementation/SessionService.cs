@@ -17,7 +17,7 @@ namespace Gym.BLL.Service.Implementation
             this.mapper = mapper;
             this.sessionRepo = sessionRepo;
         }
-        public (bool, string?) AddSession(AddUpdateSessionVM sessionvm)
+        public (bool, string?) AddSession(AddSessionVM sessionvm)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
-        public (bool, string?) Update(AddUpdateSessionVM sessionvm)
+        public (bool, string?) Update(AddSessionVM sessionvm)
         {
             try
             {

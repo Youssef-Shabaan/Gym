@@ -98,7 +98,8 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainers = GymDb.trainers.Where(t => !t.IsDeleted).ToList();
+                var trainers = GymDb.trainers.Include(a => a.Sessions).Include(u => u.User)
+                    .Where(t => !t.IsDeleted).ToList();
 
                 if (!trainers.Any())
                     return (false, null);
@@ -116,7 +117,8 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainer = GymDb.trainers.Include(a => a.Sessions).FirstOrDefault(a => a.TrainerId == id);
+                var trainer = GymDb.trainers.Include(a => a.Sessions).Include(u => u.User)
+                    .FirstOrDefault(a => a.TrainerId == id);
                 if (trainer != null)
                     return (true, trainer);
 
