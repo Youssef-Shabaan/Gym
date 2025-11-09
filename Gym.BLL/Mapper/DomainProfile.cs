@@ -46,8 +46,15 @@ namespace Gym.BLL.Mapper
                 .ForPath(dest => dest.User.PhoneNumber, opt => opt.Ignore())
                 .ReverseMap();
 
-            CreateMap<AddUpdateSessionVM, Session>().ReverseMap();
-            CreateMap<Session, GetSessionVM>().ReverseMap();
+            CreateMap<AddSessionVM, Session>().ReverseMap();
+
+            CreateMap<UpdateSessionVM, Session>().ReverseMap();
+
+            CreateMap<Session, GetSessionVM>()
+                .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src._Trainer.Name))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src =>
+                DateTime.Now < src.StartTime ? "Not Started" : DateTime.Now >= src.StartTime && DateTime.Now <= src.EndTime ? "Ongoing" : "Ended"))
+                .ReverseMap();
 
             CreateMap<GetAllMemberShipVM, MemberShip>().ReverseMap();
             CreateMap<GetMemberShipVM, MemberShip>().ReverseMap();

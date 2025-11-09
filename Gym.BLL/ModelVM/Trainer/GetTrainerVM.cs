@@ -6,6 +6,7 @@ namespace Gym.BLL.ModelVM.Trainer
 {
     public class GetTrainerVM
     {
+        public int TrainerId { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }
         public string Info { get; set; }

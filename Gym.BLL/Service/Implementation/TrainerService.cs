@@ -97,6 +97,10 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var result = trainerRepo.GetAllTrainers();
+                if(!result.Item1)
+                {
+                    return (false, "There are no trainers", null);
+                }
                 var mapped = mapper.Map<List<GetTrainerVM>>(result.Item2);
                 return (true, "Done", mapped);
             }
