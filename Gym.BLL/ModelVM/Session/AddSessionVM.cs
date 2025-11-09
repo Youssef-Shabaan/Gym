@@ -1,6 +1,7 @@
 ﻿
 using Gym.BLL.ModelVM.Trainer;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Gym.BLL.ModelVM.Session
@@ -18,9 +19,11 @@ namespace Gym.BLL.ModelVM.Session
         public string? Description { get;  set; }
 
         [Required(ErrorMessage = "Start time is required")]
+        [DisplayName("Start Time")]
         public DateTime StartTime { get;  set; } = DateTime.Now;
 
         [Required(ErrorMessage = "End time is required")]
+        [DisplayName("End Time")]
         public DateTime EndTime { get; set; } = DateTime.Now;
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
