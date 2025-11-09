@@ -138,7 +138,7 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
-        public (bool, string?) Update(AddSessionVM sessionvm)
+        public (bool, string?) Update(UpdateSessionVM sessionvm)
         {
             try
             {

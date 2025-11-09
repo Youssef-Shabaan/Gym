@@ -155,7 +155,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var OldSession = GymDb.sessions.Where(a => a.Id == session.Id).FirstOrDefault();
+                var OldSession = GymDb.sessions.FirstOrDefault(a => a.Id == session.Id);
                 if(OldSession == null)
                 {
                     return (false, "This session not found.");

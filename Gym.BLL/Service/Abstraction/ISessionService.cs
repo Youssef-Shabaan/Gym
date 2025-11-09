@@ -7,7 +7,7 @@ namespace Gym.BLL.Service.Abstraction
     public interface ISessionService
     {
         (bool, string?) AddSession(AddSessionVM session);
-        (bool, string?) Update(AddSessionVM session);
+        (bool, string?) Update(UpdateSessionVM session);
         (bool, string?) Delete(int id);
         (bool, GetSessionVM?) GetById(int id);
         (bool, string, IEnumerable<GetSessionVM>?) GetAll();

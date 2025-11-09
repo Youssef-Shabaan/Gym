@@ -40,7 +40,6 @@ namespace Gym.DAL.Entities
             Description = session.Description;
             StartTime = session.StartTime;
             EndTime = session.EndTime;
-            TrainerId = session.TrainerId;
             return true;
         }
     }

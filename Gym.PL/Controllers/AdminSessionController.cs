@@ -1,6 +1,7 @@
 ﻿using Gym.BLL.ModelVM.Session;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.BLL.Service.Abstraction;
+using Gym.BLL.Service.Implementation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +45,7 @@ namespace Gym.PL.Controllers
             return View(addSession);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Add(AddSessionVM addSession)
         {
             addSession.Trainers = trainerService.GetAll().Item3;
@@ -58,6 +60,56 @@ namespace Gym.PL.Controllers
                 return RedirectToAction("Index");
             }
             return View(addSession);
+        }
+        [HttpGet]
+        public IActionResult Edit(int Id)
+        {
+            var session = sessionService.GetById(Id);
+            if (!session.Item1)
+            {
+                return NotFound();
+            }
+            var updatedSession = new UpdateSessionVM()
+            {
+                Id = session.Item2.Id,
+                Name = session.Item2.Name,
+                Description = session.Item2.Description,
+                StartTime = session.Item2.StartTime,
+                EndTime = session.Item2.EndTime
+            };
+            return View(updatedSession);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(UpdateSessionVM updatedSession)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = sessionService.Update(updatedSession);
+                if(!result.Item1)
+                {
+                    ModelState.AddModelError("", result.Item2);
+                    return View(updatedSession);
+                }
+                return RedirectToAction("Index");
+            }
+            return View(updatedSession);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int Id)
+        {
+            var session = sessionService.GetById(Id);
+            if (!session.Item1)
+            {
+                return NotFound();
+            }
+            var result = sessionService.Delete(Id);
+            if(!result.Item1)
+            {
+                TempData["ErrorMessage"] = result.Item2;
+            }
+            return RedirectToAction("Index");
         }
     }
 }
