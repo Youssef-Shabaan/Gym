@@ -23,7 +23,7 @@ namespace Gym.BLL.Service.Implementation
             {
                 var session = mapper.Map<Session>(sessionvm);
                 var result = sessionRepo.AddSession(session);
-                if(!result.Item1)
+                if (!result.Item1)
                 {
                     return (false, result.Item2);
                 }
@@ -31,7 +31,7 @@ namespace Gym.BLL.Service.Implementation
             }
             catch (Exception ex)
             {
-                return(false, ex.Message);
+                return (false, ex.Message);
             }
         }
 
@@ -40,11 +40,11 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var result = sessionRepo.Delete(id);
-                if(!result.Item1)
+                if (!result.Item1)
                 {
-                    return(false, result.Item2);
+                    return (false, result.Item2);
                 }
-                return(true, "Deleted Successfully");
+                return (true, "Deleted Successfully");
             }
             catch (Exception ex)
             {
@@ -57,12 +57,8 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var AllSessions = sessionRepo.GetAll();
-                if(!AllSessions.Item1)
-                {
-                    return (false, "There are no sessions", null);
-                }
                 var Sessions = mapper.Map<IEnumerable<GetSessionVM>>(AllSessions.Item2);
-                return(true, null,  Sessions);
+                return (true, null, Sessions);
             }
             catch (Exception ex)
             {
@@ -75,7 +71,7 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var session = sessionRepo.GetById(id);
-                if(!session.Item1)
+                if (!session.Item1)
                 {
                     return (false, null);
                 }
@@ -111,7 +107,7 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var TrainerSessions = sessionRepo.GetSessionsByTrainerId(trainerId);
-                if(!TrainerSessions.Item1)
+                if (!TrainerSessions.Item1)
                 {
                     return (false, "There are no sessions", null);
                 }
@@ -148,7 +144,7 @@ namespace Gym.BLL.Service.Implementation
             {
                 var session = mapper.Map<Session>(sessionvm);
                 var result = sessionRepo.Update(session);
-                if(!result.Item1)
+                if (!result.Item1)
                 {
                     return (false, result.Item2);
                 }

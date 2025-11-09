@@ -9,7 +9,7 @@ namespace Gym.DAL.Entities
     public class Trainer
     {
         public Trainer() { }
-        public Trainer(string name, string image, Gender gender, int age, string? info, string? address, int capacity, string UserId)
+        public Trainer(string name, string image, Gender gender, int age, string? address, int capacity, string UserId)
         {
             Name = name;
             if (image != null) Image = image;
@@ -18,7 +18,6 @@ namespace Gym.DAL.Entities
             JoinDate = DateTime.Now;
             IsDeleted = false;
             Age = age;
-            Info = info;
             Address = address;
             Capacity = capacity;
             userId = UserId;
@@ -52,7 +51,6 @@ namespace Gym.DAL.Entities
             Image = trainer.Image;
             UpdateDate = DateTime.Now;
             Address = trainer.Address;
-            Info = trainer.Info;
             Age = trainer.Age;
             Capacity = trainer.Capacity;
             return true;

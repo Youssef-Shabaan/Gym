@@ -1,0 +1,133 @@
+﻿@using Gym.BLL.ModelVM.Trainer
+@model List<GetTrainerVM>
+<style>
+    .custom-btn {
+    transition: background-color 0.3s ease;
+    }
+    .custom-btn:hover {
+    background-color: #970101 !important;
+    border-color: #970101 !important;
+    }
+</style>
+@{
+    ViewData["Title"] = "Trainers";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
+@if (TempData["ErrorMessage"] != null && TempData["ErrorMessage"].ToString() != "Done")
+{
+        <h1>@TempData["ErrorMessage"]</h1>
+}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Trainers</h1>
+    <a asp-controller="AdminTrainer" asp-action="Create" class="custom-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+    <i class="fas fa-user-plus fa-sm text-white-50"></i>
+    Add Trainer
+    </a>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Trainers</h6>
+            </div>
+            <div class="card-body">
+                @{
+                    int i = 1;
+                }
+                <table id="myTable">
+                    <thead>
+                        <tr>
+                            <th style ="text-align:center">Id</th>
+                            <th style ="text-align:left">Name</th>
+                            <th style ="text-align:left">Email</th>
+                            <th style ="text-align:left">Username</th>
+                            <th style ="text-align:center">Capacity</th>
+                            <th style ="text-align:center">Age</th>
+                            <th style ="text-align:left">Gender</th>
+                            <th style ="text-align:left">Address</th>
+                            <th style ="text-align:left">Image</th>
+                            <th style ="text-align:left">Join Date</th>
+                            <th style ="text-align:center">Operations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var trainer in Model)
+                        {
+                                <tr>
+                                    <td style ="text-align:center">@i</td>
+                                        <td style ="text-align:left">@trainer.Name</td>
+                                        <td style ="text-align:left">@trainer.Email</td>
+                                        <td style ="text-align:left">@trainer.UserName</td>
+                                        <td style ="text-align:center">@trainer.Capacity</td>
+                                        <td style ="text-align:center">@trainer.Age</td>
+                                        <td style ="text-align:left">@trainer.Gender</td>
+                                        <td style ="text-align:left">@trainer.Address</td>
+                                    <td style="text-align:center">
+                                    @if (string.IsNullOrEmpty(trainer.Image) || trainer.Image == "avatar_man.png" || trainer.Image == "avatar_woman.png")
+                                    {
+                                                <span class="text-muted">No Image</span>
+                                    }
+                                    else
+                                    {
+                                                        <a href="javascript:void(0);" class="text-primary" onclick="showImageModal('@Url.Content("~/Files/" + trainer.Image)')">Preview</a>
+                                    }
+                                    </td>
+                                        <td style ="text-align:left">@trainer.JoinDate?.ToString("dd-MM-yyyy")</td>
+                                    <td style ="text-align:center">
+                                            <a asp-controller="AdminTrainer" asp-action="Edit" asp-route-id="@trainer.TrainerId" style = "color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
+                                                <a href="#" class="delete-btn" data-id="@trainer.TrainerId" data-toggle="modal" data-target="#deleteConfirmModal" style="color:#858796; margin:0 10px">
+                                        <i class="fas fa-trash fa-sm"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Preview Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center p-3">
+            <img id="previewImage" src="" alt="Trainer Image" class="img-fluid rounded" />
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Are you sure you want to delete this trainer?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" class="btn btn-danger" asp-controller="AdminTrainer" asp-action="Delete">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const trainerId = this.getAttribute('data-id');
+            const deleteBtn = document.getElementById('confirmDeleteBtn');
+            deleteBtn.setAttribute('href', `/AdminTrainer/Delete/${trainerId}`);
+        });
+    });
+</script>
+<script>
+    function showImageModal(imgSrc) {
+        document.getElementById('previewImage').src = imgSrc;
+        $('#imageModal').modal('show');
+    }
+</script>

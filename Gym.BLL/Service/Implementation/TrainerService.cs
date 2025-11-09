@@ -46,8 +46,10 @@ namespace Gym.BLL.Service.Implementation
                 }
 
                 // Create Trainer
-                var imagepath = Upload.UploadFile("Files", newtrainer.Image);
-                var trainer = new Trainer(newtrainer.Name, imagepath, newtrainer.Gender, newtrainer.Age, newtrainer.Info, newtrainer.Address, newtrainer.Capacity, user.Id);
+                string imagepath = null;
+                if (newtrainer.Image != null)
+                    imagepath = Upload.UploadFile("Files", newtrainer.Image);
+                var trainer = new Trainer(newtrainer.FisrtName+' '+newtrainer.LastName, imagepath, newtrainer.Gender, newtrainer.Age, newtrainer.Address, newtrainer.Capacity, user.Id);
                 var addtrainer = trainerRepo.AddTrainer(trainer);
                 if (!addtrainer.Item1)
                 {
@@ -97,10 +99,6 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var result = trainerRepo.GetAllTrainers();
-                if(!result.Item1)
-                {
-                    return (false, "There are no trainers", null);
-                }
                 var mapped = mapper.Map<List<GetTrainerVM>>(result.Item2);
                 return (true, "Done", mapped);
             }
@@ -153,11 +151,7 @@ namespace Gym.BLL.Service.Implementation
                 var trainer = result.Item2;
                 if (trainer == null)
                     return (false, "Trainer not found");
-                if (curr.Image != null)
-                {
-                    var imagePath = Upload.UploadFile("Files", curr.Image);
-                    curr.ImagePath = imagePath;
-                }
+                
                 mapper.Map(curr, trainer);
 
                 var updateResult = trainerRepo.UpdateTrainer(trainer);

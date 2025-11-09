@@ -21,12 +21,8 @@
             Add Session
         </a>
     </div>
-@if (TempData["ErrorMessage"] != null)
-{
-    <h1>@TempData["ErrorMessage"]</h1>
-}
-else
-{
+
+
     <div class="row">
         <div class="col-12">
             <div class="card shadow mb-4">
@@ -42,10 +38,10 @@ else
                             <tr>
                                 <th style="text-align:center">Id</th>
                                 <th style="text-align:left">Name</th>
-                                <th style="text-align:center">Trainer Name</th>
-                                <th style="text-align:left">Start Time</th>
-                                <th style="text-align:left">End Time</th>
-                                <th style="text-align:left">Status</th>
+                                <th style="text-align:left">Trainer Name</th>
+                                <th style="text-align:center">Start Time</th>
+                                <th style="text-align:center">End Time</th>
+                                <th style="text-align:center">Status</th>
                                 <th style="text-align:center">Operations</th>
                             </tr>
                         </thead>
@@ -56,7 +52,7 @@ else
                                     <td style="text-align:center">@i</td>
                                     <td style="text-align:left">@session.Name</td>
                                     <td style="text-align:left">@session.TrainerName</td>
-                                    <td style="text-align:left">@session.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td style="text-align:center">@session.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
                                     <td style="text-align:center">@session.EndTime.ToString("yyyy-MM-dd HH:mm")</td>
                                     <td style="text-align:center">
                                         @if (session.Status == "Not Started")
@@ -87,7 +83,7 @@ else
             </div>
         </div>
     </div>
-}
+
 
 
 <!-- Image Preview Modal -->
