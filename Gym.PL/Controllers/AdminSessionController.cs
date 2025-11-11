@@ -75,7 +75,8 @@ namespace Gym.PL.Controllers
                 Name = session.Item2.Name,
                 Description = session.Item2.Description,
                 StartTime = session.Item2.StartTime,
-                EndTime = session.Item2.EndTime
+                EndTime = session.Item2.EndTime,
+                Price = session.Item2.Price
             };
             return View(updatedSession);
         }

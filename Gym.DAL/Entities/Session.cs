@@ -10,20 +10,20 @@ namespace Gym.DAL.Entities
     public class Session
     {
         public Session() { }
-        public Session(string name, string description, DateTime StartTime,DateTime EndTime, int capactiy) 
+        public Session(string name, string description, DateTime StartTime,DateTime EndTime, int capactiy, decimal price) 
         {
             Name = name; 
             Description = description; 
             this.StartTime = StartTime;
             this.EndTime = EndTime;
-            
+            this.Price = price;
         }
         public int Id { get; private set; }
         public string Name { get; private set; }
         public string? Description { get; private set; }
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
-
+        public decimal Price { get; private set; }  
 
         // relation ya hussein
         
@@ -40,6 +40,7 @@ namespace Gym.DAL.Entities
             Description = session.Description;
             StartTime = session.StartTime;
             EndTime = session.EndTime;
+            this.Price = session.Price;
             return true;
         }
     }

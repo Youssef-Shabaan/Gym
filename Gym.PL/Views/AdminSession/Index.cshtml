@@ -42,6 +42,7 @@
                                 <th style="text-align:center">Start Time</th>
                                 <th style="text-align:center">End Time</th>
                                 <th style="text-align:center">Status</th>
+                                <th style="text-align:center">Price</th>
                                 <th style="text-align:center">Operations</th>
                             </tr>
                         </thead>
@@ -68,6 +69,7 @@
                                             <span class="badge badge-danger" style="font-size:14px;color:white">@session.Status</span>
                                         }
                                     </td>
+                                <td style="text-align:center">@session.Price</td>
                                     <td style="text-align:center">
                                         <a asp-controller="AdminSession" asp-action="Edit" asp-route-id="@session.Id" style="color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
                                         <a href="#" class="delete-btn" data-id="@session.Id" data-toggle="modal" data-target="#deleteConfirmModal" style="color:#858796; margin:0 10px">

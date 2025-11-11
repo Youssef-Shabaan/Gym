@@ -1,7 +1,7 @@
 ﻿using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -13,26 +13,13 @@ namespace Gym.DAL.Repo.Implementation
             this.GymDb = GymDb;
         }
 
-        public (bool, string) AddMemberToSession(int memberId, int sessionId)
+        public (bool, string) Add(MemberSession memberSession)
         {
             try
             {
-                var member = GymDb.members.FirstOrDefault(a => a.MemberId == memberId);
-                if (member == null) return (false, "Member is not found");
-
-                var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
-                if (session == null) return (false, "Session is not found");
-                var trainer = GymDb.trainers.FirstOrDefault(a => a.TrainerId == session.TrainerId);   
-
-                bool alreadyExists = GymDb.memberSessions
-                        .Any(ms => ms.memberId == memberId && ms.sessionId == sessionId);
-                if (alreadyExists) return (false, "Already exist");
-
-                var newMember = new MemberSession(memberId, sessionId);
-                GymDb.memberSessions.Add(newMember);
+                var result = GymDb.memberSessions.Add(memberSession);
                 GymDb.SaveChanges();
-                return (true, "Your registeration is done");
-
+                return (true, "Added member to session is done");
             }
             catch (Exception ex)
             {
@@ -40,20 +27,81 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
-        public (bool, string, IEnumerable<Member>?) GetMembersBySession(int sessionId)
+        public (bool, string) Delete(int id)
         {
             try
             {
-                var session = GymDb.sessions.Any(a => a.Id == sessionId);
-                if (!session) return (false, "Session is not found", null);
+                var memberSession = GymDb.memberSessions.FirstOrDefault(a => a.Id == id);
+                var result = GymDb.memberSessions.Remove(memberSession);
+                GymDb.SaveChanges();
+                return (true, "Removed Successfully");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message); 
+            }
+        }
 
-                var members = GymDb.memberSessions
-                    .Where(ms => ms.sessionId == sessionId)
-                    .Select(ms => ms._Member)
+        public (bool, string, IEnumerable<MemberSession>?) GetAll()
+        {
+            try
+            {
+                var memberSession = GymDb.memberSessions
+                    .Include(p => p.Payment)
+                    .Include(m => m.Member)
+                    .Include(s => s.Session)
+                    .Include(t => t.TrainerSubscription)
                     .ToList();
-                if (!members.Any()) return (false, "Session is empty", null);
+                if(!memberSession.Any())
+                {
+                    return (false, "Empty", null);
+                }
+                return (true, null, memberSession);
+            }
+            catch (Exception ex)
+            {
+                return(false, ex.Message, null);
+            }
+        }
 
-                return (true, "Done", members);
+        public (bool, string, MemberSession?) GetById(int Id)
+        {
+            try
+            {
+                var memberSession = GymDb.memberSessions
+                    .Include(p => p.Payment)
+                    .Include(m => m.Member)
+                    .Include(s => s.Session)
+                    .Include(t => t.TrainerSubscription)
+                    .FirstOrDefault(a => a.Id == Id);
+
+                if (memberSession == null)
+                {
+                    return(true, "Member session is not found", null);
+                }
+                return (true, null, memberSession);
+            }
+            catch (Exception ex)
+            {
+                return(false, ex.Message, null);
+            }
+        }
+
+        public (bool, string, IEnumerable<MemberSession>?) GetByMemberId(int MemberId)
+        {
+            try
+            {
+                var memberSession = GymDb.memberSessions
+                    .Include(p => p.Payment)
+                    .Include(m => m.Member)
+                    .Include(s => s.Session)
+                    .Include(t => t.TrainerSubscription)
+                    .Where(a => a.MemberId == MemberId).ToList();
+                if (!memberSession.Any())
+                {
+                    return (false, "Empty", null);
+                }
+                return (true, null, memberSession);
             }
             catch (Exception ex)
             {
@@ -61,19 +109,21 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
-        public (bool, string, IEnumerable<Session>?) GetSessionsByMember(int memberId)
+        public (bool, string, IEnumerable<MemberSession>?) GetBySessionId(int SessionId)
         {
             try
             {
-                var member = GymDb.members.Any(a => a.MemberId == memberId);
-                if (!member) return (false, "Member is not found", null);
-
-                var sessions = GymDb.memberSessions
-                    .Where(a => a.memberId == memberId)
-                    .Select(a => a._Session).ToList();
-                if (!sessions.Any()) return (false, "Member havn't sessions", null);
-
-                return (true, "Done", sessions);
+                var memberSession = GymDb.memberSessions
+                    .Include(p => p.Payment)
+                    .Include(m => m.Member)
+                    .Include(s => s.Session)
+                    .Include(t => t.TrainerSubscription)
+                    .Where(a => a.SessionId == SessionId).ToList();
+                if (!memberSession.Any())
+                {
+                    return (false, "Empty", null);
+                }
+                return (true, null, memberSession);
             }
             catch (Exception ex)
             {
@@ -81,71 +131,40 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
-        public (bool, string) RemoveAllMembersFromSession(int sessionId)
+        public (bool, string, IEnumerable<MemberSession>?) GetByTrainerSubscriptionId(int trainerSubscriptionId)
         {
             try
             {
-                var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
-                if (session == null) return (false, "Session is not found");
-
-                var memberSessions = GymDb.memberSessions
-                   .Where(ms => ms.sessionId == sessionId).ToList();
-
-                if (!memberSessions.Any())
-                    return (false, "Session is empty");
-                GymDb.memberSessions.RemoveRange(memberSessions);
-       
-                GymDb.SaveChanges();
-
-                return (true, "Done");
+                var memberSession = GymDb.memberSessions
+                    .Include(p => p.Payment)
+                    .Include(m => m.Member)
+                    .Include(s => s.Session)
+                    .Include(t => t.TrainerSubscription)
+                    .Where(a => a.TrainerSubscriptionId == trainerSubscriptionId).ToList();
+                if (!memberSession.Any())
+                {
+                    return (false, "Empty", null);
+                }
+                return (true, null, memberSession);
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                return (false, ex.Message, null);
             }
         }
 
-        public (bool, string) RemoveAllSessionsForMember(int memberId)
+        public (bool, string) Update(MemberSession memberSession)
         {
             try
             {
-                var memberExists = GymDb.members.Any(m => m.MemberId == memberId);
-                if (!memberExists) return (false, "Member is not found");
-
-                var memberSessions = GymDb.memberSessions
-                    .Where(ms => ms.memberId == memberId)
-                    .ToList();
-
-                if (!memberSessions.Any()) return (false, "Member havn't any sessions");
-
-
-                GymDb.memberSessions.RemoveRange(memberSessions);
-                GymDb.SaveChanges();
-                return (true, "Done");
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
-        }
-
-        public (bool, string) RemoveMemberFromSession(int memberId, int sessionId)
-        {
-            try
-            {
-                var member = GymDb.members.FirstOrDefault(a => a.MemberId == memberId);
-                if (member == null) return (false, "Member is not found");
-
-                var session = GymDb.sessions.FirstOrDefault(a => a.Id == sessionId);
-                if (session == null) return (false, "Session is not found");
-
-                var membersession = GymDb.memberSessions
-                    .FirstOrDefault(ms => ms.memberId == memberId && ms.sessionId == sessionId);
-                if (membersession == null) return (false, "Member is not register in this session");
-
-                GymDb.memberSessions.Remove(membersession);
-                GymDb.SaveChanges();
-                return (true, "Done");
+                var oldMemberSession = GymDb.memberSessions.FirstOrDefault(m => m.Id == memberSession.Id);
+                if(oldMemberSession == null)
+                {
+                    return (false, "This member session not found");
+                }
+                bool result = oldMemberSession.Update(memberSession);
+                GymDb.SaveChanges();    
+                return (result, "Updated Successfully");
             }
             catch (Exception ex)
             {

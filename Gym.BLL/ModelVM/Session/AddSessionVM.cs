@@ -26,6 +26,10 @@ namespace Gym.BLL.ModelVM.Session
         [DisplayName("End Time")]
         public DateTime EndTime { get; set; } = DateTime.Now;
 
+
+        [Required(ErrorMessage = "Price is required")]
+        public decimal Price { get; set; }  
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if(StartTime <  DateTime.Now)

@@ -6,17 +6,46 @@ namespace Gym.DAL.Entities
     public class MemberSession
     {
         public MemberSession() { }
-        public MemberSession(int memberId, int sessionId) 
+
+        public MemberSession(bool isAttended, DateTime bookingDate, string status, decimal price) 
         {
-            this.memberId = memberId;
-            this.sessionId = sessionId;
+            this.IsAttended = isAttended;
+            this.BookingDate = bookingDate;
+            this.Status = status;
+            this.Price = price;
         }
 
-        [ForeignKey("_Member")]
-        public int memberId { get; private set; }
-        public Member _Member { get; private set; }
-        [ForeignKey("_Session")]
-        public int sessionId { get; private set; }
-        public Session _Session { get; private set; }
+        public int Id { get; set; }
+        public bool? IsAttended { get; set; }      
+        public DateTime BookingDate { get; set; }   
+        public string Status { get; set; }          
+        public decimal? Price { get; set; }
+
+
+        [ForeignKey("Payment")]
+        public int? PaymentId { get; set; }
+        public Payment? Payment { get; set; }
+
+        [ForeignKey("Member")]
+        public int MemberId { get; set; }
+        public Member Member { get; set; }
+
+        [ForeignKey("Session")]
+        public int SessionId { get; set; }
+        public Session Session { get; set; }
+
+        [ForeignKey("TrainerSubscription")]
+        public int? TrainerSubscriptionId { get; set; }
+        public TrainerSubscription? TrainerSubscription { get; set; }
+
+        public bool Update(MemberSession memberSession)
+        {
+            this.Price = memberSession.Price;
+            this.IsAttended = memberSession.IsAttended;
+            this.Status = memberSession.Status;
+            this.BookingDate = memberSession.BookingDate;
+            return true;
+        }
     }
+
 }

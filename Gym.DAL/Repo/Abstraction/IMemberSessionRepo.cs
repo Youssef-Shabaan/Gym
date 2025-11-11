@@ -5,16 +5,18 @@ namespace Gym.DAL.Repo.Abstraction
 {
     public interface IMemberSessionRepo
     {
-        (bool, string) AddMemberToSession(int memberId, int sessionId);
+        (bool, string) Add(MemberSession memberSession);
 
-        (bool, string) RemoveMemberFromSession(int memberId, int sessionId);
+        (bool, string) Delete(int id);
 
-        (bool, string,IEnumerable<Session>?) GetSessionsByMember(int memberId);
+        (bool , string) Update(MemberSession memberSession);
 
-        (bool, string,IEnumerable<Member>?) GetMembersBySession(int sessionId);
+        (bool, string,IEnumerable<MemberSession>?) GetAll();
 
-        (bool, string) RemoveAllSessionsForMember(int memberId);
+        (bool, string, MemberSession?) GetById(int Id);
 
-        (bool, string) RemoveAllMembersFromSession(int sessionId);
+        (bool, string, IEnumerable<MemberSession>?) GetByMemberId(int MemberId);    
+        (bool, string, IEnumerable<MemberSession>?) GetBySessionId(int SessionId);  
+        (bool, string, IEnumerable<MemberSession>?) GetByTrainerSubscriptionId(int trainerSubscriptionId);  
     }
 }

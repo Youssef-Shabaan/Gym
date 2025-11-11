@@ -19,6 +19,7 @@ namespace Gym.DAL.DataBase
         public DbSet<Payment> payments { get; set; }
         public DbSet<Attendance> attendances { get; set; }
         public DbSet<Admin> admins { get; set; }
+        public DbSet<TrainerSubscription> trainerSubscriptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,20 +40,18 @@ namespace Gym.DAL.DataBase
                 .WithMany(s => s.Members)
                 .HasForeignKey(m => m.MemberShipId);
 
-            modelBuilder.Entity<MemberSession>()
-               .HasKey(ms => new { ms.memberId, ms.sessionId });
 
             
             modelBuilder.Entity<MemberSession>()
-                .HasOne(ms => ms._Member)
+                .HasOne(ms => ms.Member)
                 .WithMany(m => m.memberSessions)
-                .HasForeignKey(ms => ms.memberId)
+                .HasForeignKey(ms => ms.MemberId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<MemberSession>()
-                .HasOne(ms => ms._Session)
+                .HasOne(ms => ms.Session)
                 .WithMany(s => s.memberSessions)
-                .HasForeignKey(ms => ms.sessionId)
+                .HasForeignKey(ms => ms.SessionId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Attendance>()
