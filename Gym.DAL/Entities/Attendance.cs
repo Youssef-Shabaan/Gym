@@ -15,20 +15,20 @@ namespace Gym.DAL.Entities
             SessionId = sessionId;
         }
         [Key]
-        public int Id { get;private set; }
+        public int Id { get; private set; }
         public DateTime Date { get; private set; }
         public bool IsPresent { get; private set; }
 
         [ForeignKey("member")]
         public int MemberId { get; private set; }
-        public Member member { get;  set; }
+        public Member member { get; private set; }
 
         [ForeignKey("Session")]
         public int SessionId { get; private set; }
-        public Session Session { get;  set; }
+        public Session Session { get; private set; }
         public bool EditAttendance(Attendance attendance)
         {
-            if(attendance == null) return false;
+            if (attendance == null) return false;
             Date = attendance.Date;
             MemberId = attendance.MemberId;
             SessionId = attendance.SessionId;

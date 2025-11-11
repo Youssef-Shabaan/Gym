@@ -47,6 +47,7 @@ namespace Gym.PL
             builder.Services.AddScoped<ITrainerRepo, TrainerRepo>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IAdminRepo, AdminRepo>();
+            builder.Services.AddScoped<ITrainerSubscriptionRepo, TrainerSubscriptionRepo>();
 
             // Services Registration
             builder.Services.AddScoped<IAttendanceService, AttendanceService>();

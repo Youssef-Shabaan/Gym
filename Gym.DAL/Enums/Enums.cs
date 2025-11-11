@@ -1,25 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Gym.DAL.Enums
 {
     public enum Gender { Male, Female };
     public enum MemberShipType
     {
         Monthly = 1,
-        ThreeMonths = 2,
-        SixMonths = 3,
-        Yearly = 4
+        ThreeMonths,
+        SixMonths,
+        Yearly
     }
-    public enum PaymentMethod {
-        Cash,
+    public enum PaymentMethod
+    {
+        Cash = 1,
         CreditCard,
         DebitCard,
         MobilePayment
     }
-   
+    public enum PaymentStatus
+    {
+        Pending = 1,
+        Paid,
+        Failed,
+        Refunded
+    }
+    public enum Gateway
+    {
+        Paymob = 1,
+        Fawry,
+        Stripe
+    }
 
 }
