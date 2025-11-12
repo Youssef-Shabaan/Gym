@@ -283,8 +283,7 @@ namespace Gym.DAL.Migrations
                         name: "FK_sessions_trainers_TrainerId",
                         column: x => x.TrainerId,
                         principalTable: "trainers",
-                        principalColumn: "TrainerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "TrainerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -311,8 +310,7 @@ namespace Gym.DAL.Migrations
                         name: "FK_attendances_sessions_SessionId",
                         column: x => x.SessionId,
                         principalTable: "sessions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -398,8 +396,7 @@ namespace Gym.DAL.Migrations
                         name: "FK_trainerSubscriptions_members_MemberId",
                         column: x => x.MemberId,
                         principalTable: "members",
-                        principalColumn: "MemberId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "MemberId");
                     table.ForeignKey(
                         name: "FK_trainerSubscriptions_payments_PaymentId",
                         column: x => x.PaymentId,
@@ -409,8 +406,7 @@ namespace Gym.DAL.Migrations
                         name: "FK_trainerSubscriptions_trainers_TrainerId",
                         column: x => x.TrainerId,
                         principalTable: "trainers",
-                        principalColumn: "TrainerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "TrainerId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -508,11 +504,6 @@ namespace Gym.DAL.Migrations
                 column: "MemberSessionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_payments_TrainerSubscriptionId",
-                table: "payments",
-                column: "TrainerSubscriptionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_sessions_TrainerId",
                 table: "sessions",
                 column: "TrainerId");
@@ -530,7 +521,9 @@ namespace Gym.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_trainerSubscriptions_PaymentId",
                 table: "trainerSubscriptions",
-                column: "PaymentId");
+                column: "PaymentId",
+                unique: true,
+                filter: "[PaymentId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_trainerSubscriptions_TrainerId",
@@ -547,13 +540,6 @@ namespace Gym.DAL.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_memberSessions_trainerSubscriptions_TrainerSubscriptionId",
                 table: "memberSessions",
-                column: "TrainerSubscriptionId",
-                principalTable: "trainerSubscriptions",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_payments_trainerSubscriptions_TrainerSubscriptionId",
-                table: "payments",
                 column: "TrainerSubscriptionId",
                 principalTable: "trainerSubscriptions",
                 principalColumn: "Id");

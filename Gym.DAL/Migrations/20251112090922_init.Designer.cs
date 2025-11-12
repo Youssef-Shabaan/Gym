@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251112080807_init")]
+    [Migration("20251112090922_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -265,8 +265,6 @@ namespace Gym.DAL.Migrations
 
                     b.HasIndex("MemberSessionId");
 
-                    b.HasIndex("TrainerSubscriptionId");
-
                     b.ToTable("payments");
                 });
 
@@ -394,7 +392,9 @@ namespace Gym.DAL.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("PaymentId")
+                        .IsUnique()
+                        .HasFilter("[PaymentId] IS NOT NULL");
 
                     b.HasIndex("TrainerId");
 
@@ -621,7 +621,7 @@ namespace Gym.DAL.Migrations
                     b.HasOne("Gym.DAL.Entities.Session", "Session")
                         .WithMany("Attendances")
                         .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Session");
@@ -633,7 +633,8 @@ namespace Gym.DAL.Migrations
                 {
                     b.HasOne("Gym.DAL.Entities.MemberShip", "_MemberShip")
                         .WithMany("Members")
-                        .HasForeignKey("MemberShipId");
+                        .HasForeignKey("MemberShipId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Gym.DAL.Entities.User", "User")
                         .WithMany()
@@ -689,15 +690,9 @@ namespace Gym.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("MemberSessionId");
 
-                    b.HasOne("Gym.DAL.Entities.TrainerSubscription", "TrainerSubscription")
-                        .WithMany()
-                        .HasForeignKey("TrainerSubscriptionId");
-
                     b.Navigation("Member");
 
                     b.Navigation("MemberSession");
-
-                    b.Navigation("TrainerSubscription");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
@@ -705,7 +700,7 @@ namespace Gym.DAL.Migrations
                     b.HasOne("Gym.DAL.Entities.Trainer", "_Trainer")
                         .WithMany("Sessions")
                         .HasForeignKey("TrainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("_Trainer");
@@ -725,19 +720,20 @@ namespace Gym.DAL.Migrations
             modelBuilder.Entity("Gym.DAL.Entities.TrainerSubscription", b =>
                 {
                     b.HasOne("Gym.DAL.Entities.Member", "Member")
-                        .WithMany()
+                        .WithMany("TrainerSubscriptions")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Gym.DAL.Entities.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId");
+                        .WithOne("TrainerSubscription")
+                        .HasForeignKey("Gym.DAL.Entities.TrainerSubscription", "PaymentId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Gym.DAL.Entities.Trainer", "Trainer")
-                        .WithMany()
+                        .WithMany("TrainerSubscriptions")
                         .HasForeignKey("TrainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Member");
@@ -800,12 +796,19 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
                 {
+                    b.Navigation("TrainerSubscriptions");
+
                     b.Navigation("memberSessions");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberShip", b =>
                 {
                     b.Navigation("Members");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.Payment", b =>
+                {
+                    b.Navigation("TrainerSubscription");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
@@ -818,6 +821,8 @@ namespace Gym.DAL.Migrations
             modelBuilder.Entity("Gym.DAL.Entities.Trainer", b =>
                 {
                     b.Navigation("Sessions");
+
+                    b.Navigation("TrainerSubscriptions");
                 });
 #pragma warning restore 612, 618
         }
