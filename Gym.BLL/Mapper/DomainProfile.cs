@@ -3,6 +3,7 @@ using AutoMapper.Execution;
 using Gym.BLL.ModelVM.Admin;
 using Gym.BLL.ModelVM.Attendance;
 using Gym.BLL.ModelVM.Member;
+using Gym.BLL.ModelVM.MemberSession;
 using Gym.BLL.ModelVM.MemberShip;
 using Gym.BLL.ModelVM.ModifyPhotos;
 using Gym.BLL.ModelVM.Session;
@@ -83,6 +84,18 @@ namespace Gym.BLL.Mapper
 
             CreateMap<CreateAttendanceVM, Attendance>().ReverseMap();
             CreateMap<UpdateAttendanceVM, Attendance>().ReverseMap();
+
+
+            CreateMap<AddMemberSessionVM, MemberSession>().ReverseMap();
+
+            CreateMap<MemberSession, GetMemberSessionVM>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.TrainerSubscription.Trainer.Name))
+                .ForMember(dest => dest.SessionName, opt => opt.MapFrom(src => src.Session.Name))
+                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.Status))
+                .ReverseMap();
+
+            CreateMap<UpdateMemberSessionVM, MemberSession>().ReverseMap();
 
         }
     }

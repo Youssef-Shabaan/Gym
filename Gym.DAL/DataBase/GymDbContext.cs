@@ -59,6 +59,9 @@ namespace Gym.DAL.DataBase
                 .WithMany(s => s.Attendances)
                 .HasForeignKey(a => a.SessionId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            
+
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Gym.BLL.ModelVM.MemberSession
 {
-    internal class UpdateMemberSessionVM
+    public class UpdateMemberSessionVM
     {
+        public bool? IsAttended { get; set; }
+        public DateTime BookingDate { get; set; }
+        public string Status { get; set; }
+        public decimal? Price { get; set; }
     }
 }

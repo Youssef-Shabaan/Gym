@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251109082454_init")]
+    [Migration("20251112080807_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -159,15 +159,46 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberSession", b =>
                 {
-                    b.Property<int>("memberId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("sessionId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsAttended")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MemberId")
                         .HasColumnType("int");
 
-                    b.HasKey("memberId", "sessionId");
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("sessionId");
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TrainerSubscriptionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.HasIndex("SessionId");
+
+                    b.HasIndex("TrainerSubscriptionId");
 
                     b.ToTable("memberSessions");
                 });
@@ -204,18 +235,37 @@ namespace Gym.DAL.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("Gateway")
+                        .HasColumnType("int");
+
                     b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberSessionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Method")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("paymentMethod")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<int?>("TrainerSubscriptionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MemberId");
+
+                    b.HasIndex("MemberSessionId");
+
+                    b.HasIndex("TrainerSubscriptionId");
 
                     b.ToTable("payments");
                 });
@@ -237,6 +287,9 @@ namespace Gym.DAL.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
@@ -306,6 +359,46 @@ namespace Gym.DAL.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("trainers");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.TrainerSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TrainerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.HasIndex("TrainerId");
+
+                    b.ToTable("trainerSubscriptions");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.User", b =>
@@ -555,21 +648,33 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberSession", b =>
                 {
-                    b.HasOne("Gym.DAL.Entities.Member", "_Member")
+                    b.HasOne("Gym.DAL.Entities.Member", "Member")
                         .WithMany("memberSessions")
-                        .HasForeignKey("memberId")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Gym.DAL.Entities.Session", "_Session")
+                    b.HasOne("Gym.DAL.Entities.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+
+                    b.HasOne("Gym.DAL.Entities.Session", "Session")
                         .WithMany("memberSessions")
-                        .HasForeignKey("sessionId")
+                        .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("_Member");
+                    b.HasOne("Gym.DAL.Entities.TrainerSubscription", "TrainerSubscription")
+                        .WithMany()
+                        .HasForeignKey("TrainerSubscriptionId");
 
-                    b.Navigation("_Session");
+                    b.Navigation("Member");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Session");
+
+                    b.Navigation("TrainerSubscription");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Payment", b =>
@@ -580,7 +685,19 @@ namespace Gym.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Gym.DAL.Entities.MemberSession", "MemberSession")
+                        .WithMany()
+                        .HasForeignKey("MemberSessionId");
+
+                    b.HasOne("Gym.DAL.Entities.TrainerSubscription", "TrainerSubscription")
+                        .WithMany()
+                        .HasForeignKey("TrainerSubscriptionId");
+
                     b.Navigation("Member");
+
+                    b.Navigation("MemberSession");
+
+                    b.Navigation("TrainerSubscription");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
@@ -603,6 +720,31 @@ namespace Gym.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.TrainerSubscription", b =>
+                {
+                    b.HasOne("Gym.DAL.Entities.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gym.DAL.Entities.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+
+                    b.HasOne("Gym.DAL.Entities.Trainer", "Trainer")
+                        .WithMany()
+                        .HasForeignKey("TrainerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Trainer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

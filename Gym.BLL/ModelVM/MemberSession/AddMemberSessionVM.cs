@@ -3,7 +3,7 @@ namespace Gym.BLL.ModelVM.MemberSession
 {
     public class AddMemberSessionVM
     {
-        public bool? IsAttended { get; set; }
+        public bool? IsAttended { get; set; } 
         public DateTime BookingDate { get; set; }
         public string Status { get; set; }
         public decimal? Price { get; set; }

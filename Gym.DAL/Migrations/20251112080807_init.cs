@@ -273,6 +273,7 @@ namespace Gym.DAL.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TrainerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -283,28 +284,6 @@ namespace Gym.DAL.Migrations
                         column: x => x.TrainerId,
                         principalTable: "trainers",
                         principalColumn: "TrainerId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "payments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MemberId = table.Column<int>(type: "int", nullable: false),
-                    paymentMethod = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_payments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_payments_members_MemberId",
-                        column: x => x.MemberId,
-                        principalTable: "members",
-                        principalColumn: "MemberId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -340,22 +319,98 @@ namespace Gym.DAL.Migrations
                 name: "memberSessions",
                 columns: table => new
                 {
-                    memberId = table.Column<int>(type: "int", nullable: false),
-                    sessionId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsAttended = table.Column<bool>(type: "bit", nullable: true),
+                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PaymentId = table.Column<int>(type: "int", nullable: true),
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    SessionId = table.Column<int>(type: "int", nullable: false),
+                    TrainerSubscriptionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_memberSessions", x => new { x.memberId, x.sessionId });
+                    table.PrimaryKey("PK_memberSessions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_memberSessions_members_memberId",
-                        column: x => x.memberId,
+                        name: "FK_memberSessions_members_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "members",
                         principalColumn: "MemberId");
                     table.ForeignKey(
-                        name: "FK_memberSessions_sessions_sessionId",
-                        column: x => x.sessionId,
+                        name: "FK_memberSessions_sessions_SessionId",
+                        column: x => x.SessionId,
                         principalTable: "sessions",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Method = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gateway = table.Column<int>(type: "int", nullable: true),
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    MemberSessionId = table.Column<int>(type: "int", nullable: true),
+                    TrainerSubscriptionId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_payments_memberSessions_MemberSessionId",
+                        column: x => x.MemberSessionId,
+                        principalTable: "memberSessions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_payments_members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "members",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "trainerSubscriptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    PaymentId = table.Column<int>(type: "int", nullable: true),
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    TrainerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_trainerSubscriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_trainerSubscriptions_members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "members",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_trainerSubscriptions_payments_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "payments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_trainerSubscriptions_trainers_TrainerId",
+                        column: x => x.TrainerId,
+                        principalTable: "trainers",
+                        principalColumn: "TrainerId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -423,14 +478,39 @@ namespace Gym.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_memberSessions_sessionId",
+                name: "IX_memberSessions_MemberId",
                 table: "memberSessions",
-                column: "sessionId");
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_memberSessions_PaymentId",
+                table: "memberSessions",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_memberSessions_SessionId",
+                table: "memberSessions",
+                column: "SessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_memberSessions_TrainerSubscriptionId",
+                table: "memberSessions",
+                column: "TrainerSubscriptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_payments_MemberId",
                 table: "payments",
                 column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payments_MemberSessionId",
+                table: "payments",
+                column: "MemberSessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payments_TrainerSubscriptionId",
+                table: "payments",
+                column: "TrainerSubscriptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sessions_TrainerId",
@@ -441,11 +521,79 @@ namespace Gym.DAL.Migrations
                 name: "IX_trainers_userId",
                 table: "trainers",
                 column: "userId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_trainerSubscriptions_MemberId",
+                table: "trainerSubscriptions",
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_trainerSubscriptions_PaymentId",
+                table: "trainerSubscriptions",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_trainerSubscriptions_TrainerId",
+                table: "trainerSubscriptions",
+                column: "TrainerId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_memberSessions_payments_PaymentId",
+                table: "memberSessions",
+                column: "PaymentId",
+                principalTable: "payments",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_memberSessions_trainerSubscriptions_TrainerSubscriptionId",
+                table: "memberSessions",
+                column: "TrainerSubscriptionId",
+                principalTable: "trainerSubscriptions",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_payments_trainerSubscriptions_TrainerSubscriptionId",
+                table: "payments",
+                column: "TrainerSubscriptionId",
+                principalTable: "trainerSubscriptions",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_members_AspNetUsers_UserId",
+                table: "members");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_trainers_AspNetUsers_userId",
+                table: "trainers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_memberSessions_members_MemberId",
+                table: "memberSessions");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_payments_members_MemberId",
+                table: "payments");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_trainerSubscriptions_members_MemberId",
+                table: "trainerSubscriptions");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_memberSessions_sessions_SessionId",
+                table: "memberSessions");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_memberSessions_payments_PaymentId",
+                table: "memberSessions");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_trainerSubscriptions_payments_PaymentId",
+                table: "trainerSubscriptions");
+
             migrationBuilder.DropTable(
                 name: "admins");
 
@@ -468,28 +616,31 @@ namespace Gym.DAL.Migrations
                 name: "attendances");
 
             migrationBuilder.DropTable(
-                name: "memberSessions");
-
-            migrationBuilder.DropTable(
-                name: "payments");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "sessions");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "members");
 
             migrationBuilder.DropTable(
-                name: "trainers");
-
-            migrationBuilder.DropTable(
                 name: "memberShips");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "sessions");
+
+            migrationBuilder.DropTable(
+                name: "payments");
+
+            migrationBuilder.DropTable(
+                name: "memberSessions");
+
+            migrationBuilder.DropTable(
+                name: "trainerSubscriptions");
+
+            migrationBuilder.DropTable(
+                name: "trainers");
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Gym.DAL.Repo.Abstraction
         (bool, string) Delete(int id);
 
         (bool , string) Update(MemberSession memberSession);
+        (bool, string) SetAttendance(int memberId, int sessionId);
 
         (bool, string,IEnumerable<MemberSession>?) GetAll();
 

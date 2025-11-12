@@ -32,6 +32,10 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var memberSession = GymDb.memberSessions.FirstOrDefault(a => a.Id == id);
+                if (memberSession == null)
+                {
+                    return (false, "Member session not found");
+                }
                 var result = GymDb.memberSessions.Remove(memberSession);
                 GymDb.SaveChanges();
                 return (true, "Removed Successfully");
@@ -50,7 +54,7 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription)
+                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .ToList();
                 if(!memberSession.Any())
                 {
@@ -72,7 +76,7 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription)
+                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .FirstOrDefault(a => a.Id == Id);
 
                 if (memberSession == null)
@@ -95,7 +99,7 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription)
+                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .Where(a => a.MemberId == MemberId).ToList();
                 if (!memberSession.Any())
                 {
@@ -117,7 +121,7 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription)
+                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .Where(a => a.SessionId == SessionId).ToList();
                 if (!memberSession.Any())
                 {
@@ -139,7 +143,7 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription)
+                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .Where(a => a.TrainerSubscriptionId == trainerSubscriptionId).ToList();
                 if (!memberSession.Any())
                 {
@@ -150,6 +154,47 @@ namespace Gym.DAL.Repo.Implementation
             catch (Exception ex)
             {
                 return (false, ex.Message, null);
+            }
+        }
+
+        public (bool, string) SetAttendance(int memberId, int sessionId)
+        {
+            try
+            {
+                var member = GymDb.members.FirstOrDefault(m => m.MemberId == memberId); 
+                if(member == null)
+                {
+                    return (false, "This member not found");
+                }
+                var session = GymDb.sessions.FirstOrDefault(s => s.Id == sessionId);
+                if (session == null)
+                {
+                    return (false, "This session not found");
+                }
+
+                var memberSession = GymDb.memberSessions.FirstOrDefault(ms => ms.MemberId == memberId && ms.SessionId == sessionId);
+                if(memberSession == null)
+                {
+                    return (false, "Member session not found");
+                }
+
+                if(memberSession.IsAttended == false)
+                {
+                    memberSession.IsAttended = true;
+                    memberSession.Status = "Attended";
+                    GymDb.SaveChanges();
+                    return (true, "Attendance marked successfully");
+                }
+                // else
+                memberSession.IsAttended = false;
+                memberSession.Status = "Absent";
+                GymDb.SaveChanges();
+                return (true, "Attendance removed successfully");
+
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message);
             }
         }
 
