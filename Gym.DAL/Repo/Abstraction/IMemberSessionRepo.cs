@@ -18,6 +18,5 @@ namespace Gym.DAL.Repo.Abstraction
 
         (bool, string, IEnumerable<MemberSession>?) GetByMemberId(int MemberId);    
         (bool, string, IEnumerable<MemberSession>?) GetBySessionId(int SessionId);  
-        (bool, string, IEnumerable<MemberSession>?) GetByTrainerSubscriptionId(int trainerSubscriptionId);  
     }
 }

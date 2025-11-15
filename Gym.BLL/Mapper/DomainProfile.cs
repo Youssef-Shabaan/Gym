@@ -4,7 +4,6 @@ using Gym.BLL.ModelVM.Admin;
 using Gym.BLL.ModelVM.Attendance;
 using Gym.BLL.ModelVM.Member;
 using Gym.BLL.ModelVM.MemberSession;
-using Gym.BLL.ModelVM.MemberShip;
 using Gym.BLL.ModelVM.ModifyPhotos;
 using Gym.BLL.ModelVM.Session;
 using Gym.BLL.ModelVM.Trainer;
@@ -58,9 +57,7 @@ namespace Gym.BLL.Mapper
                 DateTime.Now < src.StartTime ? "Not Started" : DateTime.Now >= src.StartTime && DateTime.Now <= src.EndTime ? "Ongoing" : "Ended"))
                 .ReverseMap();
 
-            CreateMap<GetAllMemberShipVM, MemberShip>().ReverseMap();
-            CreateMap<GetMemberShipVM, MemberShip>().ReverseMap();
-
+            
             CreateMap<GetUserVM, User>().ReverseMap();
 
             CreateMap<Admin, GetAdminVM>()
@@ -90,7 +87,6 @@ namespace Gym.BLL.Mapper
 
             CreateMap<MemberSession, GetMemberSessionVM>()
                 .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
-                .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.TrainerSubscription.Trainer.Name))
                 .ForMember(dest => dest.SessionName, opt => opt.MapFrom(src => src.Session.Name))
                 .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.Status))
                 .ReverseMap();

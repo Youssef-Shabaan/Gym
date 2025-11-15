@@ -3,7 +3,6 @@ using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Enums;
 using Gym.DAL.Repo.Abstraction;
-using Microsoft.EntityFrameworkCore;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -15,184 +14,166 @@ namespace Gym.DAL.Repo.Implementation
             this.DB = DB;
         }
 
-        public (bool, string) Add(Payment payment)
+        public bool Add(Payment payment)
         {
             try
             {
+                var existingPayment = DB.payments
+                    .FirstOrDefault(p => p.TransactionId == payment.TransactionId);
+                if (existingPayment != null)
+                {
+                    throw new Exception("Payment with the same TransactionId already exists.");
+                }
                 DB.payments.Add(payment);
                 DB.SaveChanges();
-                return (true, "Payment added successfully.");
+                return true;
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
-        public (bool, string) Delete(int id)
+        public bool Delete(int id)
         {
             try
             {
-                var payment = DB.payments.FirstOrDefault(m => m.Id == id);
+                var payment = DB.payments.FirstOrDefault(p => p.Id == id);
                 if (payment == null)
                 {
-                    return (false, "Payment not found.");
+                    throw new Exception("Payment not found.");
                 }
                 DB.payments.Remove(payment);
                 DB.SaveChanges();
-                return (true, "Payment deleted successfully.");
+                return true;
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
-        public (bool, string, IEnumerable<Payment>) GetAll()
+        public IEnumerable<Payment> GetAll()
         {
             try
             {
-                var result = DB.payments
-                    .Include(m => m.Member)
-                    .Include(ms => ms.MemberSession)
-                    .Include(ts => ts.TrainerSubscription)
+                var payments = DB.payments.ToList();
+                return payments;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Payment GetById(int id)
+        {
+            try
+            {
+                var payment = DB.payments.FirstOrDefault(p => p.Id == id);
+                if (payment == null)
+                {
+                    throw new Exception("Payment not found.");
+                }
+                return payment;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<Payment> GetByMemberId(int memberId)
+        {
+            try
+            {
+                var payments = DB.payments.Where(p => p.MemberId == memberId).ToList();
+                return payments;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Payment? GetByTransactionId(string transactionId)
+        {
+            try
+            {
+                var payment = DB.payments.FirstOrDefault(p => p.TransactionId == transactionId);
+                return payment;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<Payment> GetPlanPayments()
+        {
+            try
+            {
+                var payments = DB.payments
+                    .Where(p => p.MemberPlanId != null)
                     .ToList();
-                return (true, "Payments retrieved successfully.", result);
+                return payments;
             }
             catch (Exception ex)
             {
-                return (false, ex.Message, null);
+                throw new Exception(ex.Message);
             }
         }
 
-        public (bool, string, Payment) GetById(int id)
-        {
-            try
-            {
-                var payment = DB.payments
-                    .Include(m => m.Member)
-                    .Include(ms => ms.MemberSession)
-                    .Include(ts => ts.TrainerSubscription)
-                    .FirstOrDefault(m => m.Id == id);
-                if (payment == null)
-                {
-                    return (false, "Payment not found.", null);
-                }
-                return (true, "Payment retrieved successfully.", payment);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
-
-        public (bool, string, IEnumerable<Payment>) GetByMemberId(int memberId)
+        public IEnumerable<Payment> GetSessionPayments()
         {
             try
             {
                 var payments = DB.payments
-                    .Include(m => m.Member)
-                    .Include(ms => ms.MemberSession)
-                    .Include(ts => ts.TrainerSubscription)
-                    .Where(m => m.MemberId == memberId).ToList();
-                return (true, "Payments retrieved successfully.", payments);
+                    .Where(p => p.MemberSessionId != null)
+                    .ToList();
+                return payments;
             }
             catch (Exception ex)
             {
-                return (false, ex.Message, null);
+                throw new Exception(ex.Message);
             }
         }
 
-        public (bool, string, Payment?) GetByTransactionId(string transactionId)
+        public bool Update(Payment payment)
         {
             try
             {
-                var payment = DB.payments
-                    .Include(m => m.Member)
-                    .Include(ms => ms.MemberSession)
-                    .Include(ts => ts.TrainerSubscription)
-                    .FirstOrDefault(m => m.TransactionId == transactionId);
-                if (payment == null)
-                {
-                    return (false, "Payment not found.", null);
-                }
-                return (true, "Payment retrieved successfully.", payment);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
-
-        public (bool, string, IEnumerable<Payment>) GetSessionPayments()
-        {
-            try
-            {
-                var payments = DB.payments
-                    .Include(m => m.Member)
-                    .Include(ms => ms.MemberSession)
-                    .Include(ts => ts.TrainerSubscription)
-                    .Where(m => m.MemberSessionId != null).ToList();
-                return (true, "Session payments retrieved successfully.", payments);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
-
-        public (bool, string, IEnumerable<Payment>) GetSubscriptionPayments()
-        {
-            try
-            {
-                var payments = DB.payments
-                    .Include(m => m.Member)
-                    .Include(ms => ms.MemberSession)
-                    .Include(ts => ts.TrainerSubscription)
-                    .Where(m => m.TrainerSubscriptionId != null).ToList();
-                return (true, "Subscription payments retrieved successfully.", payments);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
-
-        public (bool, string) Update(Payment payment)
-        {
-            try
-            {
-                var existingPayment = DB.payments.FirstOrDefault(m => m.Id == payment.Id);
+                var existingPayment = DB.payments.FirstOrDefault(p => p.Id == payment.Id);
                 if (existingPayment == null)
                 {
-                    return (false, "Payment not found.");
+                    throw new Exception("Payment not found.");
                 }
                 existingPayment.Update(payment);
                 DB.SaveChanges();
-                return (true, "Payment updated successfully.");
+                return true;
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
-        public (bool, string) UpdateStatus(int paymentId, PaymentStatus newStatus)
+        public bool UpdateStatus(int paymentId, PaymentStatus newStatus)
         {
             try
             {
-                var existingPayment = DB.payments.FirstOrDefault(m => m.Id == paymentId);
+                var existingPayment = DB.payments.FirstOrDefault(p => p.Id == paymentId);
                 if (existingPayment == null)
                 {
-                    return (false, "Payment not found.");
+                    throw new Exception("Payment not found.");
                 }
                 existingPayment.updateStatus(newStatus);
                 DB.SaveChanges();
-                return (true, "Payment status updated successfully.");
+                return true;
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                throw new Exception(ex.Message);
             }
         }
     }

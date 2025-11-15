@@ -7,7 +7,7 @@ namespace Gym.DAL.Entities
     public class Payment
     {
         public Payment() { }
-        public Payment(decimal amount, PaymentMethod method, PaymentStatus status, DateTime paymentDate, string? transactionId, Gateway? gateway, int memberId, int? memberSessionId = null, int? trainerSubscriptionId = null)
+        public Payment(decimal amount, PaymentMethod method, PaymentStatus status, DateTime paymentDate, string? transactionId, Gateway? gateway, int memberId, int? memberSessionId = null, int? memberPlanId = null)
         {
             Amount = amount;
             Method = method;
@@ -17,7 +17,7 @@ namespace Gym.DAL.Entities
             Gateway = gateway;
             MemberId = memberId;
             MemberSessionId = memberSessionId;
-            TrainerSubscriptionId = trainerSubscriptionId;
+            MemberPlanId = memberPlanId;
         }
         public int Id { get; private set; }
 
@@ -40,10 +40,10 @@ namespace Gym.DAL.Entities
         [ForeignKey("MemberSession")]
         public int? MemberSessionId { get; private set; }
         public MemberSession? MemberSession { get; private set; }
+        [ForeignKey("MemberPlan")]
+        public int? MemberPlanId { get; private set; }
+        public MemberPlan? MemberPlan { get; private set; }
 
-        [ForeignKey("TrainerSubscription")]
-        public int? TrainerSubscriptionId { get; private set; }
-        public TrainerSubscription? TrainerSubscription { get; private set; }
         public bool Update(Payment payment)
         {
             this.Amount = payment.Amount;

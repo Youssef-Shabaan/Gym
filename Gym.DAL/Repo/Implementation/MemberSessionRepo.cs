@@ -54,7 +54,6 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .ToList();
                 if(!memberSession.Any())
                 {
@@ -76,7 +75,6 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .FirstOrDefault(a => a.Id == Id);
 
                 if (memberSession == null)
@@ -99,7 +97,6 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .Where(a => a.MemberId == MemberId).ToList();
                 if (!memberSession.Any())
                 {
@@ -121,7 +118,6 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(p => p.Payment)
                     .Include(m => m.Member)
                     .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
                     .Where(a => a.SessionId == SessionId).ToList();
                 if (!memberSession.Any())
                 {
@@ -135,27 +131,6 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
-        public (bool, string, IEnumerable<MemberSession>?) GetByTrainerSubscriptionId(int trainerSubscriptionId)
-        {
-            try
-            {
-                var memberSession = GymDb.memberSessions
-                    .Include(p => p.Payment)
-                    .Include(m => m.Member)
-                    .Include(s => s.Session)
-                    .Include(t => t.TrainerSubscription).ThenInclude(t => t.Trainer)
-                    .Where(a => a.TrainerSubscriptionId == trainerSubscriptionId).ToList();
-                if (!memberSession.Any())
-                {
-                    return (false, "Empty", null);
-                }
-                return (true, null, memberSession);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
 
         public (bool, string) SetAttendance(int memberId, int sessionId)
         {

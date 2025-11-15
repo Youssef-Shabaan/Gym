@@ -41,19 +41,18 @@ namespace Gym.PL
             builder.Services.AddScoped<IAttendanceRepo, AttendanceRepo>();
             builder.Services.AddScoped<IMemberRepo, MemberRepo>();
             builder.Services.AddScoped<IMemberSessionRepo, MemberSessionRepo>();
-            builder.Services.AddScoped<IMemberShipRepo, MemberShipRepo>();
             builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
             builder.Services.AddScoped<ISessionRepo, SessionRepo>();
             builder.Services.AddScoped<ITrainerRepo, TrainerRepo>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IAdminRepo, AdminRepo>();
-            builder.Services.AddScoped<ITrainerSubscriptionRepo, TrainerSubscriptionRepo>();
+            builder.Services.AddScoped<IPlanRepo, PlanRepo>();
+            builder.Services.AddScoped<IMemberPlanRepo, MemberPlanRepo>();
 
             // Services Registration
             builder.Services.AddScoped<IAttendanceService, AttendanceService>();
             builder.Services.AddScoped<IMemberService, MemberService>();
             builder.Services.AddScoped<IMemberSessionService, MemberSessionService>();
-            builder.Services.AddScoped<IMemberShipService, MemberShipService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();

@@ -6,15 +6,26 @@ namespace Gym.DAL.Repo.Abstraction
 {
     public interface IPaymentRepo
     {
-        (bool, string) Add(Payment payment);
-        (bool, string, IEnumerable<Payment>) GetAll();
-        (bool, string, Payment) GetById(int id);
-        (bool, string, IEnumerable<Payment>) GetByMemberId(int memberId);
-        (bool, string, Payment?) GetByTransactionId(string transactionId);
-        (bool, string, IEnumerable<Payment>) GetSessionPayments();
-        (bool, string, IEnumerable<Payment>) GetSubscriptionPayments();
-        (bool, string) Update(Payment payment);
-        (bool, string) UpdateStatus(int paymentId, PaymentStatus newStatus);
-        (bool, string) Delete(int id);
+        bool Add(Payment payment);
+
+        IEnumerable<Payment> GetAll();
+
+        Payment GetById(int id);
+
+        IEnumerable<Payment> GetByMemberId(int memberId);
+
+        Payment? GetByTransactionId(string transactionId);
+
+        // Payments related to sessions
+        IEnumerable<Payment> GetSessionPayments();
+
+        // Payments related to plans (NEW)
+        IEnumerable<Payment> GetPlanPayments();
+
+        bool Update(Payment payment);
+
+        bool UpdateStatus(int paymentId, PaymentStatus newStatus);
+
+        bool Delete(int id);
     }
 }

@@ -131,9 +131,6 @@ namespace Gym.DAL.Migrations
                     b.Property<DateTime?>("JoinDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MemberShipId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -147,11 +144,41 @@ namespace Gym.DAL.Migrations
 
                     b.HasKey("MemberId");
 
-                    b.HasIndex("MemberShipId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("members");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.MemberPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ExpireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlanId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("memberPlans");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberSession", b =>
@@ -184,9 +211,6 @@ namespace Gym.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TrainerSubscriptionId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MemberId");
@@ -195,30 +219,7 @@ namespace Gym.DAL.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.HasIndex("TrainerSubscriptionId");
-
                     b.ToTable("memberSessions");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.MemberShip", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("MemberShipType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("memberShips");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Payment", b =>
@@ -238,6 +239,9 @@ namespace Gym.DAL.Migrations
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("MemberPlanId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("MemberSessionId")
                         .HasColumnType("int");
 
@@ -250,9 +254,6 @@ namespace Gym.DAL.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TrainerSubscriptionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(max)");
 
@@ -260,9 +261,46 @@ namespace Gym.DAL.Migrations
 
                     b.HasIndex("MemberId");
 
+                    b.HasIndex("MemberPlanId");
+
                     b.HasIndex("MemberSessionId");
 
                     b.ToTable("payments");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.Plan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TrainerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainerId");
+
+                    b.ToTable("plans");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
@@ -283,6 +321,9 @@ namespace Gym.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PlanId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -293,6 +334,8 @@ namespace Gym.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PlanId");
 
                     b.HasIndex("TrainerId");
 
@@ -354,48 +397,6 @@ namespace Gym.DAL.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("trainers");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.TrainerSubscription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PaymentId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TrainerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("PaymentId")
-                        .IsUnique()
-                        .HasFilter("[PaymentId] IS NOT NULL");
-
-                    b.HasIndex("TrainerId");
-
-                    b.ToTable("trainerSubscriptions");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.User", b =>
@@ -618,7 +619,7 @@ namespace Gym.DAL.Migrations
                     b.HasOne("Gym.DAL.Entities.Session", "Session")
                         .WithMany("Attendances")
                         .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Session");
@@ -628,11 +629,6 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
                 {
-                    b.HasOne("Gym.DAL.Entities.MemberShip", "_MemberShip")
-                        .WithMany("Members")
-                        .HasForeignKey("MemberShipId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("Gym.DAL.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -640,8 +636,25 @@ namespace Gym.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
 
-                    b.Navigation("_MemberShip");
+            modelBuilder.Entity("Gym.DAL.Entities.MemberPlan", b =>
+                {
+                    b.HasOne("Gym.DAL.Entities.Member", "Member")
+                        .WithMany("memberPlans")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Gym.DAL.Entities.Plan", "Plan")
+                        .WithMany("MemberPlans")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.MemberSession", b =>
@@ -662,17 +675,11 @@ namespace Gym.DAL.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Gym.DAL.Entities.TrainerSubscription", "TrainerSubscription")
-                        .WithMany()
-                        .HasForeignKey("TrainerSubscriptionId");
-
                     b.Navigation("Member");
 
                     b.Navigation("Payment");
 
                     b.Navigation("Session");
-
-                    b.Navigation("TrainerSubscription");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Payment", b =>
@@ -683,22 +690,45 @@ namespace Gym.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Gym.DAL.Entities.MemberPlan", "MemberPlan")
+                        .WithMany()
+                        .HasForeignKey("MemberPlanId");
+
                     b.HasOne("Gym.DAL.Entities.MemberSession", "MemberSession")
                         .WithMany()
                         .HasForeignKey("MemberSessionId");
 
                     b.Navigation("Member");
 
+                    b.Navigation("MemberPlan");
+
                     b.Navigation("MemberSession");
+                });
+
+            modelBuilder.Entity("Gym.DAL.Entities.Plan", b =>
+                {
+                    b.HasOne("Gym.DAL.Entities.Trainer", "Trainer")
+                        .WithMany()
+                        .HasForeignKey("TrainerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Trainer");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
                 {
+                    b.HasOne("Gym.DAL.Entities.Plan", "Plan")
+                        .WithMany("Sessions")
+                        .HasForeignKey("PlanId");
+
                     b.HasOne("Gym.DAL.Entities.Trainer", "_Trainer")
                         .WithMany("Sessions")
                         .HasForeignKey("TrainerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Plan");
 
                     b.Navigation("_Trainer");
                 });
@@ -712,32 +742,6 @@ namespace Gym.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Gym.DAL.Entities.TrainerSubscription", b =>
-                {
-                    b.HasOne("Gym.DAL.Entities.Member", "Member")
-                        .WithMany("TrainerSubscriptions")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Gym.DAL.Entities.Payment", "Payment")
-                        .WithOne("TrainerSubscription")
-                        .HasForeignKey("Gym.DAL.Entities.TrainerSubscription", "PaymentId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Gym.DAL.Entities.Trainer", "Trainer")
-                        .WithMany("TrainerSubscriptions")
-                        .HasForeignKey("TrainerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-
-                    b.Navigation("Payment");
-
-                    b.Navigation("Trainer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -793,19 +797,16 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.Member", b =>
                 {
-                    b.Navigation("TrainerSubscriptions");
+                    b.Navigation("memberPlans");
 
                     b.Navigation("memberSessions");
                 });
 
-            modelBuilder.Entity("Gym.DAL.Entities.MemberShip", b =>
+            modelBuilder.Entity("Gym.DAL.Entities.Plan", b =>
                 {
-                    b.Navigation("Members");
-                });
+                    b.Navigation("MemberPlans");
 
-            modelBuilder.Entity("Gym.DAL.Entities.Payment", b =>
-                {
-                    b.Navigation("TrainerSubscription");
+                    b.Navigation("Sessions");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Session", b =>
@@ -818,8 +819,6 @@ namespace Gym.DAL.Migrations
             modelBuilder.Entity("Gym.DAL.Entities.Trainer", b =>
                 {
                     b.Navigation("Sessions");
-
-                    b.Navigation("TrainerSubscriptions");
                 });
 #pragma warning restore 612, 618
         }

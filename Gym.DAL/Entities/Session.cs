@@ -31,7 +31,10 @@ namespace Gym.DAL.Entities
         public int TrainerId { get; set; }
         public Trainer _Trainer { get; private set; }
         public List<MemberSession> memberSessions { get; private set; }
-        public List<Attendance> Attendances { get; private set; } 
+        public List<Attendance> Attendances { get; private set; }
+        [ForeignKey("Plan")]
+        public int? PlanId { get; set; }
+        public Plan Plan { get; set; }
 
         public bool Update(Session session)
         {

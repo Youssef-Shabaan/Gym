@@ -34,10 +34,6 @@ namespace Gym.DAL.Entities
         public int SessionId { get; set; }
         public Session Session { get; set; }
 
-        [ForeignKey("TrainerSubscription")]
-        public int? TrainerSubscriptionId { get; set; }
-        public TrainerSubscription? TrainerSubscription { get; set; }
-
         public bool Update(MemberSession memberSession)
         {
             this.Price = memberSession.Price;

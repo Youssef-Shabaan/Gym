@@ -38,11 +38,8 @@ namespace Gym.DAL.Entities
         [ForeignKey("User")]
         public string UserId { get; private set; }
         public User User { get; private set; }
-        [ForeignKey("_MemberShip")]
-        public int? MemberShipId { get; private set; }
-        public MemberShip _MemberShip { get; private set; }
         public List<MemberSession> memberSessions { get; private set; }
-        public List<TrainerSubscription> TrainerSubscriptions { get; private set; }
+        public List<MemberPlan> memberPlans { get; private set; }
 
         public bool EditMember(Member member, string phoneNumber)
         {

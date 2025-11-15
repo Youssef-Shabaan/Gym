@@ -118,23 +118,7 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
-        public (bool, string, IEnumerable<GetMemberSessionVM>?) GetByTrainerSubscriptionId(int trainerSubscriptionId)
-        {
-            try
-            {
-                var memberSession = _memberSessionRepo.GetByTrainerSubscriptionId(trainerSubscriptionId);
-                if (!memberSession.Item1)
-                {
-                    return (false, memberSession.Item2, null);
-                }
-                var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(memberSession);
-                return (true, null, result);
-            }
-            catch (Exception ex)
-            {
-                return (true, ex.Message, null);
-            }
-        }
+      
 
         public (bool, string) SetAttendance(int memberId, int sessionId)
         {
