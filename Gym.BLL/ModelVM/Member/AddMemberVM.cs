@@ -1,6 +1,7 @@
 ﻿
 using Gym.DAL.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace Gym.BLL.ModelVM.Member
@@ -12,8 +13,9 @@ namespace Gym.BLL.ModelVM.Member
         [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
         public string FisrtName { get; set; }
         [Display(Name ="Last Name")]
-        [Required(ErrorMessage = "Name is required")]
-        [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
+        //[Required(ErrorMessage = "Name is required")]
+        //[MinLength(2, ErrorMessage = "Name must contain at least two chars")]
+        [ValidateNever]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
@@ -37,8 +39,9 @@ namespace Gym.BLL.ModelVM.Member
 
         [Required, DataType(DataType.Password)]
         public string Password { get; set; }
-        [Display(Name ="Confirm Password")]
-        [Required, DataType(DataType.Password), Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
+        //[Display(Name ="Confirm Password")]
+        //[Required, DataType(DataType.Password), Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
+        [ValidateNever]
         public string confirmPassword { get; set; }
     }
 }
