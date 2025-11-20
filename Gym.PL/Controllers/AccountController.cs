@@ -39,6 +39,12 @@ namespace Gym.PL.Controllers
         {
             if (ModelState.IsValid)
             {
+                var existingUser = await userManager.FindByEmailAsync(newMember.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("", "This email is already registered.");
+                    return View();
+                }
                 var result = await memberService.Create(newMember);
                 if (result.Item1)
                     return RedirectToAction("Login", "Account");
