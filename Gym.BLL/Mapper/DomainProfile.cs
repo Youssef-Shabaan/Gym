@@ -5,6 +5,7 @@ using Gym.BLL.ModelVM.Attendance;
 using Gym.BLL.ModelVM.Member;
 using Gym.BLL.ModelVM.MemberSession;
 using Gym.BLL.ModelVM.ModifyPhotos;
+using Gym.BLL.ModelVM.Plan;
 using Gym.BLL.ModelVM.Session;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.BLL.ModelVM.User;
@@ -93,6 +94,14 @@ namespace Gym.BLL.Mapper
 
             CreateMap<UpdateMemberSessionVM, MemberSession>().ReverseMap();
 
+
+            CreateMap<AddPlanVM, Plan>().ReverseMap();  
+
+            CreateMap<Plan,GetPlanVM>()
+                .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.Trainer.Name))
+                .ReverseMap();  
+
+            CreateMap<UpdatePlanVM, Plan>().ReverseMap();   
         }
     }
 }

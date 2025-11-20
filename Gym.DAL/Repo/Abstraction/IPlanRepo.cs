@@ -6,25 +6,25 @@ namespace Gym.DAL.Repo.Abstraction
     public interface IPlanRepo
     {
         // ===== Plans CRUD =====
-        IEnumerable<Plan> GetAllPlans();
-        Plan? GetPlanById(int id);
-        bool CreatePlan(Plan plan);
-        bool UpdatePlan(Plan plan);
-        bool DeletePlan(int id);
+        (bool,string, IEnumerable<Plan>) GetAllPlans();
+        (bool,Plan?)  GetPlanById(int id);
+        (bool, string) CreatePlan(Plan plan);
+        (bool, string) UpdatePlan(Plan plan);
+        (bool, string) DeletePlan(int id);
 
         // ===== Plan Sessions =====
-        IEnumerable<Session> GetPlanSessions(int planId);
+        (bool, string, IEnumerable<Session>) GetPlanSessions(int planId);
         bool AddSessionToPlan(int planId, int sessionId);
-        bool RemoveSessionFromPlan(int planId, int sessionId);
+        (bool, string) RemoveSessionFromPlan(int planId, int sessionId);
 
         // ===== Plan Subscriptions (MemberPlan) =====
-        IEnumerable<MemberPlan> GetPlanMembers(int planId);
-        bool SubscribeMemberToPlan(MemberPlan subscription);
-        bool CancelMemberPlan(int memberPlanId);
+        //(bool, string, IEnumerable<MemberPlan>) GetPlanMembers(int planId);
+        //bool SubscribeMemberToPlan(MemberPlan subscription);
+        //(bool, string) CancelMemberPlan(int memberPlanId);
 
         // ===== Analytics / Helper =====
-        int CountMembersInPlan(int planId);
+        //int CountMembersInPlan(int planId);
         bool PlanExists(int planId);
-        bool MemberAlreadySubscribed(int memberId, int planId);
+        //bool MemberAlreadySubscribed(int memberId, int planId);
     }
 }
