@@ -46,13 +46,80 @@ namespace Gym.PL.Controllers
                     return View();
                 }
                 var result = await memberService.Create(newMember);
-                if (result.Item1)
-                    return RedirectToAction("Login", "Account");
-                else
+                if (!result.Item1)
                     ModelState.AddModelError(string.Empty, result.Item2);
+
+
+                var user = await userManager.FindByEmailAsync(newMember.Email);
+
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                var confirmationLink = Url.Action(
+                        "ConfirmEmail",
+                        "Account",
+                        new { userId = user.Id, token = token },
+                            Request.Scheme
+                        );
+                var subject = "Confirm Your Email";
+                var body = $@"
+                        <h3>Welcome to FitHub System 💪</h3>
+                        <p>Please confirm your email by clicking the link below:</p>
+                        <a href='{confirmationLink}'>Confirm Email</a>";
+
+                try
+                {
+                    await emailService.SendEmailAsync(user.Email, subject, body);
+                }
+                catch (Exception ex)
+                {
+                    await userManager.DeleteAsync(user);
+                    return RedirectToAction("ErrorInConfirmeEmail");
+                }
+
+                return RedirectToAction("EmailSent");
             }
             return View(newMember);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+                return BadRequest("Invalid confirmation link");
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+
+            try
+            {
+                var result = await userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                    return View("EmailConfirmed");
+            }
+            catch
+            {
+                await userManager.DeleteAsync(user);
+                return View("ErrorInConfirmeEmail");
+            }
+
+            await userManager.DeleteAsync(user);
+            return View("ErrorInConfirmeEmail");
+        }
+
+        [HttpGet]
+        public IActionResult EmailConfirmed()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ErrorInConfirmeEmail()
+        {
+            return View();
+        }
+
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -66,6 +133,12 @@ namespace Gym.PL.Controllers
                 var user = await userManager.FindByNameAsync(login.UserName);
                 if (user != null)
                 {
+                    if (!user.EmailConfirmed)
+                    {
+                        ModelState.AddModelError("", "Please confirm your email first.");
+                        return View(login);
+                    }
+
                     bool found = await userManager.CheckPasswordAsync(user, login.Password);
                     if (found)
                     {
