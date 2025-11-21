@@ -16,7 +16,7 @@ namespace Gym.BLL.ModelVM.Trainer
         [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
         public string LastName { get; set; }
 
-        [Range(18, 40, ErrorMessage = "Age must be between 18 and 40")]
+        [Range(18, 60, ErrorMessage = "Age must be between 18 and 60")]
         public int Age { get; set; }
 
         [Required(ErrorMessage = "Address is required")]

@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Email Confirmed";
+}
+
+<style>
+    .account-card {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 40px 30px;
+        max-width: 600px;
+        margin: 100px auto;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+        .account-card h2 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .account-card p {
+            color: #ddd;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .account-card i {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+</style>
+
+<main>
+    <section class="contact-section">
+        <div class="container">
+            <div class="account-card">
+                <i class="bi bi-check-circle-fill text-success"></i>
+                <h2>Email Confirmed Successfully</h2>
+                <p>
+                    Your email has been verified. You can now log in to your account.
+                </p>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-primary w-100">
+                    Back To Login
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
+    }
+}

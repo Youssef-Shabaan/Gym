@@ -29,7 +29,7 @@ namespace Gym.BLL.ModelVM.Member
         [RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be 11 digits")]
         public string PhoneNumber { get; set; }
 
-        [Range(18, 40, ErrorMessage = "Age must be between 18 and 40")]
+        [Range(18, 60, ErrorMessage = "Age must be between 18 and 60")]
         public int Age { get; set; }
         [Required(ErrorMessage = "Gender is required")]
         public Gender Gender { get; set; }
