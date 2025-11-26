@@ -6,6 +6,7 @@ namespace Gym.DAL.Entities
 {
     public class Plan
     {
+        public Plan() { }
         [Key]
         public int Id { get; private set; }
         public string Name { get; private set; }
@@ -31,6 +32,11 @@ namespace Gym.DAL.Entities
             this.EndDate = plan.EndDate;
             this.Price = plan.Price;
             return true;
+        }
+
+        public DateTime GetEndDate()
+        {
+            return this.EndDate;
         }
     }
 }

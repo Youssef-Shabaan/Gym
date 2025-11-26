@@ -57,6 +57,7 @@ namespace Gym.PL
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IMemberPlanService, MemberPlanService>();
 
             // Email Settings
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));

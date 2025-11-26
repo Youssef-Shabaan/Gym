@@ -3,6 +3,7 @@ using AutoMapper.Execution;
 using Gym.BLL.ModelVM.Admin;
 using Gym.BLL.ModelVM.Attendance;
 using Gym.BLL.ModelVM.Member;
+using Gym.BLL.ModelVM.MemberPlan;
 using Gym.BLL.ModelVM.MemberSession;
 using Gym.BLL.ModelVM.ModifyPhotos;
 using Gym.BLL.ModelVM.Plan;
@@ -101,7 +102,21 @@ namespace Gym.BLL.Mapper
                 .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.Trainer.Name))
                 .ReverseMap();  
 
-            CreateMap<UpdatePlanVM, Plan>().ReverseMap();   
+            CreateMap<UpdatePlanVM, Plan>().ReverseMap();
+
+
+            CreateMap<AddMemberPlanVM, MemberPlan>()
+                .ReverseMap();
+
+            CreateMap<UpdateMemberPlanVM, MemberPlan>().ReverseMap();
+
+            CreateMap<MemberPlan, GetMemberPlanVM>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.MemberPhone, opt => opt.MapFrom(src => src.Member.User.PhoneNumber))
+                .ForMember(dest => dest.MemberImage, opt => opt.MapFrom(src => src.Member.Image))
+                .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.Plan.Name))
+                .ReverseMap();
+
         }
     }
 }
