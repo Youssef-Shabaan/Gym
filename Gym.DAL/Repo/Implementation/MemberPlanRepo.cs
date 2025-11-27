@@ -2,6 +2,7 @@
 using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -14,156 +15,178 @@ namespace Gym.DAL.Repo.Implementation
             _context = context;
         }
 
-        public bool ActivateSubscription(int memberPlanId)
+        public (bool ,string) ActivateSubscription(int memberPlanId)
         {
             try
             {
-                var memberPlan = _context.Set<MemberPlan>().FirstOrDefault(mp => mp.Id == memberPlanId);
+                var memberPlan = _context.memberPlans.FirstOrDefault(mp => mp.Id == memberPlanId);
                 if (memberPlan == null)
                 {
-                    throw new Exception("MemberPlan not found.");
+                    return(false, "MemberPlan not found.");
+                }
+                if(memberPlan.IsActive)
+                {
+                    return (false, "MemeberPlan already active.");
                 }
                 memberPlan.Active();
                 _context.SaveChanges();
-                return true;
+                return (true, null);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return (false, ex.Message);
             }
         }
 
-        public bool CancelSubscription(int memberPlanId)
+        public (bool, string) CancelSubscription(int memberPlanId)
         {
             try
             {
-                var memberPlan = _context.Set<MemberPlan>().FirstOrDefault(mp => mp.Id == memberPlanId);
+                var memberPlan = _context.memberPlans.FirstOrDefault(mp => mp.Id == memberPlanId);
                 if (memberPlan == null)
                 {
-                    throw new Exception("MemberPlan not found.");
+                    return(false, "MemberPlan not found.");
+                }
+                if (!memberPlan.IsActive)
+                {
+                    return (false, "MemberPlan already not active.");
                 }
                 memberPlan.DeActive();
                 _context.SaveChanges();
-                return true;
+                return (true, null);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return (false, ex.Message);
             }
         }
 
-        public bool Create(MemberPlan memberPlan)
+        public (bool, string) Create(MemberPlan memberPlan)
         {
             try
             {
-                var existingMemberPlan = _context.Set<MemberPlan>()
+                var existingMemberPlan = _context.memberPlans
                     .FirstOrDefault(mp => mp.MemberId == memberPlan.MemberId && mp.PlanId == memberPlan.PlanId && mp.IsActive);
                 if (existingMemberPlan != null)
                 {
-                    throw new Exception("Member is already subscribed to this plan.");
+                    return(false, "Member is already subscribed to this plan.");
                 }
-                _context.Set<MemberPlan>().Add(memberPlan);
+                _context.memberPlans.Add(memberPlan);
                 _context.SaveChanges();
-                return true;
+                return (true, "Member added to plan successfully.");
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return (false, ex.Message); 
             }
         }
 
-        public bool Delete(int id)
+        public (bool, string) Delete(int id)
         {
             try
             {
-                var memberPlan = _context.Set<MemberPlan>().FirstOrDefault(mp => mp.Id == id);
+                var memberPlan = _context.memberPlans.FirstOrDefault(mp => mp.Id == id);
                 if (memberPlan == null)
                 {
-                    throw new Exception("MemberPlan not found.");
+                    return(false, "MemberPlan not found.");
                 }
                 _context.Set<MemberPlan>().Remove(memberPlan);
                 _context.SaveChanges();
-                return true;
+                return (true, null);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return(false, ex.Message);
             }
         }
 
-        public MemberPlan? GetActivePlanForMember(int memberId)
+        public (bool, string, IEnumerable<MemberPlan>?) GetActivePlanForMember(int memberId)
         {
             try
             {
-                var memberPlan = _context.Set<MemberPlan>()
-                    .FirstOrDefault(mp => mp.MemberId == memberId && mp.IsActive);
-                return memberPlan;
+                var memberPlan = _context.memberPlans
+                    .Include(m => m.Member).ThenInclude(u => u.User)
+                    .Include(p => p.Plan)
+                    .Where(mp => mp.MemberId == memberId && mp.IsActive).ToList();
+                if(!memberPlan.Any())
+                {
+                    return (false, "There are no active plans", null);
+                }
+                return (true, null, memberPlan);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return(false, ex.Message, null);    
             }
         }
 
-        public IEnumerable<MemberPlan> GetAll()
+        public (bool, string, IEnumerable<MemberPlan>?) GetAll()
         {
             try
             {
-                var memberPlans = _context.Set<MemberPlan>().ToList();
-                return memberPlans;
+                var memberPlans = _context.memberPlans
+                    .Include(m => m.Member).ThenInclude(u => u.User)
+                    .Include(p => p.Plan).ToList();
+                if(!memberPlans.Any())
+                {
+                    return (false, "There are no plans.", null);
+                }
+                return (true, null, memberPlans);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return (false, ex.Message, null);
             }
         }
 
-        public MemberPlan? GetById(int id)
+        public (bool, MemberPlan?) GetById(int id)
         {
             try
             {
-                var memberPlan = _context.Set<MemberPlan>().FirstOrDefault(mp => mp.Id == id);
-                return memberPlan;
+                var memberPlan = _context.memberPlans
+                    .Include(m => m.Member).ThenInclude(u => u.User)
+                    .Include(p => p.Plan)
+                    .FirstOrDefault(mp => mp.Id == id);
+                if(memberPlan == null)
+                {
+                    return (false, null);
+                }
+                return (true, memberPlan);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return (false, null);
             }
         }
 
-        public IEnumerable<MemberPlan> GetMemberPlans(int memberId)
+        public (bool, string, IEnumerable<MemberPlan>?) GetMemberPlans(int memberId)
         {
             try
             {
-                var memberPlans = _context.Set<MemberPlan>()
+                var memberPlans = _context.memberPlans
+                    .Include(m => m.Member).ThenInclude(u => u.User)
+                    .Include(p => p.Plan)
                     .Where(mp => mp.MemberId == memberId)
                     .ToList();
-                return memberPlans;
+                if(!memberPlans.Any())
+                {
+                    return (false, "There are no plans for this member.", null);
+                }
+                return(true, null, memberPlans);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return(false, ex.Message, null);
             }
         }
 
-        public IEnumerable<MemberPlan> GetPlanMembers(int planId)
-        {
-            try
-            {
-                var members = _context.Set<MemberPlan>().Where(mp => mp.PlanId == planId).ToList();
-                return members;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        
 
         public bool HasActivePlan(int memberId)
         {
             try
             {
-                var hasActivePlan = _context.Set<MemberPlan>()
+                var hasActivePlan = _context.memberPlans
                     .Any(mp => mp.MemberId == memberId && mp.IsActive);
                 return hasActivePlan;
             }
@@ -177,32 +200,32 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var isSubscribed = _context.Set<MemberPlan>()
-                    .Any(mp => mp.MemberId == memberId && mp.PlanId == planId && mp.IsActive);
+                var isSubscribed = _context.memberPlans
+                    .Any(mp => mp.MemberId == memberId && mp.PlanId == planId);
                 return isSubscribed;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return false;
             }
         }
 
-        public bool Update(MemberPlan memberPlan)
+        public (bool, string) Update(MemberPlan memberPlan)
         {
             try
             {
-                var existingMemberPlan = _context.Set<MemberPlan>().FirstOrDefault(mp => mp.Id == memberPlan.Id);
+                var existingMemberPlan = _context.memberPlans.FirstOrDefault(mp => mp.Id == memberPlan.Id);
                 if (existingMemberPlan == null)
                 {
-                    throw new Exception("MemberPlan not found.");
+                    return(false, "MemberPlan not found.");
                 }
                 existingMemberPlan.Update(memberPlan);
                 _context.SaveChanges();
-                return true;
+                return (true, "Updated successfully");
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return (false, ex.Message);
             }
         }
     }

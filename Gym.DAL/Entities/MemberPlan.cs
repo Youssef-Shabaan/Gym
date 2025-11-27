@@ -6,6 +6,17 @@ namespace Gym.DAL.Entities
 {
     public class MemberPlan
     {
+        public MemberPlan() { }
+
+        public MemberPlan(int memberId, int planId, DateTime joinDate, DateTime expireDate, bool isActive) 
+        {
+            MemberId = memberId;
+            PlanId = planId;
+            JoinDate = joinDate;
+            ExpireDate = expireDate;
+            IsActive = isActive;
+        }
+
         [Key]
         public int Id { get; private set; }
 
@@ -22,7 +33,8 @@ namespace Gym.DAL.Entities
         public bool IsActive { get; private set; }
         public void Active() { 
             this.IsActive = true;
-        }public void DeActive() { 
+        }
+        public void DeActive() { 
             this.IsActive = false;
         }
         public bool Update(MemberPlan memberPlan) { 
