@@ -1,0 +1,101 @@
+﻿@using Gym.BLL.ModelVM.Session
+@model List<GetSessionVM>
+@{
+    ViewData["Title"] = "Sessions";
+}
+
+<main>
+    <div class="slider-area2">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 pt-70">
+                            <h2>Sessions</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <section class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
+                        <h2>Subscribe Now</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var session in Model)
+                {
+                        <div class="col-lg-4 col-md-6 mb-4">
+
+        <div class="card session-card" style="
+        background: #111;
+        color: white;
+        border-radius: 12px;
+        border: 1px solid #ff0000;
+        box-shadow: 0 0 15px rgba(255,0,0,0.25);
+        overflow: hidden;
+        ">
+                            @{
+                                var random = new Random();
+                                int number = random.Next(1, 7);
+                                string imagePath = $"~/assets/img/gallery/gallery{number}.png";
+                            }
+                    <img src="@Url.Content(imagePath)"
+                 class="card-img-top"
+                 style="height: 220px; object-fit: cover;" />
+
+            <div class="card-body">
+
+                    <h4 class="card-title" style="color: white;
+  font-weight: 700;
+  text-align: center;
+  font-size: 30px;">
+                                    @session.Name
+                </h4>
+
+                <p style="margin-bottom: 6px; color: #ddd;">
+                    <strong style="color:#ff3b3b;">Trainer:</strong> @session.TrainerName
+                </p>
+
+                <p style="margin-bottom: 6px; color: #ddd;">
+                        <strong style="color:#ff3b3b;">Start at:</strong> @session.StartTime.ToString("M/d/yyyy h:mm tt")
+                </p>
+                <p style="margin-bottom: 6px; color: #ddd;">
+                        <strong style="color:#ff3b3b;">End at:</strong> @session.EndTime.ToString("M/d/yyyy h:mm tt")
+                </p>
+
+                <p style="margin-bottom: 10px; color: #ddd;">
+                    <strong style="color:#ff3b3b;">Price:</strong> @session.Price EGP
+                </p>
+
+                <a href="/Session/Details/@session.Id" 
+                   class="btn btn-danger w-100" 
+                   style="font-weight:bold;">
+                   Subscribe
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+                }
+
+
+            </div>
+
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
