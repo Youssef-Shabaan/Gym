@@ -1,0 +1,81 @@
+﻿@using Gym.BLL.ModelVM.Trainer
+@model List<GetTrainerVM>
+@{
+    ViewData["Title"] = "Trainers";
+}
+
+<main>
+    <div class="slider-area2">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 pt-70">
+                            <h2>Trainers</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <section class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
+                        <h2>Our Trainers</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var trainer in Model)
+                {
+          <div class="col-lg-4 col-md-6">
+                        <div class="single-cat text-center mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                            <div class="cat-icon">
+                                      <img src="~/Files/@trainer.Image"
+                     alt="@trainer.Name"
+                     style="
+                    margin-bottom: 30px;
+                    width: 362px;
+                    height: 300px;
+                    object-fit: cover;
+                    border-radius: 10px;
+                     " />
+                            </div>
+                            <div class="cat-cap">
+                                    <h5 style="font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  display: block;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+  text-transform: uppercase;
+  color: #fff;">@trainer.Name</h5>
+                                    <p style ="color: #fff;
+  font-size: 16px;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+  margin: 0;">@trainer.Address</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
