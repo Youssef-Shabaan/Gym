@@ -84,6 +84,24 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
+        public (bool, string, IEnumerable<GetSessionVM>?) GetOnGoingSessions()
+        {
+            try
+            {
+                var AllSessions = sessionRepo.GetOnGoingSessions();
+                if (!AllSessions.Item1)
+                {
+                    return (false, "There are no sessions", null);
+                }
+                var Sessions = mapper.Map<IEnumerable<GetSessionVM>>(AllSessions.Item2);
+                return (true, null, Sessions);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
         public (bool, string, IEnumerable<GetSessionVM>?) GetPastSessions()
         {
             try

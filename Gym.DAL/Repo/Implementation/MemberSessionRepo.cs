@@ -17,6 +17,21 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
+                var member = GymDb.members.FirstOrDefault(m => m.MemberId == memberSession.MemberId);
+                if (member == null)
+                {
+                    return (false, "Member not found.");
+                }
+                var session = GymDb.sessions.FirstOrDefault(s => s.Id == memberSession.SessionId);
+                if(session == null)
+                {
+                    return (false, "Session not found.");
+                }
+                bool BookSession = session.Book();
+                if (!BookSession)
+                {
+                    return (false, "All seats have been booked.");
+                }
                 var result = GymDb.memberSessions.Add(memberSession);
                 GymDb.SaveChanges();
                 return (true, "Added member to session is done");
@@ -36,6 +51,10 @@ namespace Gym.DAL.Repo.Implementation
                 {
                     return (false, "Member session not found");
                 }
+                var session = GymDb.sessions.FirstOrDefault(s => s.Id == memberSession.SessionId);
+
+                session.Cancel();
+
                 var result = GymDb.memberSessions.Remove(memberSession);
                 GymDb.SaveChanges();
                 return (true, "Removed Successfully");
@@ -52,7 +71,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var memberSession = GymDb.memberSessions
                     .Include(p => p.Payment)
-                    .Include(m => m.Member)
+                    .Include(m => m.Member).ThenInclude(u => u.User)
                     .Include(s => s.Session)
                     .ToList();
                 if(!memberSession.Any())
@@ -73,7 +92,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var memberSession = GymDb.memberSessions
                     .Include(p => p.Payment)
-                    .Include(m => m.Member)
+                    .Include(m => m.Member).ThenInclude(u => u.User)
                     .Include(s => s.Session)
                     .FirstOrDefault(a => a.Id == Id);
 
@@ -95,7 +114,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var memberSession = GymDb.memberSessions
                     .Include(p => p.Payment)
-                    .Include(m => m.Member)
+                    .Include(m => m.Member).ThenInclude(u => u.User)
                     .Include(s => s.Session)
                     .Where(a => a.MemberId == MemberId).ToList();
                 if (!memberSession.Any())
@@ -116,7 +135,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var memberSession = GymDb.memberSessions
                     .Include(p => p.Payment)
-                    .Include(m => m.Member)
+                    .Include(m => m.Member).ThenInclude(u => u.User)
                     .Include(s => s.Session)
                     .Where(a => a.SessionId == SessionId).ToList();
                 if (!memberSession.Any())

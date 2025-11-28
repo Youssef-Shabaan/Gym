@@ -52,19 +52,18 @@ namespace Gym.BLL.Service.Implementation
         {
             try
             {
-                var plan = _PlanRepo.GetPlanById(memberPlan.PlanId);
-                if (!plan.Item1)
+                var plan = _PlanRepo.PlanExists(memberPlan.PlanId);
+                if (!plan)
                 {
                     return (false, "Plan not found");
                 }
-                var member = _memberRepo.GetById(memberPlan.MemberId);
-                if(member == null)
+                var member = _memberRepo.MemberExist(memberPlan.MemberId);
+                if(!member)
                 {
                     return (false, "Member not found");
                 }
 
-                var memberplan = new MemberPlan(memberPlan.MemberId, 
-                    memberPlan.PlanId, memberPlan.JoinDate, plan.Item2.GetEndDate(), memberPlan.IsActive);
+                var memberplan = _mapper.Map<MemberPlan>(memberPlan);
                 
                 var result = _memberPlanRepo.Create(memberplan);
                 return result;

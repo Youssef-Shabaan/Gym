@@ -4,7 +4,69 @@
     ViewData["Title"] = "Sessions";
 }
 
-<main>
+<style>
+    .blur-background {
+        filter: blur(6px);
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .desc-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(6px);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .desc-content {
+        background: #111;
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 70vh;
+        overflow-y: auto;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 0 20px rgba(255,0,0,0.4);
+        font-weight: bold;
+    }
+
+    #descText {
+        color: #fff;
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+
+    .close-btn {
+        position: sticky;
+        top: 0;
+        float: right;
+        cursor: pointer;
+        font-size: 20px;
+        color: #ff3b3b;
+        margin-bottom: 10px;
+    }
+
+    .desc-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .desc-content::-webkit-scrollbar-thumb {
+        background-color: #ff3b3b;
+        border-radius: 10px;
+    }
+</style>
+
+
+<main id="pageContent">
     <div class="slider-area2">
         <div class="slider-height2 d-flex align-items-center">
             <div class="container">
@@ -19,83 +81,105 @@
         </div>
     </div>
 
-     <section class="contact-section">
+    <section class="contact-section">
         <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
-                        <h2>Subscribe Now</h2>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 @foreach (var session in Model)
                 {
-                        <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card session-card" style="
+                                        background: #111;
+                                        color: white;
+                                        border-radius: 12px;
+                                        border: 1px solid #d3c2c2;
+                                        box-shadow: 0 0 15px rgba(255,0,0,0.25);
+                                        overflow: hidden;">
 
-        <div class="card session-card" style="
-        background: #111;
-        color: white;
-        border-radius: 12px;
-        border: 1px solid #ff0000;
-        box-shadow: 0 0 15px rgba(255,0,0,0.25);
-        overflow: hidden;
-        ">
                             @{
                                 var random = new Random();
                                 int number = random.Next(1, 7);
                                 string imagePath = $"~/assets/img/gallery/gallery{number}.png";
                             }
-                    <img src="@Url.Content(imagePath)"
-                 class="card-img-top"
-                 style="height: 220px; object-fit: cover;" />
 
-            <div class="card-body">
+                        <img src="@Url.Content(imagePath)"
+                             class="card-img-top"
+                             style="height: 220px; object-fit: cover;" />
 
-                    <h4 class="card-title" style="color: white;
-  font-weight: 700;
-  text-align: center;
-  font-size: 30px;">
-                                    @session.Name
-                </h4>
+                        <div class="card-body">
 
-                <p style="margin-bottom: 6px; color: #ddd;">
-                    <strong style="color:#ff3b3b;">Trainer:</strong> @session.TrainerName
-                </p>
+                            <h4 style="color: white; font-weight: 700; text-align: center; font-size: 26px;">
+                                @session.Name
+                            </h4>
 
-                <p style="margin-bottom: 6px; color: #ddd;">
-                        <strong style="color:#ff3b3b;">Start at:</strong> @session.StartTime.ToString("M/d/yyyy h:mm tt")
-                </p>
-                <p style="margin-bottom: 6px; color: #ddd;">
-                        <strong style="color:#ff3b3b;">End at:</strong> @session.EndTime.ToString("M/d/yyyy h:mm tt")
-                </p>
+                            <p style="margin-bottom: 6px; color: #ddd;">
+                                <strong style="color:#ff3b3b;">Trainer :</strong> @session.TrainerName
+                            </p>
+                            <p style="margin-bottom: 6px; color: #ddd;">
+                                <strong style="color:#ff3b3b;">Phone :</strong> @session.TrainerPhone
+                            </p>
 
-                <p style="margin-bottom: 10px; color: #ddd;">
-                    <strong style="color:#ff3b3b;">Price:</strong> @session.Price EGP
-                </p>
+                            <p style="margin-bottom: 6px; color: #ddd;">
+                                <strong style="color:#ff3b3b;">Start at :</strong> @session.StartTime.ToString("M/d/yyyy h:mm tt")
+                            </p>
 
-                <a href="/Session/Details/@session.Id" 
-                   class="btn btn-danger w-100" 
-                   style="font-weight:bold;">
-                   Subscribe
-                </a>
+                            <p style="margin-bottom: 6px; color: #ddd;">
+                                <strong style="color:#ff3b3b;">End at :</strong> @session.EndTime.ToString("M/d/yyyy h:mm tt")
+                            </p>
 
+                            <p style="margin-bottom: 10px; color: #ddd;">
+                                <strong style="color:#ff3b3b;">Price :</strong> @session.Price EGP
+                            </p>
+
+                            <p style="margin-bottom: 10px; color: #ddd;">
+                                <strong style="color:#ff3b3b;">Available :</strong>
+                                @(session.Capactiy - session.Booked == 0
+                                                                ? "No seats available"
+                                                                : (session.Capactiy - session.Booked) + " Seats")
+                            </p>
+
+                                <a href="javascript:void(0)"
+                                   onclick="openDescription(`@Html.Raw((session.Description ?? "").Replace("`", ""))`)"
+                                   class="btn btn-outline-danger w-100 mb-2"
+                                   style="font-weight:bold;">
+                                    View Description
+                                </a>
+
+                                <a href="/Session/Details/@session.Id"
+                                   class="btn btn-danger w-100"
+                                   style="font-weight:bold;">
+                                    Subscribe
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                                }
             </div>
-        </div>
-
-    </div>
-
-                }
-
-
-            </div>
-
         </div>
     </section>
 </main>
 
+<div id="descModal" class="desc-modal">
+    <div class="desc-content">
+        <span class="close-btn" onclick="closeDescription()">❌</span>
+        <p id="descText"></p>
+    </div>
+</div>
+
+
+
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        function openDescription(text) {
+            document.getElementById('descText').innerText = text;
+            document.getElementById('descModal').style.display = 'flex';
+            document.getElementById('pageContent').classList.add('blur-background');
+        }
+
+        function closeDescription() {
+            document.getElementById('descModal').style.display = 'none';
+            document.getElementById('pageContent').classList.remove('blur-background');
+        }
+    </script>
 }
+

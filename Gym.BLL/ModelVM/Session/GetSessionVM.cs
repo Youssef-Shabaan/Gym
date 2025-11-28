@@ -1,5 +1,7 @@
 ﻿
 
+using System.ComponentModel;
+
 namespace Gym.BLL.ModelVM.Session
 {
     public class GetSessionVM
@@ -10,7 +12,10 @@ namespace Gym.BLL.ModelVM.Session
         public DateTime StartTime { get;  set; }
         public DateTime EndTime { get;  set; }
         public string TrainerName { get; set; }
+        public string TrainerPhone { get; set; }
         public string Status { get; set; }
-        public decimal Price { get; set; }  
+        public decimal Price { get; set; }
+        public int Capactiy { get; set; }
+        public int Booked { get; set; }
     }
 }

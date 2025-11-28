@@ -9,7 +9,7 @@ namespace Gym.DAL.Entities
     public class Trainer
     {
         public Trainer() { }
-        public Trainer(string name, string image, Gender gender, int age, string? address, int capacity, string UserId)
+        public Trainer(string name, string image, Gender gender, int age, string? address,  string UserId)
         {
             Name = name;
             if (image != null) Image = image;
@@ -19,7 +19,6 @@ namespace Gym.DAL.Entities
             IsDeleted = false;
             Age = age;
             Address = address;
-            Capacity = capacity;
             userId = UserId;
         }
         [Key]
@@ -35,7 +34,6 @@ namespace Gym.DAL.Entities
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOn { get; private set; }
         public int Count { get; set; } = 0;
-        public int Capacity { get; private set; }
 
 
         //relation ya hussein
@@ -52,7 +50,6 @@ namespace Gym.DAL.Entities
             UpdateDate = DateTime.Now;
             Address = trainer.Address;
             Age = trainer.Age;
-            Capacity = trainer.Capacity;
             return true;
         }
 

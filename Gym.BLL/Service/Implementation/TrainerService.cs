@@ -49,7 +49,7 @@ namespace Gym.BLL.Service.Implementation
                 string imagepath = null;
                 if (newtrainer.Image != null)
                     imagepath = Upload.UploadFile("Files", newtrainer.Image);
-                var trainer = new Trainer(newtrainer.FisrtName+' '+newtrainer.LastName, imagepath, newtrainer.Gender, newtrainer.Age, newtrainer.Address, newtrainer.Capacity, user.Id);
+                var trainer = new Trainer(newtrainer.FisrtName+' '+newtrainer.LastName, imagepath, newtrainer.Gender, newtrainer.Age, newtrainer.Address,  user.Id);
                 var addtrainer = trainerRepo.AddTrainer(trainer);
                 if (!addtrainer.Item1)
                 {

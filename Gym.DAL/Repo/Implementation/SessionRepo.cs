@@ -68,7 +68,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var sessions = GymDb.sessions.Include(t => t._Trainer).ToList();
+                var sessions = GymDb.sessions.Include(t => t._Trainer).ThenInclude(u => u.User).ToList();
                 if(!sessions.Any())
                 {
                     return(false, null);
@@ -100,11 +100,32 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
+        public (bool, IEnumerable<Session>?) GetOnGoingSessions()
+        {
+            try
+            {
+                var OnGoingSessions = GymDb.sessions
+                    .Include(t => t._Trainer).ThenInclude(u => u.User)
+                    .Where(a => DateTime.Now >= a.StartTime && DateTime.Now <= a.EndTime).ToList();
+                if (!OnGoingSessions.Any() || OnGoingSessions == null)
+                {
+                    return (false, null);
+                }
+                return (true, OnGoingSessions);
+            }
+            catch (Exception ex)
+            {
+                return (false, null);
+            }
+        }
+
         public (bool, IEnumerable<Session>?) GetPastSessions()
         {
             try
             {
-                var PastSessions = GymDb.sessions.Where(a => a.EndTime <  DateTime.Now).ToList();
+                var PastSessions = GymDb.sessions
+                    .Include(t => t._Trainer).ThenInclude(u => u.User)
+                    .Where(a => a.EndTime <  DateTime.Now).OrderByDescending(s => s.StartTime).Take(20).ToList();
                 if(!PastSessions.Any() || PastSessions == null)
                 {
                     return(false, null);
@@ -121,7 +142,9 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var sessions = GymDb.sessions.Where(a => a.TrainerId == trainerId).ToList();
+                var sessions = GymDb.sessions
+                    .Include(t => t._Trainer).ThenInclude(u => u.User)
+                    .Where(a => a.TrainerId == trainerId).ToList();
                 if(!sessions.Any() || sessions == null)
                 {
                     return(false, null);
@@ -138,7 +161,9 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var UpcomingSessions = GymDb.sessions.Where(a => a.StartTime >= DateTime.Now).ToList();
+                var UpcomingSessions = GymDb.sessions
+                    .Include(t => t._Trainer).ThenInclude(u => u.User)
+                    .Where(a => a.StartTime >= DateTime.Now).ToList();
                 if (!UpcomingSessions.Any() || UpcomingSessions == null)
                 {
                     return (false, null);
