@@ -20,15 +20,20 @@ namespace Gym.BLL.ModelVM.Session
 
         [Required(ErrorMessage = "Start time is required")]
         [DisplayName("Start Time")]
-        public DateTime StartTime { get;  set; } = DateTime.Now;
+        public DateTime StartTime { get;  set; } = DateTime.Now.AddMinutes(1);
 
         [Required(ErrorMessage = "End time is required")]
         [DisplayName("End Time")]
-        public DateTime EndTime { get; set; } = DateTime.Now;
+        public DateTime EndTime { get; set; } = DateTime.Now.AddMinutes(1);
 
 
         [Required(ErrorMessage = "Price is required")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public decimal Price { get; set; }  
+
+        [Required(ErrorMessage = "Capacity is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Capacity must be greater than 0")]
+        public int Capactiy { get;  set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

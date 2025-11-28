@@ -55,6 +55,7 @@ namespace Gym.BLL.Mapper
 
             CreateMap<Session, GetSessionVM>()
                 .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src._Trainer.Name))
+                .ForMember(dest => dest.TrainerPhone, opt => opt.MapFrom(src => src._Trainer.User.PhoneNumber))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src =>
                 DateTime.Now < src.StartTime ? "Not Started" : DateTime.Now >= src.StartTime && DateTime.Now <= src.EndTime ? "Ongoing" : "Ended"))
                 .ReverseMap();

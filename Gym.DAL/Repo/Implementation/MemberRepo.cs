@@ -79,6 +79,12 @@ namespace Gym.DAL.Repo.Implementation
             return result;
         }
 
+        public bool MemberExist(int id)
+        {
+            var member = DB.members.FirstOrDefault(a => a.MemberId == id);  
+            return member != null;
+        }
+
         public bool Update(Member newMember, string phoneNumber)
         {
             var result = DB.members.Where(m => m.MemberId == newMember.MemberId).FirstOrDefault();

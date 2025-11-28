@@ -22,7 +22,12 @@ namespace Gym.BLL.ModelVM.Session
         public DateTime EndTime { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public decimal Price { get; set; }
+
+        [Required(ErrorMessage = "Capacity is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Capacity must be greater than 0")]
+        public int Capactiy { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (StartTime < DateTime.Now)

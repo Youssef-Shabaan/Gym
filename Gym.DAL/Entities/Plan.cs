@@ -14,6 +14,8 @@ namespace Gym.DAL.Entities
         public DateTime StartDate { get; private set; }
         public DateTime EndDate { get; private set; }
         public decimal Price { get; private set; }
+        public int Capcity { get; private set; }
+        public int Booked { get; private set; } 
 
         // Trainer owner
         [ForeignKey("Trainer")]
@@ -31,12 +33,9 @@ namespace Gym.DAL.Entities
             this.StartDate = plan.StartDate;
             this.EndDate = plan.EndDate;
             this.Price = plan.Price;
+            this.Capcity = plan.Capcity;
             return true;
         }
 
-        public DateTime GetEndDate()
-        {
-            return this.EndDate;
-        }
     }
 }
