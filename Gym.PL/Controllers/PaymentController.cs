@@ -13,22 +13,18 @@ namespace Gym.PL.Controllers
     public class PaymentController : Controller
     {
         private readonly IPayPalService paypalService;
-        private readonly UserManager<User> userManager;
         private readonly PayPal Paypal;
         private readonly IMapper mapper;
-        private readonly IUserService userService;
 
-        public PaymentController(IUserService userService, IMapper mapper, IPayPalService paypalService, UserManager<User> userManager, IConfiguration configuration)
+        public PaymentController(IMapper mapper, IPayPalService paypalService, IConfiguration configuration)
         {
             this.paypalService = paypalService;
-            this.userManager = userManager;
             this.mapper = mapper;
-            this.userService = userService;
             Paypal = new PayPal
             {
-                PayPalClientId = configuration["PayPal:ClientId"],
-                PayPalSecret = configuration["PayPal:Secret"],
-                PayPalUrl = configuration["PayPal:URL"]
+                PayPalClientId = configuration["PayPalSettings:ClientId"],
+                PayPalSecret = configuration["PayPalSettings:Secret"],
+                PayPalUrl = configuration["PayPalSettings:URL"]
             };
         }
 
@@ -57,7 +53,7 @@ namespace Gym.PL.Controllers
                     {
                         ["amount"] = new JsonObject
                         {
-                            ["currency_code"] = "EGP",
+                            ["currency_code"] = "USD",
                             ["value"] = totalAmount
                         }
                     }
@@ -87,7 +83,7 @@ namespace Gym.PL.Controllers
                     if (jsonResponse != null)
                     {
                         string paypalOrderId = jsonResponse["id"]?.ToString() ?? "";
-                        return new JsonResult(new { Id = paypalOrderId });
+                        return new JsonResult(new { id = paypalOrderId });
                     }
                 }
             }

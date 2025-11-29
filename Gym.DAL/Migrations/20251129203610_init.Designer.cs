@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251119140813_init")]
+    [Migration("20251129203610_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -279,6 +279,12 @@ namespace Gym.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Booked")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Capcity")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -313,6 +319,12 @@ namespace Gym.DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Booked")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Capactiy")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -357,9 +369,6 @@ namespace Gym.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Capacity")
                         .HasColumnType("int");
 
                     b.Property<int>("Count")

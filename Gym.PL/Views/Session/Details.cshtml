@@ -1,0 +1,140 @@
+﻿@using Gym.BLL.ModelVM.Session
+@model GetSessionVM
+<style>
+
+</style>
+@{
+    ViewData["Title"] = "Session Details";
+
+    var random = new Random();
+    int number = random.Next(1, 7);
+    string imagePath = $"~/assets/img/gallery/gallery{number}.png";
+    var totalAmount = Model.Price;
+}
+
+<style>
+    .account-card {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 25px 20px;
+        max-width: 450px;
+        margin: 50px auto;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        color: white;
+    }
+
+    .account-card h2 {
+        color: white;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .account-card p {
+        color: #ddd;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+</style>
+
+<main>
+    <section class="contact-section">
+        <div class="container">
+            <div class="account-card">
+
+                <img src="@Url.Content(imagePath)" class="session-image"
+                     style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px 12px 0 0; margin-bottom: 15px;" />
+
+                <h2>@Model.Name</h2>
+                <p><strong>Trainer:</strong> @Model.TrainerName</p>
+                <p><strong>Phone:</strong> @Model.TrainerPhone</p>
+                <p><strong>Start Time:</strong> @Model.StartTime.ToString("M/d/yyyy h:mm tt")</p>
+                <p><strong>End Time:</strong> @Model.EndTime.ToString("M/d/yyyy h:mm tt")</p>
+                <p><strong>Available Seats:</strong> @(Model.Capactiy - Model.Booked)</p>
+                <p><strong>Status:</strong> @Model.Status</p>
+                <p><strong>Description:</strong> @Model.Description</p>
+                <p><strong>Price:</strong> @Model.Price USD</p>
+
+                <div class="form-group mb-3 mt-3">
+                    <input class="form-control" type="hidden" id="totalAmount" value="@totalAmount" step='0.01' />
+                </div>
+
+                <div id="notification-container"></div>
+
+                <div id="paypal-button-container" class="btn-paypal mt-3"></div>
+
+                <a asp-controller="Session" asp-action="Index" class="btn btn-secondary mt-3">Back To Sessions</a>
+            </div>
+        </div>
+    </section>
+</main>
+@section Scripts {
+                <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PayPalClientId&currency=USD"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                paypal.Buttons({
+                    async createOrder() {
+                            console.log("Starting createOrder function...");
+                        const totalAmount = document.getElementById("totalAmount").value;
+                        const response = await fetch('/Payment/CreateOrder', {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ total: totalAmount })
+                        });
+                        const data = await response.json();
+                        return data.id;
+                    },
+
+                    async onApprove(data) {
+                        const response = await fetch('/Payment/CompleteOrder', {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ orderID: data.orderID })
+                        });
+                        const result = await response.json();
+
+                        const notificationContainer = document.getElementById("notification-container");
+
+                        if (result === "success") {
+                            notificationContainer.innerHTML = `
+                                    <div class='alert alert-success alert-dismissible fade show' role='alert' style="
+        font-size: 17px;
+    ">
+                                    <strong>Booking confirmed!</strong>
+                                </div>
+                            `;
+                            setTimeout(() => { window.location.href = '/Session/Index'; }, 1500);
+                        } else {
+                            notificationContainer.innerHTML = `
+                                    <div class='alert alert-danger alert-dismissible fade show' role='alert' style="
+        font-size: 17px;
+    ">
+                                    <strong>Payment Failed! Please retry later.</strong>
+                                </div>
+                            `;
+                        }
+                    },
+
+                    onCancel() {
+                        document.getElementById("notification-container").innerHTML = `
+                                <div class='alert alert-danger alert-dismissible fade show' role='alert' style="
+        font-size: 17px;
+    ">
+                                <strong>Payment Canceled!</strong>
+                            </div>
+                        `;
+                    },
+
+                    onError() {
+                        document.getElementById("notification-container").innerHTML = `
+                                <div class='alert alert-danger alert-dismissible fade show' role='alert' style="
+        font-size: 17px;
+    ">
+                                <strong>An error occurred! Please retry later.</strong>
+                            </div>
+                        `;
+                    }
+                }).render('#paypal-button-container');
+            });
+        </script>
+}

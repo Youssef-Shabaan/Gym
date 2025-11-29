@@ -13,11 +13,12 @@ namespace Gym.BLL.Service.Implementation
         private readonly PayPal Paypal;
         public PayPalService(IConfiguration configuration)
         {
+            Configuration = configuration;
             Paypal = new PayPal
             {
-                PayPalClientId = Configuration["PayPal:ClientId"],
-                PayPalSecret = Configuration["PayPal:Secret"],
-                PayPalUrl = Configuration["PayPal:URL"]
+                PayPalClientId = Configuration["PayPalSettings:ClientId"],
+                PayPalSecret = Configuration["PayPalSettings:Secret"],
+                PayPalUrl = Configuration["PayPalSettings:URL"]
             };
         }
         public async Task<string> GetAccessTokenAsync()
@@ -67,7 +68,7 @@ namespace Gym.BLL.Service.Implementation
             {
                 ["amount"] = new JsonObject
                 {
-                    ["currency_code"] = "EGP",
+                    ["currency_code"] = "USD",
                     ["value"] = totalAmount
                 }
             }

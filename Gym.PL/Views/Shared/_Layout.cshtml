@@ -41,7 +41,7 @@
         <!-- Preloader Start -->
         <header>
             <!-- Header Start -->
-            <div class="header-area header-transparent">
+            <div class="header-area header-transparent" style="z-index: 10000;">
                 <div class="main-header header-sticky">
                     <div class="container-fluid">
                         <div class="menu-wrapper d-flex align-items-center justify-content-between">
@@ -199,6 +199,6 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.12/dist/jquery.validate.unobtrusive.min.js"></script>
         <script src="~/assets/js/site-validation.js"></script>
+    @RenderSection("Scripts", required: false)
     </body>
 </html>
-@RenderSection("Scripts", required: false)
