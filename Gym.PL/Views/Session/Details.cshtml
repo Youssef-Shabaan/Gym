@@ -74,7 +74,6 @@
             document.addEventListener("DOMContentLoaded", function () {
                 paypal.Buttons({
                     async createOrder() {
-                            console.log("Starting createOrder function...");
                         const totalAmount = document.getElementById("totalAmount").value;
                         const response = await fetch('/Payment/CreateOrder', {
                             method: "POST",

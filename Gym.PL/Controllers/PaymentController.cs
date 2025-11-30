@@ -6,6 +6,7 @@ using Gym.DAL.Entities;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Gym.PL.Controllers
@@ -71,8 +72,9 @@ namespace Gym.PL.Controllers
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
                 {
-                    Content = new StringContent(createOrderRequest.ToString(), null, "application/json")
+                    Content = new StringContent(createOrderRequest.ToString(), Encoding.UTF8, "application/json")
                 };
+
 
                 var httpResponse = await client.SendAsync(requestMessage);
 
@@ -93,10 +95,10 @@ namespace Gym.PL.Controllers
         [HttpPost]
         public async Task<JsonResult> CompleteOrder([FromBody] JsonObject data)
         {
-            var orderId = data?["orderID"]?.ToString();
-            if (orderId == null) return new JsonResult("error");
+            var orderid = data?["orderID"]?.ToString();
+            if (orderid == null) return new JsonResult("error");
 
-            bool completed = await paypalService.CompleteOrderAsync(orderId);
+            bool completed = await paypalService.CompleteOrderAsync(orderid);
 
             if (!completed)
                 return new JsonResult("error");
