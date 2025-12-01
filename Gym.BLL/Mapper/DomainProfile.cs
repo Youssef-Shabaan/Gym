@@ -90,8 +90,15 @@ namespace Gym.BLL.Mapper
 
             CreateMap<MemberSession, GetMemberSessionVM>()
                 .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.MemberId, opt => opt.MapFrom(src => src.Member.MemberId))
                 .ForMember(dest => dest.SessionName, opt => opt.MapFrom(src => src.Session.Name))
-                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.Status))
+                .ForMember(dest => dest.SessionDescription, opt => opt.MapFrom(src => src.Session.Description))
+                .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => src.Session.Id))
+                .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.Session._Trainer.Name))
+                .ForMember(dest => dest.TrainerPhone, opt => opt.MapFrom(src => src.Session._Trainer.User.PhoneNumber))
+                .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.Session.StartTime))
+                .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.Session.EndTime))
+                .ForMember(dest => dest.IsAttended, opt => opt.Ignore())
                 .ReverseMap();
 
             CreateMap<UpdateMemberSessionVM, MemberSession>().ReverseMap();

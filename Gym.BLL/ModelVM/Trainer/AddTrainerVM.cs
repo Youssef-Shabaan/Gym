@@ -41,7 +41,6 @@ namespace Gym.BLL.ModelVM.Trainer
 
         [Required(ErrorMessage = "UserName is required")]
         public string UserName { get; set; }
-        [Required(ErrorMessage = "Capacity is required")]
 
         public int Capacity { get; set; }
     }

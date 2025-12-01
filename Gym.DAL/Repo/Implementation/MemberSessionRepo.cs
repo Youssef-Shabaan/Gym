@@ -72,7 +72,7 @@ namespace Gym.DAL.Repo.Implementation
                 var memberSession = GymDb.memberSessions
                     .Include(p => p.Payment)
                     .Include(m => m.Member).ThenInclude(u => u.User)
-                    .Include(s => s.Session)
+                    .Include(s => s.Session).ThenInclude(t => t._Trainer).ThenInclude(u => u.User)
                     .ToList();
                 if(!memberSession.Any())
                 {
@@ -93,7 +93,7 @@ namespace Gym.DAL.Repo.Implementation
                 var memberSession = GymDb.memberSessions
                     .Include(p => p.Payment)
                     .Include(m => m.Member).ThenInclude(u => u.User)
-                    .Include(s => s.Session)
+                    .Include(s => s.Session).ThenInclude(t => t._Trainer).ThenInclude(u => u.User)
                     .FirstOrDefault(a => a.Id == Id);
 
                 if (memberSession == null)
@@ -115,7 +115,7 @@ namespace Gym.DAL.Repo.Implementation
                 var memberSession = GymDb.memberSessions
                     .Include(p => p.Payment)
                     .Include(m => m.Member).ThenInclude(u => u.User)
-                    .Include(s => s.Session)
+                    .Include(s => s.Session).ThenInclude(t => t._Trainer).ThenInclude(u => u.User)
                     .Where(a => a.MemberId == MemberId).ToList();
                 if (!memberSession.Any())
                 {
@@ -136,7 +136,7 @@ namespace Gym.DAL.Repo.Implementation
                 var memberSession = GymDb.memberSessions
                     .Include(p => p.Payment)
                     .Include(m => m.Member).ThenInclude(u => u.User)
-                    .Include(s => s.Session)
+                    .Include(s => s.Session).ThenInclude(t => t._Trainer).ThenInclude(u => u.User)
                     .Where(a => a.SessionId == SessionId).ToList();
                 if (!memberSession.Any())
                 {

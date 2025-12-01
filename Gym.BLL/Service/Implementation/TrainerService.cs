@@ -32,7 +32,8 @@ namespace Gym.BLL.Service.Implementation
                 {
                     Email = newtrainer.Email,
                     PhoneNumber = newtrainer.PhoneNumber,
-                    UserName = newtrainer.UserName
+                    UserName = newtrainer.UserName,
+                    EmailConfirmed = true
                 };
 
                 // Save User

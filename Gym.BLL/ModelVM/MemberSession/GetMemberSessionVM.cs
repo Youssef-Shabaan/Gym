@@ -3,10 +3,8 @@ namespace Gym.BLL.ModelVM.MemberSession
 {
     public class GetMemberSessionVM
     {
-        public bool? IsAttended { get; set; }
-        public DateTime BookingDate { get; set; }
-        public string Status { get; set; }
-        public decimal? Price { get; set; }
+        public bool? IsAttended { get; set; }  //
+        public DateTime BookingDate { get; set; } 
 
         // From Member
         public int MemberId { get; set; }   
@@ -15,13 +13,12 @@ namespace Gym.BLL.ModelVM.MemberSession
         // From Session
         public int SessionId { get; set; }
         public string SessionName { get; set; }
+        public string SessionDescription { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
 
-        // TrainerSubscription
-        public int TrainerSubscriptionId { get; set; }
+        // Trainer
         public string TrainerName { get; set;}
-
-        // From Payment 
-        public int PaymentId { get; set; }  
-        public string PaymentStatus { get; set; }
+        public string TrainerPhone { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using Gym.DAL.Repo.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Gym.PL.Controllers
@@ -14,6 +15,7 @@ namespace Gym.PL.Controllers
     public class AccountController : Controller
     {
         private readonly IMemberService memberService;
+        private readonly ITrainerService trainerService;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IEmailService emailService;
@@ -22,12 +24,15 @@ namespace Gym.PL.Controllers
             UserManager<User> userManager
             , SignInManager<User> signInManager
             , IEmailService emailService
+            , ITrainerService trainerService
+
             )
         {
             this.memberService = memberService;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.emailService = emailService;
+            this.trainerService = trainerService;
         }
         [HttpGet]
         public IActionResult Register()
@@ -142,7 +147,15 @@ namespace Gym.PL.Controllers
                     bool found = await userManager.CheckPasswordAsync(user, login.Password);
                     if (found)
                     {
-                        await signInManager.SignInAsync(user, login.RememberMe);
+                        var member = memberService.GetByUserID(user.Id);
+                        var claims = new List<Claim>();
+                        if (member.Item3 != null)
+                        {
+                            claims.Add(new Claim("MemberId", member.Item3.MemberId.ToString()));
+                        }
+
+                        await signInManager.SignInWithClaimsAsync(user, login.RememberMe, claims);
+
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -150,6 +163,9 @@ namespace Gym.PL.Controllers
             ModelState.AddModelError("", "username or password error");
             return View(login);
         }
+
+        
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

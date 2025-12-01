@@ -57,7 +57,11 @@
                                         <li><a asp-controller="Trainer" asp-action="Index">Trainers</a></li>
                                         <li><a asp-controller="Session" asp-action="Index">Sessions</a></li>
                                         <li><a asp-controller="Plan" asp-action="Index">Plans</a></li>
-                                        <li><a href="#">Contact</a></li>
+                                        @if(User.IsInRole("Member"))
+                                        {
+                                            <li><a asp-controller="Session" asp-action="MySessions">My Sessions</a></li>
+                                            <li><a href="#">My Plans</a></li>
+                                        }
                                     </ul>
                                 </nav>
                             </div>
@@ -107,7 +111,7 @@
                                 <div class="single-footer-caption mb-50 text-center">
                                     <!-- logo -->
                                     <div class="footer-logo wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
-                                        <a href="index.html"><img src="~/assets/img/logo/logo2_footer.png" alt=""></a>
+                                    <a><img src="~/assets/img/logo/logo2_footer.png" alt=""></a>
                                     </div>
                                     <!-- Menu -->
                                     <!-- Header Start -->

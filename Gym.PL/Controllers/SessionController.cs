@@ -1,4 +1,5 @@
-﻿using Gym.BLL.ModelVM.Session;
+﻿using Gym.BLL.ModelVM.MemberSession;
+using Gym.BLL.ModelVM.Session;
 using Gym.BLL.Service.Abstraction;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,12 @@ namespace Gym.PL.Controllers
     public class SessionController : Controller
     {
         private readonly ISessionService _sessionService;
+        private readonly IMemberSessionService _memberSessionService;
         private readonly string paypalClientId = "";
-        public SessionController(ISessionService sessionService, IConfiguration configuration)
+        public SessionController(ISessionService sessionService, IConfiguration configuration, IMemberSessionService memberSessionService)
         {
             _sessionService = sessionService;
+            _memberSessionService = memberSessionService;
             paypalClientId = configuration["PayPalSettings:ClientId"];
         }
         public IActionResult Index()
@@ -54,6 +57,18 @@ namespace Gym.PL.Controllers
                 return View(new List<GetSessionVM>());
             }
             return View(sessions.Item3);
+        }
+
+        [HttpGet]
+        public IActionResult MySessions()
+        {
+            var memberId = int.Parse(User.FindFirst("MemberId").Value);
+            var mySessions = _memberSessionService.GetByMemberId(memberId);
+            if (!mySessions.Item1)
+            {
+                return View(new List<GetMemberSessionVM>());
+            }
+            return View(mySessions.Item3);
         }
     }
 }

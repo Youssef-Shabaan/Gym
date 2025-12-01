@@ -91,7 +91,7 @@ namespace Gym.BLL.Service.Implementation
                 {
                     return(false,  AllSessionsForMember.Item2, null);   
                 }
-                var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllSessionsForMember);
+                var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllSessionsForMember.Item3);
                 return (true, null, result);
             }
             catch (Exception ex)
