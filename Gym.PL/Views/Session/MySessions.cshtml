@@ -120,8 +120,7 @@
     <section class="contact-section">
         <div class="container">
 
-            <!-- ======== Filter Buttons ======== -->
-            <div class="text-center mb-4" style="margin:10px 10px 30px 10px;">
+            <div class="text-center mb-4" style="margin:10px;">
                 <button class="btn btn-danger mx-2 filter-btn" onclick="filterSessions('finished', this)">Finished Sessions</button>
                 <button class="btn btn-danger mx-2 filter-btn" onclick="filterSessions('running', this)">Running Now</button>
                 <button class="btn btn-danger mx-2 filter-btn" onclick="filterSessions('upcoming', this)">Upcoming</button>
@@ -191,7 +190,6 @@
 </main>
 
 
-<!-- ===== Modal ===== -->
 <div id="descModal" class="desc-modal">
     <div class="desc-content">
         <span class="close-btn" onclick="closeDescription()">🗙</span>
@@ -213,7 +211,6 @@
             document.getElementById('pageContent').classList.remove('blur-background');
         }
 
-        // ========== Filter Logic + Active Button + Animation + Empty Message ==========
         function filterSessions(type, button) {
 
             const now = new Date();
@@ -221,7 +218,6 @@
             const msg = document.getElementById("noSessionsMsg");
             let visibleCount = 0;
 
-            // تمييز الزرار المختار
             document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active-filter"));
             button.classList.add("active-filter");
 
@@ -245,7 +241,6 @@
                 }
             });
 
-            // لو مفيش ولا كارت
             msg.style.display = visibleCount === 0 ? "block" : "none";
         }
     </script>
