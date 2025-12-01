@@ -94,7 +94,7 @@ namespace Gym.BLL.Service.Implementation
             }
             return "";
         }
-        public async Task<bool> CompleteOrderAsync(string orderId)
+        public async Task<(bool, string?)> CompleteOrderAsync(string orderId)
         {
             string accessToken = await GetAccessTokenAsync();
             var url = Paypal.PayPalUrl + "/v2/checkout/orders/" + orderId + "/capture";
@@ -102,23 +102,36 @@ namespace Gym.BLL.Service.Implementation
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
                 {
-                    Content = new StringContent("", Encoding.UTF8, "application/json")
+                    Content = new StringContent("{}", Encoding.UTF8, "application/json")
                 };
 
-                var httpResponse = await client.SendAsync(requestMessage);
-                if (httpResponse.IsSuccessStatusCode)
+                var httpResponse = await client.SendAsync(requestMessage); var strResponse = await httpResponse.Content.ReadAsStringAsync();
+
+                if (!httpResponse.IsSuccessStatusCode)
                 {
-                    var strResponse = await httpResponse.Content.ReadAsStringAsync();
-                    var jsonResponse = JsonNode.Parse(strResponse);
-                    var status = jsonResponse?["status"]?.ToString() ?? "";
-                    return status.Equals("COMPLETED", StringComparison.OrdinalIgnoreCase);
+                    Console.WriteLine("Capture error: " + strResponse);
+                    return (false, null);
                 }
-            var error = await httpResponse.Content.ReadAsStringAsync();
-            Console.WriteLine("Capture error: " + error);
+
+                var json = JsonNode.Parse(strResponse);
+                if (json == null)
+                    return (false, null);
+
+                // get status 
+                string? status = json["status"]?.ToString();
+
+                // get PayPal transaction ID
+                string? transactionId =
+                    json?["purchase_units"]?[0]?["payments"]?["captures"]?[0]?["id"]?.ToString();
+
+                bool isCompleted = status?.Equals("COMPLETED", StringComparison.OrdinalIgnoreCase) ?? false;
+
+                return (isCompleted, transactionId);
             }
-            return false;
         }
+
     }
 }

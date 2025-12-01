@@ -57,6 +57,7 @@
 
                 <div class="form-group mb-3 mt-3">
                     <input class="form-control" type="hidden" id="totalAmount" value="@totalAmount" step='0.01' />
+                    <input type="hidden" id="sessionId" value="@Model.Id" />
                 </div>
 
                 <div id="notification-container"></div>
@@ -85,10 +86,15 @@
                     },
 
                     async onApprove(data) {
+                            const sessionId = document.getElementById("sessionId").value;
                         const response = await fetch('/Payment/CompleteOrder', {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ orderID: data.orderID })
+                            body: JSON.stringify({
+                                        orderID: data.orderID,
+                                        type: "session",     // product type
+                                        itemId: sessionId    // session id
+                                    })
                         });
                         const result = await response.json();
 

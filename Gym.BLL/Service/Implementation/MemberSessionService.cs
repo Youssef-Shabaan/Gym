@@ -5,6 +5,7 @@ using Gym.BLL.ModelVM.Session;
 using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym.BLL.Service.Implementation
 {
@@ -19,132 +20,178 @@ namespace Gym.BLL.Service.Implementation
             _mapper = mapper;
         }
 
-        public (bool, string) Add(AddMemberSessionVM memberSessionVM)
+        public (bool, string) Add(AddMemberSessionVM vm)
         {
             try
             {
-                var memberSession = _mapper.Map<MemberSession>(memberSessionVM);
-                var result = _memberSessionRepo.Add(memberSession);
+                var entity = new MemberSession
+                {
+                    MemberId = vm.MemberId,
+                    SessionId = vm.SessionId,
+                    BookingDate = vm.BookingDate,
+                    Status = vm.Status,
+                    Price = vm.Price
+                };
+
+                var result = _memberSessionRepo.Add(entity);
                 return result;
+
             }
             catch (Exception ex)
             {
                 return (false, ex.Message);
             }
         }
+    
 
-        public (bool, string) Delete(int id)
+    public (bool, string) AddMemberToSession(string userId, int sessionId)
+    {
+        try
         {
-            try
+            var member = _memberSessionRepo.GetMemberByUserId(userId);
+            if (member == null)
+                return (false, "Member not found");
+            var session = _memberSessionRepo.GetSessionById(sessionId);
+            if (session == null)
+                return (false, "Session not found");
+            if (session.Booked >= session.Capactiy)
+                return (false, "Session is full");
+            var alreadyBooked = _memberSessionRepo.IsMemberBooked(member.MemberId, sessionId);
+            if (alreadyBooked)
+                return (false, "Already booked");
+            var addVM = new AddMemberSessionVM
             {
-                var result = _memberSessionRepo.Delete(id);
+                MemberId = member.MemberId,
+                SessionId = sessionId,
+                BookingDate = DateTime.Now,
+                Status = "Booked",
+                Price = session.Price
+            };
+            var result = Add(addVM);
+            if (!result.Item1)
                 return result;
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
+            return (true, "Booked successfully");
+
+
         }
-
-        public (bool, string, IEnumerable<GetMemberSessionVM>?) GetAll()
+        catch (Exception ex)
         {
-            try
-            {
-                var AllMemberSessions = _memberSessionRepo.GetAll();
-                if(!AllMemberSessions.Item1)
-                {
-                    return (false, AllMemberSessions.Item2, null);
-                }
-                var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllMemberSessions);
-                return (true, null, result);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
-
-        public (bool, string, GetMemberSessionVM?) GetById(int Id)
-        {
-            try
-            {
-                var memberSession = _memberSessionRepo.GetById(Id);
-                if(!memberSession.Item1)
-                {
-                    return(false, memberSession.Item2, null);   
-                }
-                var result = _mapper.Map<GetMemberSessionVM>(memberSession);
-                return (true, null, result);
-            }
-            catch (Exception ex)
-            {
-                return(false, ex.Message, null);
-            }
-        }
-
-        public (bool, string, IEnumerable<GetMemberSessionVM>?) GetByMemberId(int MemberId)
-        {
-            try
-            {
-                var AllSessionsForMember = _memberSessionRepo.GetByMemberId(MemberId);
-                if (!AllSessionsForMember.Item1)
-                {
-                    return(false,  AllSessionsForMember.Item2, null);   
-                }
-                var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllSessionsForMember.Item3);
-                return (true, null, result);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
-
-        public (bool, string, IEnumerable<GetMemberSessionVM>?) GetBySessionId(int SessionId)
-        {
-            try
-            {
-                var AllMemberForSession = _memberSessionRepo.GetBySessionId(SessionId);
-                if (!AllMemberForSession.Item1)
-                {
-                    return(false, AllMemberForSession.Item2, null); 
-                }
-                var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllMemberForSession);
-                return (true, null, result);
-            }
-            catch (Exception ex)
-            {
-                return(true, ex.Message, null); 
-            }
-        }
-
-      
-
-        public (bool, string) SetAttendance(int memberId, int sessionId)
-        {
-            try
-            {
-                var result = _memberSessionRepo.SetAttendance(memberId, sessionId);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
-        }
-
-        public (bool, string) Update(UpdateMemberSessionVM memberSession)
-        {
-            try
-            {
-                var membersession = _mapper.Map<MemberSession>(memberSession);
-                var result = _memberSessionRepo.Update(membersession);  
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return(false, ex.Message);
-            }
+            return (false, ex.Message);
         }
     }
+
+    public (bool, string) Delete(int id)
+    {
+        try
+        {
+            var result = _memberSessionRepo.Delete(id);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return (false, ex.Message);
+        }
+    }
+
+    public (bool, string, IEnumerable<GetMemberSessionVM>?) GetAll()
+    {
+        try
+        {
+            var AllMemberSessions = _memberSessionRepo.GetAll();
+            if (!AllMemberSessions.Item1)
+            {
+                return (false, AllMemberSessions.Item2, null);
+            }
+            var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllMemberSessions);
+            return (true, null, result);
+        }
+        catch (Exception ex)
+        {
+            return (false, ex.Message, null);
+        }
+    }
+
+    public (bool, string, GetMemberSessionVM?) GetById(int Id)
+    {
+        try
+        {
+            var memberSession = _memberSessionRepo.GetById(Id);
+            if (!memberSession.Item1)
+            {
+                return (false, memberSession.Item2, null);
+            }
+            var result = _mapper.Map<GetMemberSessionVM>(memberSession);
+            return (true, null, result);
+        }
+        catch (Exception ex)
+        {
+            return (false, ex.Message, null);
+        }
+    }
+
+    public (bool, string, IEnumerable<GetMemberSessionVM>?) GetByMemberId(int MemberId)
+    {
+        try
+        {
+            var AllSessionsForMember = _memberSessionRepo.GetByMemberId(MemberId);
+            if (!AllSessionsForMember.Item1)
+            {
+                return (false, AllSessionsForMember.Item2, null);
+            }
+            var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllSessionsForMember.Item3);
+            return (true, null, result);
+        }
+        catch (Exception ex)
+        {
+            return (false, ex.Message, null);
+        }
+    }
+
+    public (bool, string, IEnumerable<GetMemberSessionVM>?) GetBySessionId(int SessionId)
+    {
+        try
+        {
+            var AllMemberForSession = _memberSessionRepo.GetBySessionId(SessionId);
+            if (!AllMemberForSession.Item1)
+            {
+                return (false, AllMemberForSession.Item2, null);
+            }
+            var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllMemberForSession);
+            return (true, null, result);
+        }
+        catch (Exception ex)
+        {
+            return (true, ex.Message, null);
+        }
+    }
+
+
+
+    public (bool, string) SetAttendance(int memberId, int sessionId)
+    {
+        try
+        {
+            var result = _memberSessionRepo.SetAttendance(memberId, sessionId);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return (false, ex.Message);
+        }
+    }
+
+    public (bool, string) Update(UpdateMemberSessionVM memberSession)
+    {
+        try
+        {
+            var membersession = _mapper.Map<MemberSession>(memberSession);
+            var result = _memberSessionRepo.Update(membersession);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return (false, ex.Message);
+        }
+    }
+}
 }

@@ -6,7 +6,9 @@ namespace Gym.DAL.Repo.Abstraction
     public interface IMemberSessionRepo
     {
         (bool, string) Add(MemberSession memberSession);
-
+        Member GetMemberByUserId(string userid);
+        Session GetSessionById(int sessionId);
+        bool IsMemberBooked(int memberId, int sessionId);
         (bool, string) Delete(int id);
 
         (bool , string) Update(MemberSession memberSession);

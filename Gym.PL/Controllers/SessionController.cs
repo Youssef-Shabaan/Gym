@@ -1,6 +1,8 @@
 ﻿using Gym.BLL.ModelVM.MemberSession;
 using Gym.BLL.ModelVM.Session;
 using Gym.BLL.Service.Abstraction;
+using Gym.DAL.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gym.PL.Controllers
@@ -8,10 +10,14 @@ namespace Gym.PL.Controllers
     public class SessionController : Controller
     {
         private readonly ISessionService _sessionService;
+        private readonly IMemberService _memberSerice;
+        private readonly UserManager<User> _userManager;
         private readonly IMemberSessionService _memberSessionService;
         private readonly string paypalClientId = "";
-        public SessionController(ISessionService sessionService, IConfiguration configuration, IMemberSessionService memberSessionService)
+        public SessionController(IMemberService _memberSerice, UserManager<User> _userManager, ISessionService sessionService, IConfiguration configuration, IMemberSessionService memberSessionService)
         {
+            this._memberSerice = _memberSerice;
+            this._userManager = _userManager;
             _sessionService = sessionService;
             _memberSessionService = memberSessionService;
             paypalClientId = configuration["PayPalSettings:ClientId"];
@@ -62,7 +68,9 @@ namespace Gym.PL.Controllers
         [HttpGet]
         public IActionResult MySessions()
         {
-            var memberId = int.Parse(User.FindFirst("MemberId").Value);
+            var userId = _userManager.GetUserId(User);
+            var member = _memberSerice.GetByUserID(userId).Item3;
+            var memberId = member.MemberId;
             var mySessions = _memberSessionService.GetByMemberId(memberId);
             if (!mySessions.Item1)
             {

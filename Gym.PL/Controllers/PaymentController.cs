@@ -3,22 +3,28 @@ using Gym.BLL.Helper;
 using Gym.BLL.Service.Abstraction;
 using Gym.BLL.Service.Implementation;
 using Gym.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Gym.PL.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IPayPalService paypalService;
         private readonly PayPal Paypal;
         private readonly IMapper mapper;
-
-        public PaymentController(IMapper mapper, IPayPalService paypalService, IConfiguration configuration)
+        private readonly IMemberService memberService;
+        private readonly IMemberSessionService memberSessionService;
+        public PaymentController(IMemberSessionService memberSessionService, IMapper mapper, IPayPalService paypalService, IConfiguration configuration, IMemberService memberService)
         {
+            this.memberSessionService = memberSessionService;
+            this.memberService = memberService;
             this.paypalService = paypalService;
             this.mapper = mapper;
             Paypal = new PayPal
@@ -98,13 +104,27 @@ namespace Gym.PL.Controllers
             var orderid = data?["orderID"]?.ToString();
             if (orderid == null) return new JsonResult("error");
 
-            bool completed = await paypalService.CompleteOrderAsync(orderid);
+            var (completed, transactionId) = await paypalService.CompleteOrderAsync(orderid);
 
             if (!completed)
                 return new JsonResult("error");
 
             // logic
+            var type = data?["type"]?.ToString();
+            var itemIdStr = data?["itemId"]?.ToString();
+            if (!int.TryParse(itemIdStr, out int itemId))
+                return new JsonResult("Invalid itemId");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (type == "session")
+            {
+                var result = memberSessionService.AddMemberToSession(userId, itemId);
 
+                if (!result.Item1)
+                    return new JsonResult(result.Item2); // error message
+
+                return new JsonResult("success");
+            }
+            else if (type == "plan") { }
             // ====
 
             return new JsonResult("success");

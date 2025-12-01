@@ -23,7 +23,7 @@ namespace Gym.DAL.Repo.Implementation
                     return (false, "Member not found.");
                 }
                 var session = GymDb.sessions.FirstOrDefault(s => s.Id == memberSession.SessionId);
-                if(session == null)
+                if (session == null)
                 {
                     return (false, "Session not found.");
                 }
@@ -61,7 +61,7 @@ namespace Gym.DAL.Repo.Implementation
             }
             catch (Exception ex)
             {
-                return (false, ex.Message); 
+                return (false, ex.Message);
             }
         }
 
@@ -74,7 +74,7 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(m => m.Member).ThenInclude(u => u.User)
                     .Include(s => s.Session).ThenInclude(t => t._Trainer).ThenInclude(u => u.User)
                     .ToList();
-                if(!memberSession.Any())
+                if (!memberSession.Any())
                 {
                     return (false, "Empty", null);
                 }
@@ -82,7 +82,7 @@ namespace Gym.DAL.Repo.Implementation
             }
             catch (Exception ex)
             {
-                return(false, ex.Message, null);
+                return (false, ex.Message, null);
             }
         }
 
@@ -98,13 +98,13 @@ namespace Gym.DAL.Repo.Implementation
 
                 if (memberSession == null)
                 {
-                    return(true, "Member session is not found", null);
+                    return (true, "Member session is not found", null);
                 }
                 return (true, null, memberSession);
             }
             catch (Exception ex)
             {
-                return(false, ex.Message, null);
+                return (false, ex.Message, null);
             }
         }
 
@@ -150,13 +150,59 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
+        public Member GetMemberByUserId(string userid)
+        {
+            try
+            {
+                var member = GymDb.members
+                    .Include(u => u.User)
+                    .FirstOrDefault(m => m.User.Id == userid);
+                return member;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public Session GetSessionById(int sessionId)
+        {
+            try
+            {
+                var session = GymDb.sessions
+                    .FirstOrDefault(s => s.Id == sessionId);
+                return session;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public bool IsMemberBooked(int memberId, int sessionId)
+        {
+            try
+            {
+                var memberSession = GymDb.memberSessions
+                    .FirstOrDefault(ms => ms.MemberId == memberId && ms.SessionId == sessionId);
+                if (memberSession == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         public (bool, string) SetAttendance(int memberId, int sessionId)
         {
             try
             {
-                var member = GymDb.members.FirstOrDefault(m => m.MemberId == memberId); 
-                if(member == null)
+                var member = GymDb.members.FirstOrDefault(m => m.MemberId == memberId);
+                if (member == null)
                 {
                     return (false, "This member not found");
                 }
@@ -167,12 +213,12 @@ namespace Gym.DAL.Repo.Implementation
                 }
 
                 var memberSession = GymDb.memberSessions.FirstOrDefault(ms => ms.MemberId == memberId && ms.SessionId == sessionId);
-                if(memberSession == null)
+                if (memberSession == null)
                 {
                     return (false, "Member session not found");
                 }
 
-                if(memberSession.IsAttended == false)
+                if (memberSession.IsAttended == false)
                 {
                     memberSession.IsAttended = true;
                     memberSession.Status = "Attended";
@@ -186,7 +232,7 @@ namespace Gym.DAL.Repo.Implementation
                 return (true, "Attendance removed successfully");
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return (false, ex.Message);
             }
@@ -197,12 +243,12 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var oldMemberSession = GymDb.memberSessions.FirstOrDefault(m => m.Id == memberSession.Id);
-                if(oldMemberSession == null)
+                if (oldMemberSession == null)
                 {
                     return (false, "This member session not found");
                 }
                 bool result = oldMemberSession.Update(memberSession);
-                GymDb.SaveChanges();    
+                GymDb.SaveChanges();
                 return (result, "Updated Successfully");
             }
             catch (Exception ex)
@@ -210,5 +256,6 @@ namespace Gym.DAL.Repo.Implementation
                 return (false, ex.Message);
             }
         }
+
     }
 }

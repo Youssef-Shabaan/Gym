@@ -8,8 +8,8 @@ namespace Gym.BLL.Service.Abstraction
 {
     public interface IMemberSessionService
     {
-        (bool, string) Add(AddMemberSessionVM memberSession);
-
+        (bool, string) Add(AddMemberSessionVM vm);
+        (bool, string) AddMemberToSession(string userId, int sessionId);
         (bool, string) Delete(int id);
 
         (bool, string) SetAttendance(int memberId, int sessionId);
