@@ -7,17 +7,16 @@ namespace Gym.DAL.Entities
     public class Payment
     {
         public Payment() { }
-        public Payment(decimal amount, PaymentMethod method, PaymentStatus status, DateTime paymentDate, string? transactionId, Gateway? gateway, int memberId, int? memberSessionId = null, int? memberPlanId = null)
+        public Payment(decimal amount, PaymentMethod method, DateTime paymentDate, string? transactionId, Gateway? gateway, int memberId, int? sessionId = null, int? planId = null)
         {
             Amount = amount;
             Method = method;
-            Status = status;
             PaymentDate = paymentDate;
             TransactionId = transactionId;
             Gateway = gateway;
             MemberId = memberId;
-            MemberSessionId = memberSessionId;
-            MemberPlanId = memberPlanId;
+            SessionId = sessionId;
+            PlanId = planId;
         }
         public int Id { get; private set; }
 
@@ -25,7 +24,6 @@ namespace Gym.DAL.Entities
 
         public PaymentMethod Method { get; private set; }
 
-        public PaymentStatus Status { get; private set; }
 
         public DateTime PaymentDate { get; private set; }
 
@@ -37,28 +35,23 @@ namespace Gym.DAL.Entities
         public int MemberId { get; private set; }
         public Member Member { get; private set; }
 
-        [ForeignKey("MemberSession")]
-        public int? MemberSessionId { get; private set; }
-        public MemberSession? MemberSession { get; private set; }
-        [ForeignKey("MemberPlan")]
-        public int? MemberPlanId { get; private set; }
-        public MemberPlan? MemberPlan { get; private set; }
+        [ForeignKey("Session")]
+        public int? SessionId { get; private set; }
+        public Session? Session { get; private set; }
+        [ForeignKey("Plan")]
+        public int? PlanId { get; private set; }
+        public Plan? Plan { get; private set; }
 
         public bool Update(Payment payment)
         {
             this.Amount = payment.Amount;
             this.Method = payment.Method;
-            this.Status = payment.Status;
             this.PaymentDate = payment.PaymentDate;
             this.TransactionId = payment.TransactionId;
             this.Gateway = payment.Gateway;
             return true;
         }
-        public bool updateStatus(PaymentStatus Status)
-        {
-            this.Status = Status;
-            return true;
-        }
+
     }
 
 }

@@ -16,16 +16,10 @@ namespace Gym.DAL.Enums
         DebitCard,
         MobilePayment
     }
-    public enum PaymentStatus
-    {
-        Pending = 1,
-        Paid,
-        Failed,
-        Refunded
-    }
+   
     public enum Gateway
     {
-        Paymob = 1,
+        PayPal = 1,
         Fawry,
         Stripe
     }

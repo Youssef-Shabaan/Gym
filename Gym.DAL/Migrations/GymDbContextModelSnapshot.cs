@@ -239,19 +239,16 @@ namespace Gym.DAL.Migrations
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MemberPlanId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MemberSessionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Method")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("PlanId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SessionId")
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
@@ -261,9 +258,9 @@ namespace Gym.DAL.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.HasIndex("MemberPlanId");
+                    b.HasIndex("PlanId");
 
-                    b.HasIndex("MemberSessionId");
+                    b.HasIndex("SessionId");
 
                     b.ToTable("payments");
                 });
@@ -699,19 +696,19 @@ namespace Gym.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gym.DAL.Entities.MemberPlan", "MemberPlan")
+                    b.HasOne("Gym.DAL.Entities.Plan", "Plan")
                         .WithMany()
-                        .HasForeignKey("MemberPlanId");
+                        .HasForeignKey("PlanId");
 
-                    b.HasOne("Gym.DAL.Entities.MemberSession", "MemberSession")
+                    b.HasOne("Gym.DAL.Entities.Session", "Session")
                         .WithMany()
-                        .HasForeignKey("MemberSessionId");
+                        .HasForeignKey("SessionId");
 
                     b.Navigation("Member");
 
-                    b.Navigation("MemberPlan");
+                    b.Navigation("Plan");
 
-                    b.Navigation("MemberSession");
+                    b.Navigation("Session");
                 });
 
             modelBuilder.Entity("Gym.DAL.Entities.Plan", b =>

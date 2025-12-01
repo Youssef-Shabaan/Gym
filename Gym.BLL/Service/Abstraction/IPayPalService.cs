@@ -5,6 +5,6 @@ namespace Gym.BLL.Service.Abstraction
     {
         Task<string> GetAccessTokenAsync();
         Task<string> CreateOrderAsync(string totalAmount);
-        Task<(bool, string?)> CompleteOrderAsync(string orderId);
+        Task<(bool, string?, decimal)> CompleteOrderAsync(string orderId);
     }
 }

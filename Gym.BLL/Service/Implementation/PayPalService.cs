@@ -94,7 +94,7 @@ namespace Gym.BLL.Service.Implementation
             }
             return "";
         }
-        public async Task<(bool, string?)> CompleteOrderAsync(string orderId)
+        public async Task<(bool, string?, decimal)> CompleteOrderAsync(string orderId)
         {
             string accessToken = await GetAccessTokenAsync();
             var url = Paypal.PayPalUrl + "/v2/checkout/orders/" + orderId + "/capture";
@@ -113,12 +113,12 @@ namespace Gym.BLL.Service.Implementation
                 if (!httpResponse.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Capture error: " + strResponse);
-                    return (false, null);
+                    return (false, null, 0);
                 }
 
                 var json = JsonNode.Parse(strResponse);
                 if (json == null)
-                    return (false, null);
+                    return (false, null, 0);
 
                 // get status 
                 string? status = json["status"]?.ToString();
@@ -127,9 +127,16 @@ namespace Gym.BLL.Service.Implementation
                 string? transactionId =
                     json?["purchase_units"]?[0]?["payments"]?["captures"]?[0]?["id"]?.ToString();
 
+                decimal amount =
+      decimal.TryParse(
+          json?["purchase_units"]?[0]?["payments"]?["captures"]?[0]?["amount"]?["value"]?.ToString(),
+          out var a
+      ) ? a : 0;
+
+
                 bool isCompleted = status?.Equals("COMPLETED", StringComparison.OrdinalIgnoreCase) ?? false;
 
-                return (isCompleted, transactionId);
+                return (isCompleted, transactionId, amount);
             }
         }
 

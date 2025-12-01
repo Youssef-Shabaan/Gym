@@ -355,6 +355,42 @@ namespace Gym.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Method = table.Column<int>(type: "int", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gateway = table.Column<int>(type: "int", nullable: true),
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    SessionId = table.Column<int>(type: "int", nullable: true),
+                    PlanId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_payments_members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "members",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_payments_plans_PlanId",
+                        column: x => x.PlanId,
+                        principalTable: "plans",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_payments_sessions_SessionId",
+                        column: x => x.SessionId,
+                        principalTable: "sessions",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "memberSessions",
                 columns: table => new
                 {
@@ -377,47 +413,15 @@ namespace Gym.DAL.Migrations
                         principalTable: "members",
                         principalColumn: "MemberId");
                     table.ForeignKey(
+                        name: "FK_memberSessions_payments_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "payments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_memberSessions_sessions_SessionId",
                         column: x => x.SessionId,
                         principalTable: "sessions",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "payments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Method = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Gateway = table.Column<int>(type: "int", nullable: true),
-                    MemberId = table.Column<int>(type: "int", nullable: false),
-                    MemberSessionId = table.Column<int>(type: "int", nullable: true),
-                    MemberPlanId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_payments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_payments_memberPlans_MemberPlanId",
-                        column: x => x.MemberPlanId,
-                        principalTable: "memberPlans",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_payments_memberSessions_MemberSessionId",
-                        column: x => x.MemberSessionId,
-                        principalTable: "memberSessions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_payments_members_MemberId",
-                        column: x => x.MemberId,
-                        principalTable: "members",
-                        principalColumn: "MemberId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -510,14 +514,14 @@ namespace Gym.DAL.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_payments_MemberPlanId",
+                name: "IX_payments_PlanId",
                 table: "payments",
-                column: "MemberPlanId");
+                column: "PlanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_payments_MemberSessionId",
+                name: "IX_payments_SessionId",
                 table: "payments",
-                column: "MemberSessionId");
+                column: "SessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_plans_TrainerId",
@@ -538,50 +542,11 @@ namespace Gym.DAL.Migrations
                 name: "IX_trainers_userId",
                 table: "trainers",
                 column: "userId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_memberSessions_payments_PaymentId",
-                table: "memberSessions",
-                column: "PaymentId",
-                principalTable: "payments",
-                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_members_AspNetUsers_UserId",
-                table: "members");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_trainers_AspNetUsers_userId",
-                table: "trainers");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_memberPlans_members_MemberId",
-                table: "memberPlans");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_memberSessions_members_MemberId",
-                table: "memberSessions");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_payments_members_MemberId",
-                table: "payments");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_memberSessions_sessions_SessionId",
-                table: "memberSessions");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_memberPlans_plans_PlanId",
-                table: "memberPlans");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_memberSessions_payments_PaymentId",
-                table: "memberSessions");
-
             migrationBuilder.DropTable(
                 name: "admins");
 
@@ -604,10 +569,16 @@ namespace Gym.DAL.Migrations
                 name: "attendances");
 
             migrationBuilder.DropTable(
+                name: "memberPlans");
+
+            migrationBuilder.DropTable(
+                name: "memberSessions");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "payments");
 
             migrationBuilder.DropTable(
                 name: "members");
@@ -622,13 +593,7 @@ namespace Gym.DAL.Migrations
                 name: "trainers");
 
             migrationBuilder.DropTable(
-                name: "payments");
-
-            migrationBuilder.DropTable(
-                name: "memberPlans");
-
-            migrationBuilder.DropTable(
-                name: "memberSessions");
+                name: "AspNetUsers");
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Gym.BLL.Helper;
+using Gym.BLL.ModelVM.Payment;
 using Gym.BLL.Service.Abstraction;
 using Gym.BLL.Service.Implementation;
 using Gym.DAL.Entities;
+using Gym.DAL.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
@@ -17,12 +19,14 @@ namespace Gym.PL.Controllers
     public class PaymentController : Controller
     {
         private readonly IPayPalService paypalService;
+        private readonly IPaymentService paymentService;
         private readonly PayPal Paypal;
         private readonly IMapper mapper;
         private readonly IMemberService memberService;
         private readonly IMemberSessionService memberSessionService;
-        public PaymentController(IMemberSessionService memberSessionService, IMapper mapper, IPayPalService paypalService, IConfiguration configuration, IMemberService memberService)
+        public PaymentController(IPaymentService paymentService, IMemberSessionService memberSessionService, IMapper mapper, IPayPalService paypalService, IConfiguration configuration, IMemberService memberService)
         {
+            this.paymentService = paymentService;
             this.memberSessionService = memberSessionService;
             this.memberService = memberService;
             this.paypalService = paypalService;
@@ -104,7 +108,7 @@ namespace Gym.PL.Controllers
             var orderid = data?["orderID"]?.ToString();
             if (orderid == null) return new JsonResult("error");
 
-            var (completed, transactionId) = await paypalService.CompleteOrderAsync(orderid);
+            var (completed, transactionId, amount) = await paypalService.CompleteOrderAsync(orderid);
 
             if (!completed)
                 return new JsonResult("error");
@@ -115,12 +119,23 @@ namespace Gym.PL.Controllers
             if (!int.TryParse(itemIdStr, out int itemId))
                 return new JsonResult("Invalid itemId");
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var memberId = memberService.GetByUserID(userId).Item3.MemberId;
             if (type == "session")
             {
                 var result = memberSessionService.AddMemberToSession(userId, itemId);
 
                 if (!result.Item1)
                     return new JsonResult(result.Item2); // error message
+                var paymentVM = new AddPaymentVM() {
+                    Amount = amount,
+                    Method = PaymentMethod.DebitCard,
+                    PaymentDate = DateTime.Now,
+                    TransactionId = transactionId,
+                    Gateway = Gateway.PayPal,
+                    MemberId = memberId,
+                    SessionId = itemId
+                };
+                paymentService.AddPayment(paymentVM);
 
                 return new JsonResult("success");
             }

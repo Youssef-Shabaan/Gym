@@ -114,7 +114,7 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var payments = DB.payments
-                    .Where(p => p.MemberPlanId != null)
+                    .Where(p => p.PlanId != null)
                     .ToList();
                 return payments;
             }
@@ -129,7 +129,7 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var payments = DB.payments
-                    .Where(p => p.MemberSessionId != null)
+                    .Where(p => p.SessionId != null)
                     .ToList();
                 return payments;
             }
@@ -158,23 +158,6 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
-        public bool UpdateStatus(int paymentId, PaymentStatus newStatus)
-        {
-            try
-            {
-                var existingPayment = DB.payments.FirstOrDefault(p => p.Id == paymentId);
-                if (existingPayment == null)
-                {
-                    throw new Exception("Payment not found.");
-                }
-                existingPayment.updateStatus(newStatus);
-                DB.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+     
     }
 }

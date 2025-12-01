@@ -24,7 +24,6 @@ namespace Gym.DAL.Repo.Abstraction
 
         bool Update(Payment payment);
 
-        bool UpdateStatus(int paymentId, PaymentStatus newStatus);
 
         bool Delete(int id);
     }
