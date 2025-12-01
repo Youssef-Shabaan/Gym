@@ -4,6 +4,7 @@ using Gym.BLL.Service.Abstraction;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Nodes;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace Gym.BLL.Service.Implementation
 {
@@ -114,6 +115,8 @@ namespace Gym.BLL.Service.Implementation
                     var status = jsonResponse?["status"]?.ToString() ?? "";
                     return status.Equals("COMPLETED", StringComparison.OrdinalIgnoreCase);
                 }
+            var error = await httpResponse.Content.ReadAsStringAsync();
+            Console.WriteLine("Capture error: " + error);
             }
             return false;
         }
