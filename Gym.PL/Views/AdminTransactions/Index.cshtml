@@ -1,0 +1,62 @@
+﻿@using Gym.BLL.ModelVM.Payment
+@model List<GetPaymentVM>
+<style>
+    .custom-btn {
+    transition: background-color 0.3s ease;
+    }
+    .custom-btn:hover {
+    background-color: #970101 !important;
+    border-color: #970101 !important;
+    }
+</style>
+@{
+    ViewData["Title"] = "Transactions";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
+@if (TempData["ErrorMessage"] != null && TempData["ErrorMessage"].ToString() != "Done")
+{
+        <h1>@TempData["ErrorMessage"]</h1>
+}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Transactions</h1>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Transactions</h6>
+            </div>
+            <div class="card-body">
+                @{
+                    int i = 1;
+                }
+                <table id="myTable">
+                    <thead>
+                        <tr>
+                            <th style ="text-align:center">Id</th>
+                            <th style ="text-align:left">Transaction Id</th>
+                            <th style ="text-align:left">Name</th>
+                            <th style ="text-align:center">Amount</th>
+                            <th style ="text-align:center">Date</th>
+                            <th style ="text-align:left">Gateway</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model)
+                        {
+                                <tr>
+                                    <td style ="text-align:center">@i</td>
+                                        <td style ="text-align:left">@transaction.TransactionId</td>
+                                        <td style ="text-align:left">@transaction.MemberName</td>
+                                        <td style ="text-align:center">@transaction.Amount</td>
+                                        <td style ="text-align:center">@transaction.PaymentDate</td>
+                                        <td style ="text-align:left">@transaction.Gateway</td>
+                                </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

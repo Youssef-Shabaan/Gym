@@ -3,6 +3,7 @@ using Gym.DAL.DataBase;
 using Gym.DAL.Entities;
 using Gym.DAL.Enums;
 using Gym.DAL.Repo.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym.DAL.Repo.Implementation
 {
@@ -57,7 +58,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var payments = DB.payments.ToList();
+                var payments = DB.payments.Include(p => p.Member).ToList();
                 return payments;
             }
             catch (Exception ex)

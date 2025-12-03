@@ -68,16 +68,21 @@
                     </div>
                 </li>
                 <!-- Nav Item - Charts -->
-                <li class="nav-item">
-                    <a class="nav-link" href="charts.html">
-                    <i class="fas fa-user-check"></i>
-                    <span>Attendance</span></a>
-                </li>
                 <!-- Nav Item - Tables -->
                 <li class="nav-item">
                 <a class="nav-link" asp-controller="AdminSession" asp-action="Index">
-                    <i class="fas fa-calendar-alt"></i>
+                    <i class="fas fa-clock"></i>
                     <span>Sessions</span></a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" asp-controller="AdminPlan" asp-action="Index">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Plans</span></a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" asp-controller="AdminTransactions" asp-action="Index">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Transactions</span></a>
                 </li>
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">

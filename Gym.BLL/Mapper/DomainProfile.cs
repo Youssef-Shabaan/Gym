@@ -61,7 +61,7 @@ namespace Gym.BLL.Mapper
                 DateTime.Now < src.StartTime ? "Not Started" : DateTime.Now >= src.StartTime && DateTime.Now <= src.EndTime ? "Ongoing" : "Ended"))
                 .ReverseMap();
 
-            
+
             CreateMap<GetUserVM, User>().ReverseMap();
 
             CreateMap<Admin, GetAdminVM>()
@@ -105,11 +105,11 @@ namespace Gym.BLL.Mapper
             CreateMap<UpdateMemberSessionVM, MemberSession>().ReverseMap();
 
 
-            CreateMap<AddPlanVM, Plan>().ReverseMap();  
+            CreateMap<AddPlanVM, Plan>().ReverseMap();
 
-            CreateMap<Plan,GetPlanVM>()
+            CreateMap<Plan, GetPlanVM>()
                 .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.Trainer.Name))
-                .ReverseMap();  
+                .ReverseMap();
 
             CreateMap<UpdatePlanVM, Plan>().ReverseMap();
 
@@ -120,6 +120,9 @@ namespace Gym.BLL.Mapper
             CreateMap<UpdateMemberPlanVM, MemberPlan>().ReverseMap();
 
             CreateMap<AddPaymentVM, Payment>().ReverseMap();
+            CreateMap<Payment, GetPaymentVM>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ReverseMap();
 
             CreateMap<MemberPlan, GetMemberPlanVM>()
                 .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
