@@ -2,6 +2,7 @@
 using AutoMapper;
 using Gym.BLL.Helper;
 using Gym.BLL.ModelVM.Member;
+using Gym.BLL.ModelVM.Session;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
@@ -137,6 +138,29 @@ namespace Gym.BLL.Service.Implementation
                 }
                 var mapped = mapper.Map<GetTrainerVM>(result.Item2);
                 return (true, "Done", mapped);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
+        public (bool, string, IEnumerable<GetSessionVM>?) GetTrainerSessions(int trainerId)
+        {
+            try
+            {
+                var trainer = trainerRepo.GetTrainerSessions(trainerId);
+                if (!trainer.Item1)
+                {
+                    return (false, "Trainer not found", null);
+                }
+                var sessions = trainer.Item2.Sessions;
+                if (!sessions.Any())
+                {
+                    return (false, "There are no sessions", null);
+                }
+                var sessionVm = mapper.Map<IEnumerable<GetSessionVM>>(sessions);
+                return (true, null, sessionVm);
             }
             catch (Exception ex)
             {

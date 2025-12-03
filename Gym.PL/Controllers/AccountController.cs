@@ -50,7 +50,7 @@ namespace Gym.PL.Controllers
                     ModelState.AddModelError("", "This email is already registered.");
                     return View();
                 }
-                var result = await memberService.Create(newMember);
+                var result = await memberService.Create(newMember, false);
                 if (!result.Item1)
                     ModelState.AddModelError(string.Empty, result.Item2);
 

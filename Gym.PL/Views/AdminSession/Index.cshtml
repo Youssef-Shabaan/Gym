@@ -45,6 +45,7 @@
                                 <th style="text-align:center">Price</th>
                                 <th style ="text-align:center">Capacity</th>
                                 <th style ="text-align:center">Booked</th>
+                                <th style="text-align:center">Members</th>
                                 <th style="text-align:center">Operations</th>
                             </tr>
                         </thead>
@@ -74,6 +75,7 @@
                                     <td style="text-align:center">@session.Price</td>
                                     <td style="text-align:center">@session.Capactiy</td>
                                     <td style="text-align:center">@session.Booked</td>
+                                <td style="text-align:center"><a asp-controller="AdminSession" asp-action="GetMembersForSession" asp-route-SessionId="@session.Id">Click here</a></td>
                                     <td style="text-align:center">
                                         <a asp-controller="AdminSession" asp-action="Edit" asp-route-id="@session.Id" style="color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
                                         <a href="#" class="delete-btn" data-id="@session.Id" data-toggle="modal" data-target="#deleteConfirmModal" style="color:#858796; margin:0 10px">

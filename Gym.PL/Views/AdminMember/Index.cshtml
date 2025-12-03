@@ -46,6 +46,7 @@
                             <th style ="text-align:left">Address</th>
                             <th style ="text-align:left">Image</th>
                             <th style ="text-align:left">Join Date</th>
+                            <th style="text-align:left">Sessions</th>
                             <th style ="text-align:center">Operations</th>
                         </tr>
                     </thead>
@@ -71,6 +72,7 @@
                                         }
                                 </td>
                                 <td style ="text-align:left">@member.JoinDate?.ToString("dd-MM-yyyy")</td>
+                                <td style="text-align:left"> <a asp-controller="AdminSession" asp-action="GetSessionsForUser" asp-route-id="@member.MemberId" style="color:#e83636; margin:0 10px">Click here</a></td>
                                 <td style ="text-align:center">
                                     <a asp-controller="AdminMember" asp-action="Edit" asp-route-id="@member.MemberId" style = "color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
                                     <a href="#" class="delete-btn" data-id="@member.MemberId" data-toggle="modal" data-target="#deleteConfirmModal" style="color:#858796; margin:0 10px">

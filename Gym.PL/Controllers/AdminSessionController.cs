@@ -1,4 +1,5 @@
-﻿using Gym.BLL.ModelVM.Session;
+﻿using Gym.BLL.ModelVM.MemberSession;
+using Gym.BLL.ModelVM.Session;
 using Gym.BLL.ModelVM.Trainer;
 using Gym.BLL.Service.Abstraction;
 using Gym.BLL.Service.Implementation;
@@ -12,11 +13,13 @@ namespace Gym.PL.Controllers
     {
         private readonly ISessionService sessionService;
         private readonly ITrainerService trainerService;
+        private readonly IMemberSessionService memberSessionService;
 
-        public AdminSessionController(ISessionService sessionService, ITrainerService trainerService)
+        public AdminSessionController(ISessionService sessionService, ITrainerService trainerService, IMemberSessionService memberSessionService)
         {
             this.sessionService = sessionService;
             this.trainerService = trainerService;
+            this.memberSessionService = memberSessionService;
         }
 
         [HttpGet]
@@ -112,6 +115,59 @@ namespace Gym.PL.Controllers
                 TempData["ErrorMessage"] = result.Item2;
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult GetSessionsForUser(int id)
+        {
+            var sessions = memberSessionService.GetByMemberId(id);
+            if(!sessions.Item1)
+            {
+                return View(new List<GetMemberSessionVM>());
+            }
+            return View(sessions.Item3);
+        }
+
+        [HttpGet]
+        public IActionResult GetSessionsForTrainer(int id)
+        {
+            var sessions = trainerService.GetTrainerSessions(id);
+            if(!sessions.Item1 && sessions.Item2 == "Trainer not found")
+            {
+                return NotFound();
+            }
+            if(!sessions.Item1)
+            {
+                return View(new List<GetSessionVM>());    
+            }
+            return View(sessions.Item3);
+        }
+
+        [HttpGet]
+        public IActionResult GetMembersForSession(int SessionId)
+        {
+            var members = memberSessionService.GetMembersForSession(SessionId);
+            if(!members.Item1 &&  members.Item2 == "Session not found")
+            {
+                return NotFound();
+            }
+            return View(members.Item3);
+        }
+
+        [HttpGet]
+        public IActionResult DeleteMemberFromSession(int Id) 
+        {
+            var sessionId = memberSessionService.GetSessionId(Id);
+            if (sessionId == -1)
+            {
+                return NotFound();
+            }
+            var result = memberSessionService.Delete(Id);
+            if (!result.Item1)
+            {
+                ViewBag.ErrorMessage = result.Item2;
+            }
+            return RedirectToAction("GetMembersForSession", new { sessionId });
         }
     }
 }

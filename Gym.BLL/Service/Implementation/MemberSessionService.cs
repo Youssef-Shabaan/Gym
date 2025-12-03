@@ -154,7 +154,7 @@ namespace Gym.BLL.Service.Implementation
             var AllMemberForSession = _memberSessionRepo.GetBySessionId(SessionId);
             if (!AllMemberForSession.Item1)
             {
-                return (false, AllMemberForSession.Item2, null);
+                return (false, AllMemberForSession.Item2, new List<GetMemberSessionVM>());
             }
             var result = _mapper.Map<IEnumerable<GetMemberSessionVM>>(AllMemberForSession);
             return (true, null, result);
@@ -165,9 +165,25 @@ namespace Gym.BLL.Service.Implementation
         }
     }
 
+        public (bool, string, IEnumerable<GetMembersForSession>) GetMembersForSession(int sessionId)
+        {
+            try
+            {
+                var members = _memberSessionRepo.GetMembersForSession(sessionId);
+                if(!members.Item1)
+                {
+                    return(false, members.Item2, new List<GetMembersForSession>());
+                }
+                var membersVM = _mapper.Map<IEnumerable<GetMembersForSession>>(members.Item3);
+                return (true, null, membersVM);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
 
-
-    public (bool, string) SetAttendance(int memberId, int sessionId)
+        public (bool, string) SetAttendance(int memberId, int sessionId)
     {
         try
         {
@@ -193,5 +209,9 @@ namespace Gym.BLL.Service.Implementation
             return (false, ex.Message);
         }
     }
+        public int GetSessionId(int memberSessionId)
+        {
+            return _memberSessionRepo.GetSessionId(memberSessionId);
+        }
 }
 }

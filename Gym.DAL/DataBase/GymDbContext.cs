@@ -38,13 +38,13 @@ namespace Gym.DAL.DataBase
                 .HasOne(ms => ms.Member)
                 .WithMany(m => m.memberSessions)
                 .HasForeignKey(ms => ms.MemberId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<MemberSession>()
                 .HasOne(ms => ms.Session)
                 .WithMany(s => s.memberSessions)
                 .HasForeignKey(ms => ms.SessionId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ----------------------
             // Attendance

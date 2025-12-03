@@ -22,5 +22,8 @@ namespace Gym.BLL.Service.Abstraction
 
         (bool, string, IEnumerable<GetMemberSessionVM>?) GetByMemberId(int MemberId);
         (bool, string, IEnumerable<GetMemberSessionVM>?) GetBySessionId(int SessionId);
+
+        (bool, string, IEnumerable<GetMembersForSession>) GetMembersForSession(int sessionId);
+        int GetSessionId(int memberSessionId);
     }
 }

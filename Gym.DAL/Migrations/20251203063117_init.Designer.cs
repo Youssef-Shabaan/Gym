@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251201214306_init")]
+    [Migration("20251203063117_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -671,7 +671,7 @@ namespace Gym.DAL.Migrations
                     b.HasOne("Gym.DAL.Entities.Member", "Member")
                         .WithMany("memberSessions")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Gym.DAL.Entities.Payment", "Payment")
@@ -681,7 +681,7 @@ namespace Gym.DAL.Migrations
                     b.HasOne("Gym.DAL.Entities.Session", "Session")
                         .WithMany("memberSessions")
                         .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Member");

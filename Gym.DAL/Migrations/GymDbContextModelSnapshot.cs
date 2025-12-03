@@ -668,7 +668,7 @@ namespace Gym.DAL.Migrations
                     b.HasOne("Gym.DAL.Entities.Member", "Member")
                         .WithMany("memberSessions")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Gym.DAL.Entities.Payment", "Payment")
@@ -678,7 +678,7 @@ namespace Gym.DAL.Migrations
                     b.HasOne("Gym.DAL.Entities.Session", "Session")
                         .WithMany("memberSessions")
                         .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Member");

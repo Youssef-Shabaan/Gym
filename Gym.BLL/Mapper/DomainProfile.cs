@@ -86,11 +86,26 @@ namespace Gym.BLL.Mapper
             CreateMap<CreateAttendanceVM, Attendance>().ReverseMap();
             CreateMap<UpdateAttendanceVM, Attendance>().ReverseMap();
 
+            CreateMap<MemberSession, GetMembersForSession>()
+                .ForMember(dest => dest.MemberSessionId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => src.SessionId))
+                .ForMember(dest => dest.MemberPhoto, opt => opt.MapFrom(src => src.Member.Image))
+                .ForMember(dest => dest.MemberUserName, opt => opt.MapFrom(src => src.Member.User.UserName))
+                .ForMember(dest => dest.MemberEmail, opt => opt.MapFrom(src => src.Member.User.Email))
+                .ForMember(dest => dest.MemberPhone, opt => opt.MapFrom(src => src.Member.User.PhoneNumber))
+                .ForMember(dest => dest.MemberAddress, opt => opt.MapFrom(src => src.Member.Address))
+                .ForMember(dest => dest.MemberAge, opt => opt.MapFrom(src => src.Member.Age))
+                .ForMember(dest => dest.MemberGender, opt => opt.MapFrom(src => src.Member.Gender))
+                .ReverseMap();
+
+
+
 
             CreateMap<AddMemberSessionVM, MemberSession>().ReverseMap();
 
             CreateMap<MemberSession, GetMemberSessionVM>()
                 .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.MemberPhone, opt => opt.MapFrom(src => src.Member.User.PhoneNumber))
                 .ForMember(dest => dest.MemberId, opt => opt.MapFrom(src => src.Member.MemberId))
                 .ForMember(dest => dest.SessionName, opt => opt.MapFrom(src => src.Session.Name))
                 .ForMember(dest => dest.SessionDescription, opt => opt.MapFrom(src => src.Session.Description))
