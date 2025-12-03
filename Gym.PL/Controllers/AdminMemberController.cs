@@ -30,7 +30,7 @@ namespace Gym.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _memberService.Create(addMemberVM);
+                var result = await _memberService.Create(addMemberVM, true);
                 if (result.Item1)
                 {
                     return RedirectToAction("Index");

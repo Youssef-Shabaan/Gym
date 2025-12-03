@@ -3,12 +3,14 @@ namespace Gym.BLL.ModelVM.MemberSession
 {
     public class GetMemberSessionVM
     {
+        public int Id { get; set; }
         public bool? IsAttended { get; set; }  //
         public DateTime BookingDate { get; set; } 
 
         // From Member
         public int MemberId { get; set; }   
         public string MemberName { get; set; }
+        public string MemberPhone { get; set; } 
 
         // From Session
         public int SessionId { get; set; }

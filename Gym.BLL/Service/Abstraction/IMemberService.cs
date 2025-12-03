@@ -17,7 +17,7 @@ namespace Gym.BLL.Service.Abstraction
 
 		Task<(bool, string)> Delete(int id);
         (bool, string) Update(EditMemberVM curr);
-        Task<(bool, string)> Create(AddMemberVM newmember);
+        Task<(bool, string)> Create(AddMemberVM newmember, bool IsAdmin);
 
         Task<(bool, string)> CreateMemberForEmail(string name, Gender gender, string image, int age, string address, string userId);
     }

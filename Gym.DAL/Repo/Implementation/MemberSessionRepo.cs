@@ -165,6 +165,27 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
+        public (bool, string, IEnumerable<MemberSession>) GetMembersForSession(int sessionId)
+        {
+            try
+            {
+                var session = GymDb.sessions.FirstOrDefault(s => s.Id == sessionId);
+                if(session == null)
+                {
+                    return (false, "Session not found", null);
+                }
+                var membersSession = GymDb.memberSessions.Include(ms => ms.Member)
+                    .ThenInclude(m => m.User)
+                    .Where(s => s.SessionId == sessionId).ToList();
+
+                return (true, null, membersSession);   
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
         public Session GetSessionById(int sessionId)
         {
             try
@@ -255,6 +276,16 @@ namespace Gym.DAL.Repo.Implementation
             {
                 return (false, ex.Message);
             }
+        }
+
+        public int GetSessionId(int memberSessionId)
+        {
+            var membersession = GymDb.memberSessions.FirstOrDefault(s => s.Id == memberSessionId);
+            if(membersession == null)
+            {
+                return 0;
+            }
+            return membersession.SessionId;
         }
 
     }

@@ -411,7 +411,8 @@ namespace Gym.DAL.Migrations
                         name: "FK_memberSessions_members_MemberId",
                         column: x => x.MemberId,
                         principalTable: "members",
-                        principalColumn: "MemberId");
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_memberSessions_payments_PaymentId",
                         column: x => x.PaymentId,
@@ -421,7 +422,8 @@ namespace Gym.DAL.Migrations
                         name: "FK_memberSessions_sessions_SessionId",
                         column: x => x.SessionId,
                         principalTable: "sessions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

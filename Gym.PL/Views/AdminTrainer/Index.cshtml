@@ -41,12 +41,12 @@
                             <th style ="text-align:left">Name</th>
                             <th style ="text-align:left">Email</th>
                             <th style ="text-align:left">Username</th>
-                            <th style ="text-align:center">Capacity</th>
                             <th style ="text-align:center">Age</th>
                             <th style ="text-align:left">Gender</th>
                             <th style ="text-align:left">Address</th>
                             <th style ="text-align:left">Image</th>
                             <th style ="text-align:left">Join Date</th>
+                            <th style ="text-align:left">Sessions</th>
                             <th style ="text-align:center">Operations</th>
                         </tr>
                     </thead>
@@ -58,7 +58,6 @@
                                         <td style ="text-align:left">@trainer.Name</td>
                                         <td style ="text-align:left">@trainer.Email</td>
                                         <td style ="text-align:left">@trainer.UserName</td>
-                                        <td style ="text-align:center">@trainer.Capacity</td>
                                         <td style ="text-align:center">@trainer.Age</td>
                                         <td style ="text-align:left">@trainer.Gender</td>
                                         <td style ="text-align:left">@trainer.Address</td>
@@ -73,7 +72,8 @@
                                     }
                                     </td>
                                         <td style ="text-align:left">@trainer.JoinDate?.ToString("dd-MM-yyyy")</td>
-                                    <td style ="text-align:center">
+                                <td style="text-align:left"> <a asp-controller="AdminSession" asp-action="GetSessionsForTrainer" asp-route-id="@trainer.TrainerId" style="color:#e83636; margin:0 10px">Click here</a></td>
+                                <td style="text-align:center">
                                             <a asp-controller="AdminTrainer" asp-action="Edit" asp-route-id="@trainer.TrainerId" style = "color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
                                                 <a href="#" class="delete-btn" data-id="@trainer.TrainerId" data-toggle="modal" data-target="#deleteConfirmModal" style="color:#858796; margin:0 10px">
                                         <i class="fas fa-trash fa-sm"></i>

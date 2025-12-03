@@ -27,7 +27,7 @@ namespace Gym.BLL.Service.Implementation
 
         
 
-        public async Task<(bool, string)> Create(AddMemberVM newmember)
+        public async Task<(bool, string)> Create(AddMemberVM newmember, bool ISAdmin)
         {
             try
             {
@@ -36,8 +36,10 @@ namespace Gym.BLL.Service.Implementation
                 {
                     Email = newmember.Email,
                     PhoneNumber = newmember.PhoneNumber,
-                    UserName = newmember.UserName
+                    UserName = newmember.UserName,
                 };
+
+                user.EmailConfirmed = ISAdmin;
 
                 // Save User
                 var result = await userManager.CreateAsync(user, newmember.Password);

@@ -1,0 +1,126 @@
+﻿@using Gym.BLL.ModelVM.MemberSession
+@model IEnumerable<GetMemberSessionVM>
+
+@{
+    ViewData["Title"] = "My Sessions";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+
+    var now = DateTime.Now;
+
+    var upcoming = Model.Where(s => s.StartTime > now).OrderBy(s => s.StartTime).ToList();
+    var active = Model.Where(s => s.StartTime <= now && s.EndTime >= now).OrderBy(s => s.StartTime).ToList();
+    var finished = Model.Where(s => s.EndTime < now).OrderByDescending(s => s.EndTime).ToList();
+}
+<style>
+    .btn-filter {
+        min-width: 140px;
+        font-weight: 600;
+        transition: .3s;
+    }
+
+        .btn-filter.active {
+            box-shadow: 0 0 12px rgba(0,0,0,.25);
+            transform: scale(1.05);
+        }
+</style>
+
+<div class="container mt-4">
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow text-center p-3">
+                <h5 class="text-success">Upcoming</h5>
+                <h2 class="font-weight-bold">@upcoming.Count</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-3">
+                <h5 class="text-warning">Active</h5>
+                <h2 class="font-weight-bold">@active.Count</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-3">
+                <h5 class="text-danger">Finished</h5>
+                <h2 class="font-weight-bold">@finished.Count</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mb-4">
+        <button class="btn btn-success btn-filter active mx-2" onclick="showTab('upcoming')">Upcoming</button>
+        <button class="btn btn-warning btn-filter mx-2" onclick="showTab('active')">Active</button>
+        <button class="btn btn-danger btn-filter mx-2" onclick="showTab('finished')">Finished</button>
+    </div>
+
+
+    <div id="upcoming" class="session-tab">
+        @if (!upcoming.Any())
+        {
+            <div class="alert alert-info text-center">No upcoming sessions.</div>
+        }
+        else
+        {
+            foreach (var item in upcoming)
+            {
+                <div class="card shadow mb-3 p-3 border-success">
+                    <h5 class="text-success">@item.SessionName</h5>
+                    <p><b>Start:</b> @item.StartTime.ToString("dd-MM-yyyy hh:mm tt")</p>
+                    <p><b>End:</b> @item.EndTime.ToString("dd-MM-yyyy hh:mm tt")</p>
+                    <p><b>Trainer:</b> @item.TrainerName ( @item.TrainerPhone )</p>
+                </div>
+            }
+        }
+    </div>
+
+    <div id="active" class="session-tab" style="display:none">
+        @if (!active.Any())
+        {
+            <div class="alert alert-warning text-center">No active sessions right now.</div>
+        }
+        else
+        {
+            foreach (var item in active)
+            {
+                <div class="card shadow mb-3 p-3 border-warning">
+                    <h5 class="text-warning">@item.SessionName</h5>
+                    <p><b>Start:</b> @item.StartTime.ToString("dd-MM-yyyy hh:mm tt")</p>
+                    <p><b>End:</b> @item.EndTime.ToString("dd-MM-yyyy hh:mm tt")</p>
+                    <p><b>Trainer:</b> @item.TrainerName ( @item.TrainerPhone )</p>
+                </div>
+            }
+        }
+    </div>
+
+    <div id="finished" class="session-tab" style="display:none">
+        @if (!finished.Any())
+        {
+            <div class="alert alert-danger text-center">No finished sessions.</div>
+        }
+        else
+        {
+            foreach (var item in finished)
+            {
+                <div class="card shadow mb-3 p-3 border-danger">
+                    <h5 class="text-danger">@item.SessionName</h5>
+                    <p><b>Start:</b> @item.StartTime.ToString("dd-MM-yyyy hh:mm tt")</p>
+                    <p><b>End:</b> @item.EndTime.ToString("dd-MM-yyyy hh:mm tt")</p>
+                    <p><b>Trainer:</b> @item.TrainerName ( @item.TrainerPhone )</p>
+                </div>
+            }
+        }
+    </div>
+
+</div>
+
+<script>
+    function showTab(tab) {
+        document.querySelectorAll('.session-tab').forEach(t => t.style.display = 'none');
+        document.getElementById(tab).style.display = 'block';
+
+        document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+</script>

@@ -4,7 +4,6 @@
 @{
     ViewData["Title"] = "My Sessions";
 
-    // ترتيب السيشنات حسب تاريخ البداية
     var orderedModel = Model.OrderBy(s => s.StartTime).ToList();
 }
 
@@ -100,7 +99,6 @@
     }
 </style>
 
-
 <main id="pageContent">
 
     <div class="slider-area2">
@@ -123,7 +121,7 @@
             <div class="text-center mb-4" style="margin:10px;">
                 <button class="btn btn-danger mx-2 filter-btn" onclick="filterSessions('finished', this)">Finished Sessions</button>
                 <button class="btn btn-danger mx-2 filter-btn" onclick="filterSessions('running', this)">Running Now</button>
-                <button class="btn btn-danger mx-2 filter-btn" onclick="filterSessions('upcoming', this)">Upcoming</button>
+                <button class="btn btn-danger mx-2 filter-btn active-filter" onclick="filterSessions('upcoming', this)" id="defaultUpcomingBtn">Upcoming</button>
             </div>
 
             <div id="noSessionsMsg">No Sessions Found</div>
@@ -189,14 +187,12 @@
 
 </main>
 
-
 <div id="descModal" class="desc-modal">
     <div class="desc-content">
         <span class="close-btn" onclick="closeDescription()">🗙</span>
         <p id="descText"></p>
     </div>
 </div>
-
 
 @section Scripts {
     <script>
@@ -243,5 +239,10 @@
 
             msg.style.display = visibleCount === 0 ? "block" : "none";
         }
+
+        window.onload = function () {
+            const btn = document.getElementById("defaultUpcomingBtn");
+            filterSessions('upcoming', btn);
+        };
     </script>
 }

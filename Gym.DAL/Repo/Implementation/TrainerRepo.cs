@@ -57,12 +57,8 @@ namespace Gym.DAL.Repo.Implementation
                 var trainer = GymDb.trainers.FirstOrDefault(x => x.TrainerId == id);
                 if (trainer != null)
                 {
-                    if (trainer.Delete())
-                    {
-                        GymDb.SaveChanges();
-                        return (true, null);
-                    }
-                    return (false, "This trainer is already deleted.");
+                    GymDb.SaveChanges();
+                    return (true, null);
                 }
                 return (false, "Trainer not found.");
             }
@@ -98,7 +94,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var trainers = GymDb.trainers.Include(a => a.Sessions).Include(u => u.User)
+                var trainers = GymDb.trainers.Include(u => u.User)
                     .Where(t => !t.IsDeleted).ToList();
 
                 if (!trainers.Any())
@@ -153,7 +149,7 @@ namespace Gym.DAL.Repo.Implementation
                     .Include(t => t.Sessions)
                     .FirstOrDefault(t => t.TrainerId == trainerId);
 
-                if (trainer == null || trainer.Sessions == null || !trainer.Sessions.Any())
+                if (trainer == null)
                     return (false, null);
 
                 return (true, trainer);
