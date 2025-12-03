@@ -31,5 +31,18 @@ namespace Gym.BLL.Service.Implementation
                 return (false, ex.Message);
             }
         }
+
+        public (bool, string, List<GetPaymentVM>) GetAllPayments()
+        {
+            try { 
+                var payments = paymentRepo.GetAll();
+                var paymentsVM = mapper.Map<List<GetPaymentVM>>(payments);
+                return (true, "Payments retrieved successfully.", paymentsVM);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
     }
 }

@@ -6,7 +6,20 @@ namespace Gym.DAL.Entities
 {
     public class Plan
     {
-        public Plan() { }
+        public Plan()
+        {
+            
+        }
+        public Plan(string name, string description, DateTime startDate, DateTime endDate, decimal price, int capacity, int booked)
+        {
+            Name = name;
+            Description = description;
+            StartDate = startDate;
+            EndDate = endDate;
+            Price = price;
+            Capcity = capacity;
+            Booked = booked;
+        }
         [Key]
         public int Id { get; private set; }
         public string Name { get; private set; }
@@ -15,7 +28,7 @@ namespace Gym.DAL.Entities
         public DateTime EndDate { get; private set; }
         public decimal Price { get; private set; }
         public int Capcity { get; private set; }
-        public int Booked { get; private set; } 
+        public int Booked { get; private set; }
 
         // Trainer owner
         [ForeignKey("Trainer")]
@@ -27,7 +40,8 @@ namespace Gym.DAL.Entities
 
         // Members subscribed
         public List<MemberPlan> MemberPlans { get; set; } = new();
-        public bool Update(Plan plan) {
+        public bool Update(Plan plan)
+        {
             this.Name = plan.Name;
             this.Description = plan.Description;
             this.StartDate = plan.StartDate;
@@ -36,6 +50,11 @@ namespace Gym.DAL.Entities
             this.Capcity = plan.Capcity;
             return true;
         }
-
+        public bool Book()
+        {
+            if (Booked >= Capcity) return false;
+            Booked += 1;
+            return true;
+        }
     }
 }
