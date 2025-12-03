@@ -79,6 +79,13 @@ namespace Gym.DAL.DataBase
                 .HasForeignKey(mp => mp.PlanId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+
+            modelBuilder.Entity<Payment>()
+.HasOne(p => p.Session)
+.WithMany()
+.HasForeignKey(p => p.SessionId)
+.OnDelete(DeleteBehavior.Cascade);
+
             base.OnModelCreating(modelBuilder);
         }
     }
