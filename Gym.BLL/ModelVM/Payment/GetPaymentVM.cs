@@ -11,5 +11,6 @@ namespace Gym.BLL.ModelVM.Payment
         public int MemberId { get; set; }
         public Gateway Gateway { get;  set; }
         public string MemberName { get; set; }
+        public string MemberPhone { get; set; }
     }
 }

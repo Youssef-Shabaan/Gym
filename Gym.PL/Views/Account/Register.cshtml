@@ -4,15 +4,40 @@
 }
 <style>
     .text-danger:empty {
-    background: none !important;
-    padding: 0 !important;
+        background: none !important;
+        padding: 0 !important;
     }
+
     .text-danger:not(:empty) {
-    background-color: rgba(255, 0, 0, 0.1);
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 500;
+        background-color: rgba(255, 0, 0, 0.1);
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+        display: block; 
+        color: #ff3b3b !important; 
+    }
+
+    .boxed-btn {
+        background: #ff3b3b;
+        border-color: #ff3b3b;
+        color: white !important;
+        transition: all 0.3s ease;
+    }
+
+        .boxed-btn:hover {
+            background: #e60000;
+            border-color: #e60000;
+            color: white !important;
+        }
+    .form-control {
+        color: white !important;
+        background-color: transparent !important; 
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .form-check-label {
+        color: white !important;
     }
 </style>
 <main>
@@ -31,121 +56,145 @@
     </div>
     <section class="contact-section">
         <div class="container">
-        <div class="d-none d-sm-block mb-5 pb-4">
-            <div class="row">
-                <div class="col-12">
-                    <h2 style ="color:white;" class="contact-title">Create Your Account</h2>
-                </div>
-                <div class="col-lg-8">
-                    <form class="form-contact contact_form" asp-action="Register">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-2"
-                            style="font-size: 18px; font-weight: 500;"></div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label style ="color:white;" asp-for="FisrtName" class="control-label"></label>
-                                    <input style ="color:white;" asp-for="FisrtName" class="form-control" />
-                                    <span  asp-validation-for="FisrtName" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label style ="color:white;" asp-for="Email" class="control-label"></label>
-                                    <input style ="color:white;" asp-for="Email" class="form-control" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label style ="color:white;" asp-for="UserName" class="control-label"></label>
-                                    <input style ="color:white;" asp-for="UserName" class="form-control" />
-                                    <span asp-validation-for="UserName" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label style ="color:white;" asp-for="Password" class="control-label"></label>
-                                    <input style ="color:white;" asp-for="Password" class="form-control" />
-                                    <span  asp-validation-for="Password" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label style ="color:white;" asp-for="PhoneNumber" class="control-label"></label>
-                                    <input style ="color:white;" asp-for="PhoneNumber" class="form-control" />
-                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label style ="color:white;" asp-for="Age" class="control-label"></label>
-                                    <input style ="color:white;" asp-for="Age" class="form-control" />
-                                    <span asp-validation-for="Age" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label style ="color:white;" asp-for="Address" class="control-label"></label>
-                                    <input style ="color:white;" asp-for="Address" class="form-control" />
-                                    <span  asp-validation-for="Address" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label style="color:white;" asp-for="Gender" class="control-label d-block"></label>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" asp-for="Gender" value="Male" id="genderMale">
-                                        <label class="form-check-label" for="genderMale" style="color:white;">Male</label>
+            <div class="d-none d-sm-block mb-5 pb-4">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 style="color:white;" class="contact-title">Create Your Account</h2>
+                    </div>
+                    <div class="col-lg-8">
+                        <form class="form-contact contact_form" asp-action="Register">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-2"
+                                 style="font-size: 18px; font-weight: 500;"></div>
+                            <div class="row">
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="FisrtName" class="control-label"></label>
+                                        <input style="color:white;" asp-for="FisrtName" class="form-control" placeholder="Enter First Name" />
+                                        <span asp-validation-for="FisrtName" class="text-danger"></span>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" asp-for="Gender" value="Female" id="genderFemale">
-                                        <label class="form-check-label" for="genderFemale" style="color:white;">Female</label>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="LastName" class="control-label"></label>
+                                        <input style="color:white;" asp-for="LastName" class="form-control" placeholder="Enter Last Name" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
                                     </div>
-                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="Email" class="control-label"></label>
+                                        <input style="color:white;" asp-for="Email" class="form-control" placeholder="Enter Email" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="UserName" class="control-label"></label>
+                                        <input style="color:white;" asp-for="UserName" class="form-control" placeholder="Choose Username" />
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="Password" class="control-label"></label>
+                                        <input style="color:white;" asp-for="Password" class="form-control" placeholder="Enter Password" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="confirmPassword" class="control-label"></label>
+                                        <input style="color:white;" asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                                        <span asp-validation-for="confirmPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="PhoneNumber" class="control-label"></label>
+                                        <input style="color:white;" asp-for="PhoneNumber" class="form-control" placeholder="Enter Phone Number" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="Age" class="control-label"></label>
+                                        <input style="color:white;" asp-for="Age" class="form-control" placeholder="Enter Age" />
+                                        <span asp-validation-for="Age" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="Address" class="control-label"></label>
+                                        <input style="color:white;" asp-for="Address" class="form-control" placeholder="Enter Address" />
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label style="color:white;" asp-for="Gender" class="control-label d-block mb-2"></label>
+                                        <div class="d-flex align-items-center">
+                                            <div class="form-check form-check-inline me-4">
+                                                <input class="form-check-input" type="radio" asp-for="Gender" value="Male" id="genderMale">
+                                                <label class="form-check-label" for="genderMale" style="color:white;">Male</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" asp-for="Gender" value="Female" id="genderFemale">
+                                                <label class="form-check-label" for="genderFemale" style="color:white;">Female</label>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="Gender" class="text-danger mt-2 d-block"></span>
+                                    </div>
                                 </div>
                             </div>
+                            <div style="margin-bottom: 1rem;" class="form-group mt-3">
+                                <button type="submit" class="button button-contactForm boxed-btn w-100">Register</button>
+                            </div>
+                        </form>
+
+                        <div class="form-group mt-3">
+                            <span class="text-decoration-none"
+                                  style="color:white; font-size:16px; display:inline-block; margin-top:5px;">Or Sign in with</span>
                         </div>
-                        <div style="margin-bottom: 1rem;" class="form-group mt-3">
-                            <button type="submit" class="button button-contactForm  boxed-btn w-100">Register</button>
-                        </div>
-                    </form>
-                    <div class="form-group mt-3">
-                        <span class="text-decoration-none"
-                            style="color:white; font-size:16px; display:inline-block; margin-top:5px;">Or Sign in with</span>
+                        <form asp-controller="Account" asp-action="ExternalLogin" method="post">
+                            <input type="hidden" name="provider" value="Google" />
+                            <button type="submit" class="button button-contactForm boxed-btn w-100">
+                                <i class="fab fa-google" style="font-size:18px;"></i>
+                                Google
+                            </button>
+                        </form>
                     </div>
-                    <form asp-controller="Account" asp-action="ExternalLogin" method="post">
-                        <input type="hidden" name="provider" value="Google" />
-                        <button type="submit" class="button button-contactForm boxed-btn w-100">
-                        <i class="fab fa-google" style="font-size:18px;"></i>
-                        Google
-                        </button>
-                    </form>
-                </div>
-                <div class="col-lg-3 offset-lg-1">
-                    <div class="media contact-info">
-                        <span class="contact-info__icon"><i class="ti-home"></i></span>
-                        <div class="media-body">
-                            <h3 style ="color:white;">Buttonwood, California.</h3>
-                            <p>Rosemead, CA 91770</p>
+
+                    <div class="col-lg-3 offset-lg-1">
+                        <div class="media contact-info">
+                            <span class="contact-info__icon"><i class="ti-home"></i></span>
+                            <div class="media-body">
+                                <h3 style="color:white;">Buttonwood, California.</h3>
+                                <p>Rosemead, CA 91770</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="media contact-info">
-                        <span class="contact-info__icon"><i class="ti-tablet"></i></span>
-                        <div class="media-body">
-                            <h3 style ="color:white;">+1 253 565 2365</h3>
-                            <p>Mon to Fri 9am to 6pm</p>
+                        <div class="media contact-info">
+                            <span class="contact-info__icon"><i class="ti-tablet"></i></span>
+                            <div class="media-body">
+                                <h3 style="color:white;">+1 253 565 2365</h3>
+                                <p>Mon to Fri 9am to 6pm</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="media contact-info">
-                        <span class="contact-info__icon"><i class="ti-email"></i></span>
-                        <div class="media-body">
-                            <h3 style ="color:white;">support@colorlib.com</h3>
-                            <p>Send us your query anytime!</p>
+                        <div class="media contact-info">
+                            <span class="contact-info__icon"><i class="ti-email"></i></span>
+                            <div class="media-body">
+                                <h3 style="color:white;">support@colorlib.com</h3>
+                                <p>Send us your query anytime!</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 </main>
 @section Scripts {

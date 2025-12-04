@@ -58,7 +58,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var payments = DB.payments.Include(p => p.Member).ToList();
+                var payments = DB.payments.Include(p => p.Member).ThenInclude(u => u.User).ToList();
                 return payments;
             }
             catch (Exception ex)

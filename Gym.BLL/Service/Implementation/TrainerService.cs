@@ -179,7 +179,7 @@ namespace Gym.BLL.Service.Implementation
                 
                 mapper.Map(curr, trainer);
 
-                var updateResult = trainerRepo.UpdateTrainer(trainer);
+                var updateResult = trainerRepo.UpdateTrainer(trainer, curr.PhoneNumber);
                 if (!updateResult.Item1)
                     return (false, "Failed to update trainer");
 

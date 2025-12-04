@@ -42,7 +42,7 @@ namespace Gym.DAL.Entities
         public User User { get; private set; }
         public IEnumerable<Session> Sessions { get; private set; }
 
-        public bool EditTrainer(Trainer trainer)
+        public bool EditTrainer(Trainer trainer, string PhoneNumber)
         {
             if (trainer == null) return false;
             Name = trainer.Name;
@@ -50,6 +50,7 @@ namespace Gym.DAL.Entities
             UpdateDate = DateTime.Now;
             Address = trainer.Address;
             Age = trainer.Age;
+            User.PhoneNumber = PhoneNumber;
             return true;
         }
 

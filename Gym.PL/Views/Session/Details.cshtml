@@ -1,8 +1,5 @@
 ﻿@using Gym.BLL.ModelVM.Session
 @model GetSessionVM
-<style>
-
-</style>
 @{
     ViewData["Title"] = "Session Details";
 
@@ -13,133 +10,225 @@
 }
 
 <style>
-    .account-card {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 25px 20px;
-        max-width: 450px;
-        margin: 50px auto;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    .detail-card {
+        background: #1a1a1a;
         color: white;
+        border-radius: 16px;
+        border: none;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        position: relative;
+        margin-top: 50px;
+        margin-bottom: 50px;
     }
 
-    .account-card h2 {
-        color: white;
-        font-size: 32px;
-        margin-bottom: 20px;
+        .detail-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #ff3b3b;
+        }
+
+        .detail-card h2 {
+            color: white;
+            font-weight: 800;
+            text-align: center;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+    .card-body {
+        padding: 30px;
     }
 
-    .account-card p {
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 16px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding-bottom: 8px;
+    }
+
+    .info-label {
+        color: #ff3b3b;
+        font-weight: bold;
+    }
+
+    .info-value {
         color: #ddd;
-        font-size: 18px;
-        line-height: 1.6;
+        text-align: right;
+        font-weight: 500;
     }
+
+
+    .price-tag {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+        margin: 30px 0; 
+        text-shadow: 0 0 10px rgba(255, 59, 59, 0.5);
+    }
+
+    .btn-back {
+        background: transparent;
+        border: 1px solid #666;
+        color: #aaa;
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        transition: 0.3s;
+        text-align: center;
+        display: block;
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            border-color: white;
+            color: white;
+            background: rgba(255,255,255,0.05);
+            text-decoration: none;
+        }
 </style>
 
 <main>
     <section class="contact-section">
         <div class="container">
-            <div class="account-card">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
 
-                <img src="@Url.Content(imagePath)" class="session-image"
-                     style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px 12px 0 0; margin-bottom: 15px;" />
+                    <div class="card detail-card">
 
-                <h2>@Model.Name</h2>
-                <p><strong>Trainer:</strong> @Model.TrainerName</p>
-                <p><strong>Phone:</strong> @Model.TrainerPhone</p>
-                <p><strong>Start Time:</strong> @Model.StartTime.ToString("M/d/yyyy h:mm tt")</p>
-                <p><strong>End Time:</strong> @Model.EndTime.ToString("M/d/yyyy h:mm tt")</p>
-                <p><strong>Available Seats:</strong> @(Model.Capactiy - Model.Booked)</p>
-                <p><strong>Status:</strong> @Model.Status</p>
-                <p><strong>Description:</strong> @Model.Description</p>
-                <p><strong>Price:</strong> @Model.Price USD</p>
+                        <img src="@Url.Content(imagePath)"
+                             style="width: 100%; height: 250px; object-fit: cover; border-radius: 16px 16px 0 0;" />
 
-                <div class="form-group mb-3 mt-3">
-                    <input class="form-control" type="hidden" id="totalAmount" value="@totalAmount" step='0.01' />
-                    <input type="hidden" id="sessionId" value="@Model.Id" />
+                        <div class="card-body">
+                            <h2>@Model.Name</h2>
+
+                            <div class="info-row">
+                                <span class="info-label">Trainer</span>
+                                <span class="info-value">@Model.TrainerName</span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-label">Phone</span>
+                                <span class="info-value">@Model.TrainerPhone</span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-label">Start Time</span>
+                                <span class="info-value">@Model.StartTime.ToString("M/d/yyyy h:mm tt")</span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-label">End Time</span>
+                                <span class="info-value">@Model.EndTime.ToString("M/d/yyyy h:mm tt")</span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-label">Available Seats</span>
+                                <span class="info-value">@(Model.Capactiy - Model.Booked)</span>
+                            </div>
+
+                            <div class="info-row" style="border-bottom: none;">
+                                <span class="info-label">Status</span>
+                                <span class="info-value" style="color: @(Model.Status == "Active" ? "#28a745" : "#ffc107")">@Model.Status</span>
+                            </div>
+
+                            <div class="price-tag">
+                                @Model.Price USD
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control" type="hidden" id="totalAmount" value="@totalAmount" step='0.01' />
+                                <input type="hidden" id="sessionId" value="@Model.Id" />
+                            </div>
+
+                            <div id="notification-container" class="mb-3"></div>
+
+                            <div id="paypal-button-container" class="btn-paypal mb-3"></div>
+
+                            <a asp-controller="Session" asp-action="Index" class="btn-back">
+                                <i class="fa fa-arrow-left"></i> Back To Sessions
+                            </a>
+
+                        </div>
+                    </div>
+
                 </div>
-
-                <div id="notification-container"></div>
-
-                <div id="paypal-button-container" class="btn-paypal mt-3"></div>
-
-                <a asp-controller="Session" asp-action="Index" class="btn btn-secondary mt-3">Back To Sessions</a>
             </div>
         </div>
     </section>
 </main>
+
 @section Scripts {
-                <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PayPalClientId&currency=USD"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                paypal.Buttons({
-                    async createOrder() {
-                        const totalAmount = document.getElementById("totalAmount").value;
-                        const response = await fetch('/Payment/CreateOrder', {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ total: totalAmount })
-                        });
-                        const data = await response.json();
-                        return data.id;
-                    },
+    <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PayPalClientId&currency=USD"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            paypal.Buttons({
+                async createOrder() {
+                    const totalAmount = document.getElementById("totalAmount").value;
+                    const response = await fetch('/Payment/CreateOrder', {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ total: totalAmount })
+                    });
+                    const data = await response.json();
+                    return data.id;
+                },
 
-                    async onApprove(data) {
-                            const sessionId = document.getElementById("sessionId").value;
-                        const response = await fetch('/Payment/CompleteOrder', {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                        orderID: data.orderID,
-                                        type: "session",     // product type
-                                        itemId: sessionId    // session id
-                                    })
-                        });
-                        const result = await response.json();
+                async onApprove(data) {
+                    const sessionId = document.getElementById("sessionId").value;
+                    const response = await fetch('/Payment/CompleteOrder', {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            orderID: data.orderID,
+                            type: "session",     
+                            itemId: sessionId   
+                        })
+                    });
+                    const result = await response.json();
 
-                        const notificationContainer = document.getElementById("notification-container");
+                    const notificationContainer = document.getElementById("notification-container");
 
-                        if (result === "success") {
-                            notificationContainer.innerHTML = `
-                                    <div class='alert alert-success alert-dismissible fade show' role='alert' style="
-        font-size: 17px;
-    ">
-                                    <strong>Booking confirmed!</strong>
-                                </div>
-                            `;
-                            setTimeout(() => { window.location.href = '/Session/Index'; }, 1500);
-                        } else {
-                            notificationContainer.innerHTML = `
-                                    <div class='alert alert-danger alert-dismissible fade show' role='alert' style="
-        font-size: 17px;
-    ">
-                                    <strong>Payment Failed! Please retry later.</strong>
-                                </div>
-                            `;
-                        }
-                    },
-
-                    onCancel() {
-                        document.getElementById("notification-container").innerHTML = `
-                                <div class='alert alert-danger alert-dismissible fade show' role='alert' style="
-        font-size: 17px;
-    ">
-                                <strong>Payment Canceled!</strong>
-                            </div>
-                        `;
-                    },
-
-                    onError() {
-                        document.getElementById("notification-container").innerHTML = `
-                                <div class='alert alert-danger alert-dismissible fade show' role='alert' style="
-        font-size: 17px;
-    ">
-                                <strong>An error occurred! Please retry later.</strong>
-                            </div>
-                        `;
+                    if (result === "success") {
+                        notificationContainer.innerHTML = `
+                                            <div class='alert alert-success alert-dismissible fade show' role='alert' style="font-size: 17px;">
+                                                <strong>Booking confirmed!</strong>
+                                            </div>
+                                        `;
+                        setTimeout(() => { window.location.href = '/Session/Index'; }, 1500);
+                    } else {
+                        notificationContainer.innerHTML = `
+                                            <div class='alert alert-danger alert-dismissible fade show' role='alert' style="font-size: 17px;">
+                                                <strong>Payment Failed! Please retry later.</strong>
+                                            </div>
+                                        `;
                     }
-                }).render('#paypal-button-container');
-            });
-        </script>
+                },
+
+                onCancel() {
+                    document.getElementById("notification-container").innerHTML = `
+                                    <div class='alert alert-danger alert-dismissible fade show' role='alert' style="font-size: 17px;">
+                                        <strong>Payment Canceled!</strong>
+                                    </div>
+                                `;
+                },
+
+                onError() {
+                    document.getElementById("notification-container").innerHTML = `
+                                    <div class='alert alert-danger alert-dismissible fade show' role='alert' style="font-size: 17px;">
+                                        <strong>An error occurred! Please retry later.</strong>
+                                    </div>
+                                `;
+                }
+            }).render('#paypal-button-container');
+        });
+    </script>
 }

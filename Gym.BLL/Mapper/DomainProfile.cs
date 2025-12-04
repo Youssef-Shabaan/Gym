@@ -38,6 +38,7 @@ namespace Gym.BLL.Mapper
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.IsEmailConfirmed, opt => opt.MapFrom(src => src.User.EmailConfirmed))
                 .ReverseMap();
 
 
@@ -77,15 +78,7 @@ namespace Gym.BLL.Mapper
                 .ForMember(dest => dest.UserId, opt => opt.Ignore());
 
 
-            CreateMap<Attendance, AttendanceMemberVM>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.member.Name))
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.member.Image))
-                .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.member.Age))
-                .ReverseMap();
-
-            CreateMap<CreateAttendanceVM, Attendance>().ReverseMap();
-            CreateMap<UpdateAttendanceVM, Attendance>().ReverseMap();
-
+           
             CreateMap<MemberSession, GetMembersForSession>()
                 .ForMember(dest => dest.MemberSessionId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => src.SessionId))
@@ -135,8 +128,10 @@ namespace Gym.BLL.Mapper
             CreateMap<UpdateMemberPlanVM, MemberPlan>().ReverseMap();
 
             CreateMap<AddPaymentVM, Payment>().ReverseMap();
+
             CreateMap<Payment, GetPaymentVM>()
                 .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.MemberPhone, opt => opt.MapFrom(src => src.Member.User.PhoneNumber))
                 .ReverseMap();
 
             CreateMap<MemberPlan, GetMemberPlanVM>()

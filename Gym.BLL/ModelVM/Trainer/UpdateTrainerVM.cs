@@ -20,7 +20,7 @@ namespace Gym.BLL.ModelVM.Trainer
 
 
         [Required(ErrorMessage = "Phone number is required.")]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be 11 digits")]
         public string PhoneNumber { get; set; }
-        public int Capacity { get; set; }
     }
 }

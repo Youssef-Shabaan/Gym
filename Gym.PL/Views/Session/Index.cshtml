@@ -6,9 +6,10 @@
 
 <style>
     .blur-background {
-        filter: blur(6px);
+        filter: blur(8px);
         pointer-events: none;
         user-select: none;
+        transition: filter 0.3s ease;
     }
 
     .desc-modal {
@@ -16,53 +17,186 @@
         position: fixed;
         z-index: 9999;
         inset: 0;
-        background: rgba(0,0,0,0.7);
-        backdrop-filter: blur(6px);
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
         align-items: center;
         justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
     .desc-content {
-        background: #111;
+        background: linear-gradient(145deg, #1a1a1a, #000);
         color: white;
-        padding: 30px;
-        border-radius: 12px;
+        padding: 40px;
+        border-radius: 20px;
         max-width: 600px;
         width: 90%;
         max-height: 70vh;
         overflow-y: auto;
         text-align: center;
         position: relative;
-        box-shadow: 0 0 20px rgba(255,0,0,0.4);
-        font-weight: bold;
-    }
-
-    #descText {
-        color: #fff;
-        font-size: 22px;
-        font-weight: bold;
-        line-height: 1.5;
-        word-wrap: break-word;
+        border: 1px solid #333;
+        box-shadow: 0 10px 30px rgba(255, 59, 59, 0.2);
     }
 
     .close-btn {
-        position: sticky;
-        top: 0;
-        float: right;
+        position: absolute;
+        top: 15px;
+        right: 20px;
         cursor: pointer;
-        font-size: 20px;
+        font-size: 24px;
         color: #ff3b3b;
+        transition: 0.2s;
+    }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+            color: white;
+        }
+
+    .session-card {
+        transition: all 0.4s ease-out;
+    }
+
+    .card {
+        background: #1a1a1a;
+        color: white;
+        border-radius: 16px;
+        border: none;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ff3b3b;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+            z-index: 2;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        opacity: 0.9;
+        transition: opacity 0.3s;
+    }
+
+    .card:hover .card-img-top {
+        opacity: 1;
+    }
+
+    .card-body {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .session-title {
+        color: white;
+        font-weight: 800;
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding-bottom: 5px;
+    }
+
+    .info-label {
+        color: #ff3b3b;
+        font-weight: bold;
+    }
+
+    .info-value {
+        color: #ddd;
+        text-align: right;
+    }
+
+    .btn-desc {
+        background: transparent;
+        border: 1px solid #666;
+        color: #ccc;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: 0.3s;
+        font-size: 13px;
+        margin-top: auto; 
+        padding: 8px 0;
+        display: block;
+        text-align: center;
         margin-bottom: 10px;
     }
 
-    .desc-content::-webkit-scrollbar {
-        width: 6px;
+        .btn-desc:hover {
+            border-color: #ff3b3b;
+            color: #ff3b3b;
+            background: rgba(255, 59, 59, 0.05);
+            text-decoration: none;
+        }
+
+    .btn-subscribe {
+        background: #ff3b3b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 10px 0;
+        display: block;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(255, 59, 59, 0.3);
     }
 
-    .desc-content::-webkit-scrollbar-thumb {
-        background-color: #ff3b3b;
-        border-radius: 10px;
+        .btn-subscribe:hover {
+            background: #e60000;
+            color: white;
+            box-shadow: 0 6px 20px rgba(255, 59, 59, 0.5);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+    .status-available {
+        color: #28a745;
+        font-weight: bold;
     }
+
+    .status-full {
+        color: #dc3545;
+        font-weight: bold;
+    }
+
 </style>
 
 
@@ -87,73 +221,84 @@
                 @foreach (var session in Model)
                 {
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card session-card" style="
-                                        background: #111;
-                                        color: white;
-                                        border-radius: 12px;
-                                        border: 1px solid #d3c2c2;
-                                        box-shadow: 0 0 15px rgba(255,0,0,0.25);
-                                        overflow: hidden;">
+                        <div class="card session-card">
 
                             @{
                                 var random = new Random();
                                 int number = random.Next(1, 7);
                                 string imagePath = $"~/assets/img/gallery/gallery{number}.png";
+
+                                int availableSeats = session.Capactiy - session.Booked;
+                                bool isFull = availableSeats <= 0;
                             }
 
-                        <img src="@Url.Content(imagePath)"
-                             class="card-img-top"
-                             style="height: 220px; object-fit: cover;" />
+                            <img src="@Url.Content(imagePath)" class="card-img-top" />
 
-                        <div class="card-body">
+                            <div class="card-body">
 
-                            <h4 style="color: white; font-weight: 700; text-align: center; font-size: 26px;">
-                                @session.Name
-                            </h4>
+                                <h4 class="session-title">
+                                    @session.Name
+                                </h4>
 
-                            <p style="margin-bottom: 6px; color: #ddd;">
-                                <strong style="color:#ff3b3b;">Trainer :</strong> @session.TrainerName
-                            </p>
-                            <p style="margin-bottom: 6px; color: #ddd;">
-                                <strong style="color:#ff3b3b;">Phone :</strong> @session.TrainerPhone
-                            </p>
+                                <div class="info-row">
+                                    <span class="info-label">Trainer</span>
+                                    <span class="info-value">@session.TrainerName</span>
+                                </div>
 
-                            <p style="margin-bottom: 6px; color: #ddd;">
-                                <strong style="color:#ff3b3b;">Start at :</strong> @session.StartTime.ToString("M/d/yyyy h:mm tt")
-                            </p>
+                                <div class="info-row">
+                                    <span class="info-label">Date</span>
+                                    <span class="info-value">@session.StartTime.ToString("MMM dd, yyyy")</span>
+                                </div>
 
-                            <p style="margin-bottom: 6px; color: #ddd;">
-                                <strong style="color:#ff3b3b;">End at :</strong> @session.EndTime.ToString("M/d/yyyy h:mm tt")
-                            </p>
+                                <div class="info-row">
+                                    <span class="info-label">Time</span>
+                                    <span class="info-value">
+                                        @session.StartTime.ToString("h:mm tt") - @session.EndTime.ToString("h:mm tt")
+                                    </span>
+                                </div>
 
-                            <p style="margin-bottom: 10px; color: #ddd;">
-                                <strong style="color:#ff3b3b;">Price :</strong> @session.Price EGP
-                            </p>
+                                <div class="info-row">
+                                    <span class="info-label">Price</span>
+                                    <span class="info-value" style="color:white; font-size:1.1em;">@session.Price USD</span>
+                                </div>
 
-                            <p style="margin-bottom: 10px; color: #ddd;">
-                                <strong style="color:#ff3b3b;">Available :</strong>
-                                @(session.Capactiy - session.Booked == 0
-                                                                ? "No seats available"
-                                                                : (session.Capactiy - session.Booked) + " Seats")
-                            </p>
+                                <div class="info-row" style="border-bottom: none;">
+                                    <span class="info-label">Availability</span>
+                                    @if (isFull)
+                                    {
+                                        <span class="info-value status-full">FULL BOOKED</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="info-value status-available">@availableSeats Seats Left</span>
+                                    }
+                                </div>
+
+                                <div style="margin-top: 15px;"></div>
 
                                 <a href="javascript:void(0)"
                                    onclick="openDescription(`@Html.Raw((session.Description ?? "").Replace("`", ""))`)"
-                                   class="btn btn-outline-danger w-100 mb-2"
-                                   style="font-weight:bold;">
-                                    View Description
+                                   class="btn-desc">
+                                    View Details
                                 </a>
 
-                                <a href="/Session/Details/@session.Id"
-                                   class="btn btn-danger w-100"
-                                   style="font-weight:bold;">
-                                    Subscribe
-                                </a>
+                                @if (!isFull)
+                                {
+                                    <a href="/Session/Details/@session.Id" class="btn-subscribe">
+                                        Subscribe Now
+                                    </a>
+                                }
+                                else
+                                {
+                                    <button class="btn-subscribe" style="background:#444; box-shadow:none; cursor:not-allowed; opacity:0.7;">
+                                        Sold Out
+                                    </button>
+                                }
 
                             </div>
                         </div>
                     </div>
-                                }
+                }
             </div>
         </div>
     </section>
@@ -161,25 +306,27 @@
 
 <div id="descModal" class="desc-modal">
     <div class="desc-content">
-        <span class="close-btn" onclick="closeDescription()">🗙</span>
-        <p id="descText"></p>
+        <span class="close-btn" onclick="closeDescription()">&times;</span>
+        <h3 style="color:#ff3b3b; margin-bottom:20px;">Session Details</h3>
+        <p id="descText" style="font-size: 18px; line-height: 1.6;"></p>
     </div>
 </div>
-
-
 
 @section Scripts {
     <script>
         function openDescription(text) {
+            const modal = document.getElementById('descModal');
             document.getElementById('descText').innerText = text;
-            document.getElementById('descModal').style.display = 'flex';
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; }, 10);
             document.getElementById('pageContent').classList.add('blur-background');
         }
 
         function closeDescription() {
-            document.getElementById('descModal').style.display = 'none';
+            const modal = document.getElementById('descModal');
+            modal.style.opacity = '0';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
             document.getElementById('pageContent').classList.remove('blur-background');
         }
     </script>
 }
-
