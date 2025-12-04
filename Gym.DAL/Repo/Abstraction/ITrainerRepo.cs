@@ -10,7 +10,7 @@ namespace Gym.DAL.Repo.Abstraction
     public interface ITrainerRepo
     {
         (bool, string?) AddTrainer(Trainer trainer);
-        (bool, string?) UpdateTrainer(Trainer trainer);
+        (bool, string?) UpdateTrainer(Trainer trainer, string PhoneNumber);
         (bool, string?) DeleteTrainer(int id);
         int GetTrainerCount();
 

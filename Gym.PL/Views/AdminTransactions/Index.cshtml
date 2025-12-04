@@ -1,13 +1,54 @@
 ﻿@using Gym.BLL.ModelVM.Payment
 @model List<GetPaymentVM>
 <style>
-    .custom-btn {
-    transition: background-color 0.3s ease;
+    .custom-btn, .btn-primary {
+        background-color: #ff3b3b !important;
+        border-color: #ff3b3b !important;
+        transition: all 0.3s ease;
     }
-    .custom-btn:hover {
-    background-color: #970101 !important;
-    border-color: #970101 !important;
+
+        .custom-btn:hover, .btn-primary:hover {
+            background-color: #e60000 !important;
+            border-color: #e60000 !important;
+            box-shadow: 0 4px 10px rgba(255, 59, 59, 0.3);
+        }
+
+    .card-header .text-primary {
+        color: #ff3b3b !important;
+        font-weight: 700;
     }
+
+    #myTable {
+        width: 100% !important;
+        border-collapse: separate;
+        border-spacing: 0 10px; 
+    }
+
+        #myTable thead th {
+            background-color: #f3f3f3;
+            color: #6c757d;
+            font-weight: bold;
+            padding: 12px 8px;
+            border-bottom: 2px solid #ff3b3b;
+        }
+
+        #myTable tbody tr {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+            #myTable tbody tr:hover {
+                background-color: #f7f7f7;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+
+        #myTable tbody td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            border: none;
+            word-break: break-word; 
+        }
 </style>
 @{
     ViewData["Title"] = "Transactions";
@@ -15,7 +56,9 @@
 }
 @if (TempData["ErrorMessage"] != null && TempData["ErrorMessage"].ToString() != "Done")
 {
+    <div class="alert alert-danger mb-4" role="alert">
         <h1>@TempData["ErrorMessage"]</h1>
+    </div>
 }
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Transactions</h1>
@@ -27,35 +70,39 @@
                 <h6 class="m-0 font-weight-bold text-primary">All Transactions</h6>
             </div>
             <div class="card-body">
-                @{
-                    int i = 1;
-                }
-                <table id="myTable">
-                    <thead>
-                        <tr>
-                            <th style ="text-align:center">Id</th>
-                            <th style ="text-align:left">Transaction Id</th>
-                            <th style ="text-align:left">Name</th>
-                            <th style ="text-align:center">Amount</th>
-                            <th style ="text-align:center">Date</th>
-                            <th style ="text-align:left">Gateway</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var transaction in Model)
-                        {
+                <div class="table-responsive">
+                    @{
+                        int i = 1;
+                    }
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th style="width:5%; text-align:center">Id</th>
+                                <th style="width:30%; text-align:left">Transaction Id</th>
+                                <th style="width:20%; text-align:left">Member Name</th>
+                                <th style="width:20%; text-align:left">Member Phone</th>
+                                <th style="width:10%; text-align:center">Amount</th>
+                                <th style="width:20%; text-align:center">Date</th>
+                                <th style="width:15%; text-align:left">Gateway</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var transaction in Model)
+                            {
                                 <tr>
-                                    <td style ="text-align:center">@i</td>
-                                        <td style ="text-align:left">@transaction.TransactionId</td>
-                                        <td style ="text-align:left">@transaction.MemberName</td>
-                                        <td style ="text-align:center">@transaction.Amount</td>
-                                        <td style ="text-align:center">@transaction.PaymentDate</td>
-                                        <td style ="text-align:left">@transaction.Gateway</td>
+                                    <td style="text-align:center">@i</td>
+                                    <td style="text-align:left">@transaction.TransactionId</td>
+                                    <td style="text-align:left">@transaction.MemberName</td>
+                                    <td style="text-align:left">@transaction.MemberPhone</td>
+                                    <td style="text-align:center">@transaction.Amount USD</td>
+                                    <td style="text-align:center">@transaction.PaymentDate.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td style="text-align:left">@transaction.Gateway</td>
                                 </tr>
-                            i++;
-                        }
-                    </tbody>
-                </table>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

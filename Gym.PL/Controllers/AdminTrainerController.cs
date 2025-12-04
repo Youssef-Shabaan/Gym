@@ -67,7 +67,6 @@ namespace Gym.PL.Controllers
                 Age = trainer.Item3.Age,
                 Address = trainer.Item3.Address,
                 PhoneNumber = trainer.Item3.PhoneNumber,
-                Capacity = trainer.Item3.Capacity
             };
             return View(editTrainer);
         }

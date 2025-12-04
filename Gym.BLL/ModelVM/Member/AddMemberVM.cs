@@ -12,10 +12,10 @@ namespace Gym.BLL.ModelVM.Member
         [Required(ErrorMessage = "Name is required")]
         [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
         public string FisrtName { get; set; }
+
         [Display(Name ="Last Name")]
-        //[Required(ErrorMessage = "Name is required")]
-        //[MinLength(2, ErrorMessage = "Name must contain at least two chars")]
-        [ValidateNever]
+        [Required(ErrorMessage = "Name is required")]
+        [MinLength(2, ErrorMessage = "Name must contain at least two chars")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
@@ -29,19 +29,21 @@ namespace Gym.BLL.ModelVM.Member
         [RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be 11 digits")]
         public string PhoneNumber { get; set; }
 
+
         [Range(18, 60, ErrorMessage = "Age must be between 18 and 60")]
         public int Age { get; set; }
+
         [Required(ErrorMessage = "Gender is required")]
         public Gender Gender { get; set; }
+
         public string Address { get; set; }
 
         public IFormFile? Image { get; set; }
 
         [Required, DataType(DataType.Password)]
         public string Password { get; set; }
-        //[Display(Name ="Confirm Password")]
-        //[Required, DataType(DataType.Password), Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
-        [ValidateNever]
+        [Display(Name = "Confirm Password")]
+        [Required, DataType(DataType.Password), Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
         public string confirmPassword { get; set; }
     }
 }

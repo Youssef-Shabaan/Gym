@@ -28,7 +28,7 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
-        public (bool, string?) UpdateTrainer(Trainer trainer)
+        public (bool, string?) UpdateTrainer(Trainer trainer, string PhoneNumber)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Gym.DAL.Repo.Implementation
                 if (oldTrainer == null)
                     return (false, "Trainer not found.");
 
-                if (oldTrainer.EditTrainer(trainer))
+                if (oldTrainer.EditTrainer(trainer, PhoneNumber))
                 {
                     GymDb.SaveChanges();
                     return (true, null);

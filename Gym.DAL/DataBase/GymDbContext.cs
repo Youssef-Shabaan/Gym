@@ -81,10 +81,10 @@ namespace Gym.DAL.DataBase
 
 
             modelBuilder.Entity<Payment>()
-.HasOne(p => p.Session)
-.WithMany()
-.HasForeignKey(p => p.SessionId)
-.OnDelete(DeleteBehavior.Cascade);
+                .HasOne(p => p.Session)
+                .WithMany()
+                .HasForeignKey(p => p.SessionId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }
