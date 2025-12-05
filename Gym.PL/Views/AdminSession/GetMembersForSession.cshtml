@@ -53,7 +53,6 @@
                                 <th>Address</th>
                                 <th>Age</th>
                                 <th>Gender</th>
-                                <th>Options</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,16 +77,7 @@
                                     <td class="align-middle">@item.MemberAddress</td>
                                     <td class="align-middle">@item.MemberAge</td>
                                     <td class="align-middle">@item.MemberGender</td>
-                                    <td class="align-middle">
-                                        <a href="#"
-                                           class="btn btn-sm btn-danger delete-member-btn"
-                                           data-id="@item.MemberSessionId"
-                                           data-toggle="modal"
-                                           data-target="#deleteMemberConfirmModal"
-                                           title="Delete member from session">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    </td>
+                                  
                                 </tr>
                             }
                         </tbody>

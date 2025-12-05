@@ -1,0 +1,79 @@
+﻿@model Gym.BLL.ModelVM.Session.AddSessionVM
+
+@{
+    ViewData["Title"] = "Add Session to Plan";
+    Layout = "~/Views/Shared/_TrainerDashboardCRUD.cshtml";
+}
+<style>
+    .custom-btn {
+        transition: background-color 0.3s ease;
+    }
+
+        .custom-btn:hover {
+            background-color: #970101 !important;
+            border-color: #970101 !important;
+        }
+</style>
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+} 
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Add Session</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="AddSessiontoPlan" method="post" class="needs-validation">
+
+                        <input asp-for="TrainerId" type="hidden" />
+                        <input asp-for="Price" type="hidden" />
+                        <input asp-for="Capactiy" type="hidden" />
+                        <input asp-for="PlanId" type="hidden" />
+
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="form-label">Session Name</label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter session name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Optional details..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="StartTime" class="form-label">Start Time</label>
+                        <input asp-for="StartTime" type="datetime-local" class="form-control" step="60"
+                               value="@Model.StartTime.ToString("yyyy-MM-ddTHH:mm")" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="EndTime" class="form-label">End Time</label>
+                        <input asp-for="EndTime" type="datetime-local" class="form-control" step="60"
+                               value="@Model.EndTime.ToString("yyyy-MM-ddTHH:mm")" />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">Add Session</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+}

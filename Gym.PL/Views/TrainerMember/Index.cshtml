@@ -1,0 +1,203 @@
+﻿@using Gym.BLL.ModelVM.Member
+@model List<GetMemberVM>
+<style>
+    .custom-btn, .btn-primary {
+        background-color: #ff3b3b !important;
+        border-color: #ff3b3b !important;
+        transition: all 0.3s ease;
+    }
+
+        .custom-btn:hover, .btn-primary:hover {
+            background-color: #e60000 !important;
+            border-color: #e60000 !important;
+            box-shadow: 0 4px 10px rgba(255, 59, 59, 0.3);
+        }
+
+    .card-header .text-primary {
+        color: #ff3b3b !important;
+        font-weight: 700;
+    }
+
+    .custom-btn {
+        color: white !important;
+    }
+
+        .custom-btn i {
+            color: white !important;
+        }
+
+    #myTable {
+        width: 100% !important;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+        #myTable thead th {
+            background-color: #f3f3f3;
+            color: #6c757d;
+            font-weight: bold;
+            padding: 12px 8px;
+            border-bottom: 2px solid #ff3b3b;
+        }
+
+        #myTable tbody tr {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+            #myTable tbody tr:hover {
+                background-color: #f7f7f7;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+
+        #myTable tbody td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            border: none;
+            word-break: break-word;
+        }
+
+    .table-actions a {
+        color: #6c757d !important;
+        margin: 0 8px;
+        transition: color 0.2s, transform 0.2s;
+    }
+
+        .table-actions a:hover {
+            color: #ff3b3b !important;
+            transform: scale(1.1);
+        }
+
+    .session-link {
+        color: #007bff !important;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    a[asp-action="GetSessionsForUser"] {
+        color: #007bff !important;
+    }
+
+    .text-primary {
+        color: #ff3b3b !important;
+    }
+
+    .email-confirmed-status {
+        font-size: 1.25rem;
+    }
+
+    .status-confirmed {
+        color: #28a745; 
+    }
+
+    .status-unconfirmed {
+        color: #dc3545; 
+    }
+
+    .text-muted i {
+        font-size: 1.25rem;
+    }
+</style>
+@{
+    ViewData["Title"] = "Members";
+    Layout = "~/Views/Shared/_TrainerDashboard.cshtml";
+}
+@if (TempData["ErrorMessage"] != null && TempData["ErrorMessage"].ToString() != "Done")
+{
+        <div class="alert alert-danger mb-4" role="alert">
+            <h1>@TempData["ErrorMessage"]</h1>
+        </div>
+}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Members</h1>
+    
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Members</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    @{
+                        int i = 1;
+                    }
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th style="width:5%; text-align:center">Id</th>
+                                <th style="width:15%; text-align:left">Name</th>
+                                <th style="width:20%; text-align:left">Email</th>
+                                <th style="width:10%; text-align:left">Username</th>
+                                <th style="width:5%; text-align:center">Age</th>
+                                <th style="width:5%; text-align:left">Gender</th>
+                                <th style="width:10%; text-align:left">Address</th>
+                                <th style="width:5%; text-align:center">Image</th>
+                                <th style="width:10%; text-align:center">Email Confirmed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var member in Model)
+                            {
+                                    <tr>
+                                        <td style="text-align:center">@i</td>
+                                        <td style="text-align:left">@member.Name</td>
+                                        <td style="text-align:left">@member.Email</td>
+                                        <td style="text-align:left">@member.UserName</td>
+                                        <td style="text-align:center">@member.Age</td>
+                                        <td style="text-align:left">@member.Gender</td>
+                                        <td style="text-align:left">@member.Address</td>
+                                        <td style="text-align:center">
+                                        @if (string.IsNullOrEmpty(member.Image) || member.Image == "avatar_man.png" || member.Image == "avatar_woman.png")
+                                        {
+                                                    <span class="text-muted"><i class="fas fa-user-circle"></i></span>
+                                        }
+                                        else
+                                        {
+                                                    <a href="javascript:void(0);" class="text-primary" onclick="showImageModal('@Url.Content("~/Files/" + member.Image)')" title="View Image">
+                                                        <i class="fas fa-eye fa-lg"></i>
+                                                    </a>
+                                        }
+                                        </td>
+                                        <td style="text-align:center">
+                                        @if (member.IsEmailConfirmed)
+                                        {
+                                                    <span class="email-confirmed-status status-confirmed" title="Email is Confirmed">
+                                                        <i class="fas fa-check-circle"></i>
+                                                    </span>
+                                        }
+                                        else
+                                        {
+                                                    <span class="email-confirmed-status status-unconfirmed" title="Email is NOT Confirmed">
+                                                        <i class="fas fa-times-circle"></i>
+                                                    </span>
+                                        }
+                                        </td>
+                                       
+                                    </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center p-3">
+            <img id="previewImage" src="" alt="Member Image" class="img-fluid rounded" />
+        </div>
+    </div>
+</div>
+
+<script>
+    function showImageModal(imgSrc) {
+        document.getElementById('previewImage').src = imgSrc;
+        $('#imageModal').modal('show');
+    }
+</script>

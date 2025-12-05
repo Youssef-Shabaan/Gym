@@ -178,6 +178,31 @@ namespace Gym.DAL.Repo.Implementation
             return _context.plans.Count();
         }
 
+        public int CountPlanForTrainer(int trainerid)
+        {
+            return _context.plans.Count(p => p.TrainerId == trainerid);
+
+        }
+
+        public (bool, IEnumerable<Plan>?) GetPlansByTrainerId(int trainerId)
+        {
+            try
+            {
+                var plans = _context.plans
+                    .Include(t => t.Trainer).ThenInclude(u => u.User)
+                    .Where(a => a.TrainerId == trainerId ).ToList();
+                if (!plans.Any() || plans == null)
+                {
+                    return (false, null);
+                }
+                return (true, plans);
+            }
+            catch (Exception ex)
+            {
+                return (false, null);
+            }
+        }
+
         //public (bool, string) CancelMemberPlan(int memberPlanId)
         //{
         //    try

@@ -1,9 +1,9 @@
-﻿@using Gym.BLL.ModelVM.MemberPlan
-@model IEnumerable<GetMembersForPlanVM>
+﻿@using Gym.BLL.ModelVM.MemberSession
+@model IEnumerable<GetMembersForSession>
 
 @{
-    ViewData["Title"] = "Plan Members List";
-    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+    ViewData["Title"] = "Session Members List";
+    Layout = "~/Views/Shared/_TrainerDashboard.cshtml";
 }
 
 <style>
@@ -29,7 +29,7 @@
 </style>
 
 <div class="container-fluid mt-4">
-    <h2 class="mb-4 text-primary"><i class="fa fa-users"></i> Plan Members</h2>
+    <h2 class="mb-4 text-primary"><i class="fa fa-users"></i> Session Members</h2>
     <hr />
 
     <div class="card shadow">
@@ -37,7 +37,7 @@
             @if (!Model.Any())
             {
                     <div class="alert alert-info text-center m-4">
-                        No members are currently registered for this plan.
+                        No members are currently registered for this session.
                     </div>
             }
             else
@@ -71,15 +71,13 @@
                                                         </div>
                                         }
                                             </td>
-
                                             <td class="font-weight-bold align-middle">@item.MemberUserName</td>
                                             <td class="font-weight-bold align-middle">@item.MemberEmail</td>
                                             <td class="align-middle">@item.MemberPhone</td>
                                             <td class="align-middle">@item.MemberAddress</td>
                                             <td class="align-middle">@item.MemberAge</td>
                                             <td class="align-middle">@item.MemberGender</td>
-
-                                           
+                                            
                                         </tr>
                             }
                             </tbody>
@@ -89,49 +87,3 @@
         </div>
     </div>
 </div>
-
-
-<div class="modal fade" id="deleteMemberConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                Are you sure you want to remove this member from the plan?
-                <br />
-                <strong class="text-danger">This action cannot be undone.</strong>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-
-                <a id="confirmDeleteMemberBtn" class="btn btn-danger"
-                   asp-controller="AdminPlan"
-                   asp-action="DeleteMemberFromPlan">
-                    Delete
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-@section Scripts {
-        <script>
-            document.querySelectorAll('.delete-member-btn').forEach(btn => {
-                btn.addEventListener('click', function () {
-
-                    const memberPlanId = this.getAttribute('data-id');
-
-                    const deleteBtn = document.getElementById('confirmDeleteMemberBtn');
-
-                    deleteBtn.setAttribute('href', `/AdminPlan/DeleteMemberFromPlan?Id=${memberPlanId}`);
-                });
-            });
-        </script>
-}

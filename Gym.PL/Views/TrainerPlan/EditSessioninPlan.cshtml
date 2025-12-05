@@ -2,7 +2,7 @@
 @model UpdateSessionVM
 @{
     ViewData["Title"] = "Edit Plan Session";
-    Layout = "~/Views/Shared/_AdminDashboardCRUD.cshtml";
+    Layout = "~/Views/Shared/_TrainerDashboardCRUD.cshtml";
 }
 <style>
     .custom-btn {
@@ -16,11 +16,11 @@
 </style>
 @if (ViewBag.ErrorMessage != null)
 {
-        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
 }
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Plan Sessions</h1>
-    <a asp-controller="AdminPlan" asp-action="Index" class="custom-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+    <a asp-controller="TrainerPlan" asp-action="MyPlans" class="custom-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         <i class="fas fa-arrow-left fa-sm text-white-50"></i>
         Back
     </a>
@@ -32,7 +32,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Edit Session</h6>
             </div>
             <div class="card-body">
-                <form class="col-12" asp-action="EditSessioninPlan" asp-controller="AdminPlan" enctype="multipart/form-data">
+                <form class="col-12" asp-action="EditSessioninPlan" asp-controller="TrainerPlan" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     @Html.HiddenFor(model => model.Id)
                     @Html.HiddenFor(model => model.PlanId)
@@ -63,7 +63,7 @@
                         </div>
 
                     </div>
-                   
+
                     <div class="form-group">
                         <input type="submit" value="Save" class="custom-btn btn btn-primary" />
                     </div>

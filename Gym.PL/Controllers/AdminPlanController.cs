@@ -25,7 +25,7 @@ namespace Gym.PL.Controllers
         {
             var plans = planService.GetAllPlans().Item3;
             return View(plans);
-        }
+        } 
         [HttpGet]
         public IActionResult Create()
         {

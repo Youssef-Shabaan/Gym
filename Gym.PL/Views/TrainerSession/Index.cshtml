@@ -1,0 +1,179 @@
+﻿@using Gym.BLL.ModelVM.Session
+@model List<GetSessionVM>
+
+@{
+    ViewData["Title"] = "Sessions";
+    Layout = "~/Views/Shared/_TrainerDashboard.cshtml";
+}
+<style>
+    .custom-btn, .btn-primary {
+        background-color: #ff3b3b !important;
+        border-color: #ff3b3b !important;
+        transition: all 0.3s ease;
+    }
+
+        .custom-btn:hover, .btn-primary:hover {
+            background-color: #e60000 !important;
+            border-color: #e60000 !important;
+            box-shadow: 0 4px 10px rgba(255, 59, 59, 0.3);
+        }
+
+    .card-header .text-primary {
+        color: #ff3b3b !important;
+        font-weight: 700;
+    }
+
+    .custom-btn {
+        color: white !important;
+    }
+
+        .custom-btn i {
+            color: white !important;
+        }
+
+    #myTable {
+        width: 100% !important;
+        border-collapse: separate;
+        border-spacing: 0 10px; 
+    }
+
+        #myTable thead th {
+            background-color: #f3f3f3;
+            color: #6c757d;
+            font-weight: bold;
+            padding: 12px 8px;
+            border-bottom: 2px solid #ff3b3b;
+        }
+
+        #myTable tbody tr {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+            #myTable tbody tr:hover {
+                background-color: #f7f7f7;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+
+        #myTable tbody td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            border: none;
+        }
+
+    .table-actions a {
+        color: #6c757d !important;
+        margin: 0 8px;
+        transition: color 0.2s, transform 0.2s;
+    }
+
+        .table-actions a:hover {
+            color: #ff3b3b !important;
+            transform: scale(1.1);
+        }
+
+    .badge-status {
+        font-size: 14px;
+        padding: 6px 10px;
+        min-width: 100px;
+        display: inline-block;
+        font-weight: 600;
+    }
+
+    .badge-success { 
+        background-color: #28a745 !important;
+        color: white !important;
+    }
+
+    .badge-warning { 
+        background-color: #ffc107 !important;
+        color: #333 !important; 
+    }
+
+    .badge-danger { 
+        background-color: #dc3545 !important;
+        color: white !important;
+    }
+
+    .member-link {
+        color: #007bff !important;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Sessions</h1>
+   
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Sessions</h6>
+            </div>
+            <div class="card-body">
+                @{
+                    int i = 1;
+                }
+                <div class="table-responsive">
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th style="width:5%; text-align:center">Id</th>
+                                <th style="width:20%; text-align:left">Name</th>
+                                <th style="width:15%; text-align:left">Trainer Name</th>
+                                <th style="width:7%; text-align:center">Start Time</th>
+                                <th style="width:7%; text-align:center">End Time</th>
+                                <th style="width:10%; text-align:center">Status</th>
+                                <th style="width:5%; text-align:center">Price</th>
+                                <th style="width:5%; text-align:center">Capacity</th>
+                                <th style="width:5%; text-align:center">Booked</th>
+                                <th style="width:5%; text-align:center">Members</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var session in Model)
+                            {
+                                    <tr>
+                                        <td style="text-align:center">@i</td>
+                                        <td style="text-align:left">@session.Name</td>
+                                        <td style="text-align:left">@session.TrainerName</td>
+                                        <td style="text-align:center">@session.StartTime.ToString("yyyy-MM-dd  hh:mm tt")</td>
+                                        <td style="text-align:center">@session.EndTime.ToString("yyyy-MM-dd  hh:mm tt")</td>
+                                        <td style="text-align:center">
+                                        @if (session.Status == "Not Started")
+                                        {
+                                                    <span class="badge badge-success badge-status">@session.Status</span>
+                                        }
+                                        else if (session.Status == "Ongoing")
+                                        {
+                                                    <span class="badge badge-warning badge-status">@session.Status</span>
+                                        }
+                                        else if (session.Status == "Ended")
+                                        {
+                                                    <span class="badge badge-danger badge-status">@session.Status</span>
+                                        }
+                                        </td>
+                                        <td style="text-align:center">@session.Price USD</td>
+                                        <td style="text-align:center">@session.Capactiy</td>
+                                        <td style="text-align:center">@session.Booked</td>
+                                        <td style="text-align:center">
+                                            <a asp-controller="TrainerSession" asp-action="GetMembersForSession" asp-route-SessionId="@session.Id" class="member-link">
+                                                View (@session.Booked)
+                                            </a>
+                                        </td>
+                                       
+                                    </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

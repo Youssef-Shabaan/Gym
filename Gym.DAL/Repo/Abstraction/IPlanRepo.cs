@@ -18,6 +18,8 @@ namespace Gym.DAL.Repo.Abstraction
         (bool, string) RemoveSessionFromPlan(int planId, int sessionId);
 
         bool PlanExists(int planId);
+        int CountPlanForTrainer(int trainerid);
+        (bool, IEnumerable<Plan>?) GetPlansByTrainerId(int trainerId);
 
         int PlansCount();
     }
