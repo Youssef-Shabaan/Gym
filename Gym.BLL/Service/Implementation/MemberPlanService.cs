@@ -18,7 +18,7 @@ namespace Gym.BLL.Service.Implementation
         {
             _memberPlanRepo = memberPlanRepo;
             _memberRepo = memberRepo;
-            _PlanRepo = planRepo;   
+            _PlanRepo = planRepo;
             _mapper = mapper;
         }
 
@@ -58,17 +58,17 @@ namespace Gym.BLL.Service.Implementation
                     return (false, "Plan not found");
                 }
                 var member = _memberRepo.MemberExist(memberPlan.MemberId);
-                if(!member)
+                if (!member)
                 {
                     return (false, "Member not found");
                 }
 
                 var memberplan = _mapper.Map<MemberPlan>(memberPlan);
-                
+
                 var result = _memberPlanRepo.Create(memberplan);
                 return result;
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 return (false, ex.Message);
             }
@@ -138,16 +138,34 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var memberPlans = _memberPlanRepo.GetMemberPlans(memberId);
-                if(!memberPlans.Item1)
+                if (!memberPlans.Item1)
                 {
                     return (false, memberPlans.Item2, null);
                 }
                 var mapMemberPlans = _mapper.Map<IEnumerable<GetMemberPlanVM>>(memberPlans.Item3);
-                return(true, null, mapMemberPlans); 
+                return (true, null, mapMemberPlans);
             }
             catch (Exception ex)
             {
-                return(false, ex.Message, null);
+                return (false, ex.Message, null);
+            }
+        }
+
+        public (bool, string, List<GetMembersForPlanVM>) GetMembersForPlan(int planid)
+        {
+            try
+            {
+                var members = _memberPlanRepo.GetMembersForPlan(planid);
+                if (!members.Item1)
+                {
+                    return (false, members.Item2, null);
+                }
+                var mapMembers = _mapper.Map<List<GetMembersForPlanVM>>(members.Item3);
+                return (true, null, mapMembers);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
             }
         }
 
@@ -171,7 +189,7 @@ namespace Gym.BLL.Service.Implementation
             }
             catch (Exception ex)
             {
-                return (false, ex.Message); 
+                return (false, ex.Message);
             }
         }
     }

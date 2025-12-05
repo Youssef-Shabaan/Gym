@@ -68,7 +68,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var sessions = GymDb.sessions.Include(t => t._Trainer).ThenInclude(u => u.User).ToList();
+                var sessions = GymDb.sessions.Where(s=>s.PlanId==null).Include(t => t._Trainer).ThenInclude(u => u.User).ToList();
                 if(!sessions.Any())
                 {
                     return(false, null);
@@ -207,6 +207,16 @@ namespace Gym.DAL.Repo.Implementation
             catch (Exception ex)
             {
                 return(false, ex.Message);
+            }
+        }
+        public (bool, string, List<Session>) GetSessionforPlan(int planid)
+        {
+            try {
+                var sessions = GymDb.sessions.Where(s => s.PlanId == planid).ToList();
+                return (true, "retrieved", sessions);
+            }
+            catch (Exception ex) { 
+                return (false, ex.Message, null);
             }
         }
     }

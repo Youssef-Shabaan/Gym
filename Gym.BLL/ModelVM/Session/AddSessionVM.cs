@@ -52,6 +52,8 @@ namespace Gym.BLL.ModelVM.Session
                 );
             }
         }
+        public int? PlanId { get; set; }
+
 
     }
 }

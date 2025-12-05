@@ -120,6 +120,20 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
+        public (bool, string, IEnumerable<GetSessionVM>?) GetSessionforPlan(int planid)
+        {
+            try {
+                var session = sessionRepo.GetSessionforPlan(planid);
+               
+                var sessions = mapper.Map<IEnumerable<GetSessionVM>>(session.Item3);
+                return (true, null, sessions);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
         public (bool, string, IEnumerable<GetSessionVM>?) GetSessionsByTrainerId(int trainerId)
         {
             try

@@ -16,7 +16,7 @@ namespace Gym.DAL.Repo.Abstraction
         (bool, IEnumerable<Session>?) GetAll();
 
         // Trainer-related
-        (bool,IEnumerable<Session>?) GetSessionsByTrainerId(int trainerId);
+        (bool, IEnumerable<Session>?) GetSessionsByTrainerId(int trainerId);
 
         (bool,IEnumerable<Session>?) GetUpcomingSessions();
         (bool,IEnumerable<Session>?) GetOnGoingSessions();

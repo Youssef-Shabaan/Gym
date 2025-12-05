@@ -41,6 +41,7 @@ namespace Gym.DAL.Entities
         public string userId { get; private set; }
         public User User { get; private set; }
         public IEnumerable<Session> Sessions { get; private set; }
+        public IEnumerable<Plan> Plans { get; private set; }
 
         public bool EditTrainer(Trainer trainer, string PhoneNumber)
         {
