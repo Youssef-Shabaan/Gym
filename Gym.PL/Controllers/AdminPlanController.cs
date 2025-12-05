@@ -102,6 +102,7 @@ namespace Gym.PL.Controllers
             }
             return View(updatedPlan);
         }
+
         [HttpGet]
         public IActionResult GetSessionsForPlan(int id) { 
             var sessions = sessionService.GetSessionforPlan(id);
@@ -112,6 +113,7 @@ namespace Gym.PL.Controllers
             }
             return View(sessions.Item3);
         }
+
         [HttpGet]
         public IActionResult AddSessiontoPlan(int id) {
             var planResult = planService.GetPlanById(id);

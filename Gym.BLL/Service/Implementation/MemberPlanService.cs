@@ -111,14 +111,14 @@ namespace Gym.BLL.Service.Implementation
             return _memberPlanRepo.Delete(id);
         }
 
-        public (bool, string, IEnumerable<GetMemberPlanVM>?) GetActivePlanForMember(int memberId)
+        public (bool, string, IEnumerable<GetMemberPlanVM>?) GetPlanForMember(int memberId)
         {
             try
             {
-                var memberPlans = _memberPlanRepo.GetActivePlanForMember(memberId);
+                var memberPlans = _memberPlanRepo.GetPlanForMember(memberId);
                 if (!memberPlans.Item1)
                 {
-                    return (false, memberPlans.Item2, null);
+                    return (false, memberPlans.Item2, new List<GetMemberPlanVM>());
                 }
                 var mapMemberPlans = _mapper.Map<IEnumerable<GetMemberPlanVM>>(memberPlans.Item3);
                 return (true, null, mapMemberPlans);

@@ -60,7 +60,7 @@
                                         @if(User.IsInRole("Member"))
                                         {
                                             <li><a asp-controller="Session" asp-action="MySessions">My Sessions</a></li>
-                                            <li><a href="#">My Plans</a></li>
+                                            <li><a asp-controller="Plan" asp-action="MyPlans">My Plans</a></li>
                                         }
                                     </ul>
                                 </nav>
