@@ -26,5 +26,11 @@ namespace Gym.DAL.Repo.Abstraction
 
         public (bool, string, List<MemberPlan>) GetMembersForPlan(int planid);
 
+        Member GetMemberByUserId(string userid);
+        Plan GetPlanById(int planId);
+        bool IsMemberBooked(int memberId, int planId);
+
+
+
     }
 }

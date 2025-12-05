@@ -8,29 +8,30 @@ namespace Gym.DAL.Entities
     {
         public MemberPlan() { }
 
-        public MemberPlan(int memberId, int planId, DateTime joinDate, DateTime expireDate, bool isActive) 
+        public MemberPlan(int memberId, int planId, DateTime joinDate, bool isActive) 
         {
             MemberId = memberId;
             PlanId = planId;
             JoinDate = joinDate;
-            ExpireDate = expireDate;
             IsActive = isActive;
         }
 
         [Key]
-        public int Id { get; private set; }
+        public int Id { get;  set; }
 
         [ForeignKey("Member")]
-        public int MemberId { get; private set; }
+        public int MemberId { get;  set; }
         public Member Member { get; set; }
 
         [ForeignKey("Plan")]
-        public int PlanId { get; private set; }
+        public int PlanId { get;  set; }
         public Plan Plan { get; set; }
-
-        public DateTime JoinDate { get; private set; }
-        public DateTime? ExpireDate { get; private set; }
-        public bool IsActive { get; private set; }
+        public DateTime BookingDate { get; set; }
+        public string Status { get; set; }
+        public decimal? Price { get; set; }
+        public DateTime JoinDate { get;  set; }
+        public DateTime? ExpireDate { get;  set; }
+        public bool IsActive { get;  set; }
         public void Active() { 
             this.IsActive = true;
         }

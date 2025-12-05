@@ -23,9 +23,13 @@ namespace Gym.PL.Controllers
         private readonly PayPal Paypal;
         private readonly IMapper mapper;
         private readonly IMemberService memberService;
+        private readonly IPlanService planService;
         private readonly IMemberSessionService memberSessionService;
-        public PaymentController(IPaymentService paymentService, IMemberSessionService memberSessionService, IMapper mapper, IPayPalService paypalService, IConfiguration configuration, IMemberService memberService)
+        private readonly IMemberPlanService memberPlanService;
+        public PaymentController(IPlanService planService, IMemberPlanService memberPlanService,  IPaymentService paymentService, IMemberSessionService memberSessionService, IMapper mapper, IPayPalService paypalService, IConfiguration configuration, IMemberService memberService)
         {
+            this.planService = planService;
+            this.memberPlanService = memberPlanService;
             this.paymentService = paymentService;
             this.memberSessionService = memberSessionService;
             this.memberService = memberService;
@@ -139,7 +143,24 @@ namespace Gym.PL.Controllers
 
                 return new JsonResult("success");
             }
-            else if (type == "plan") { }
+            else if (type == "plan") { 
+                var result = memberPlanService.AddMemberToPlan(userId, itemId);
+                if (!result.Item1)
+                    return new JsonResult(result.Item2); // error message
+                var paymentVM = new AddPaymentVM()
+                {
+                    Amount = amount,
+                    Method = PaymentMethod.DebitCard,
+                    PaymentDate = DateTime.Now,
+                    TransactionId = transactionId,
+                    Gateway = Gateway.PayPal,
+                    MemberId = memberId,
+                    PlanId = itemId
+                };
+                paymentService.AddPayment(paymentVM);
+
+                return new JsonResult("success");
+            }
             // ====
 
             return new JsonResult("success");
