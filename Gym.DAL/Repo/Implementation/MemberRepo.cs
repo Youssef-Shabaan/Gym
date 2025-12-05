@@ -46,8 +46,14 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var result = DB.members.Where(m => m.MemberId == id).FirstOrDefault();
+                var result = DB.members.Include(ms => ms.memberSessions).Where(m => m.MemberId == id).FirstOrDefault();
                 if (result == null) return false;
+                var memberSessions = result.memberSessions;
+                foreach (var item in memberSessions)
+                {
+                    var session = DB.sessions.FirstOrDefault(s => s.Id == item.SessionId);
+                    session.Cancel();
+                }
                 DB.members.Remove(result);
                 DB.SaveChanges();
                 return true;

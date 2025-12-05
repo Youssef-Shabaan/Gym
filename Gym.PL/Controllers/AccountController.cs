@@ -308,7 +308,7 @@ namespace Gym.PL.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var user = new User { UserName = email, Email = email };
+            var user = new User { UserName = email.Split('@')[0], Email = email, EmailConfirmed = true };
             var createResult = await userManager.CreateAsync(user);
             if (createResult.Succeeded)
             {
@@ -322,8 +322,7 @@ namespace Gym.PL.Controllers
                 string? address = null;
                 var age = 0;
 
-                //var member = new Member(name, gender, image, age, address, user.Id);
-                //memberRepo.Create(member);
+               
                 var AddMember = await memberService.CreateMemberForEmail(name, gender, image, age, address, user.Id);
 
                 if(!AddMember.Item1)
