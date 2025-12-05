@@ -173,6 +173,11 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
+        public int PlansCount()
+        {
+            return _context.plans.Count();
+        }
+
         //public (bool, string) CancelMemberPlan(int memberPlanId)
         //{
         //    try

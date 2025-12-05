@@ -156,6 +156,11 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
+        public int SessionsCount()
+        {
+            return sessionRepo.SessionsCount();
+        }
+
         public (bool, string?) Update(UpdateSessionVM sessionvm)
         {
             try

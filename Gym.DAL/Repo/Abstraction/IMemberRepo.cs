@@ -17,5 +17,7 @@ namespace Gym.DAL.Repo.Abstraction
 
         bool MemberExist (int id);
         void DeletePhoto(int id);
+
+        int MembersCount();
     }
 }

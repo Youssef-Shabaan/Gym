@@ -16,6 +16,8 @@ namespace Gym.BLL.Service.Abstraction
         (bool, string) Update(int id, UpdateTrainerVM curr);
         Task<(bool, string)> Create(AddTrainerVM newmember);
 
-       (bool,string, IEnumerable<GetSessionVM>?) GetTrainerSessions(int trainerId);
+        (bool,string, IEnumerable<GetSessionVM>?) GetTrainerSessions(int trainerId);
+
+        int TrainersCount();
     }
 }

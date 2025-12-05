@@ -130,6 +130,11 @@ namespace Gym.BLL.Service.Implementation
 
         }
 
+        public int PlansCount()
+        {
+            return planRepo.PlansCount();
+        }
+
         public (bool, string) RemoveSessionFromPlan(int planId, int sessionId)
         {
 

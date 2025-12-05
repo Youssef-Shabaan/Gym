@@ -15,6 +15,8 @@ namespace Gym.BLL.Service.Abstraction
 
         void DeletePhoto(int id);
 
+        int MembersCount();
+
 		Task<(bool, string)> Delete(int id);
         (bool, string) Update(EditMemberVM curr);
         Task<(bool, string)> Create(AddMemberVM newmember, bool IsAdmin);

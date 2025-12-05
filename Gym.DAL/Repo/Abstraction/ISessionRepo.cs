@@ -21,6 +21,7 @@ namespace Gym.DAL.Repo.Abstraction
         (bool,IEnumerable<Session>?) GetUpcomingSessions();
         (bool,IEnumerable<Session>?) GetOnGoingSessions();
         (bool,IEnumerable<Session>?) GetPastSessions();
+        int SessionsCount();
 
     }
 }
