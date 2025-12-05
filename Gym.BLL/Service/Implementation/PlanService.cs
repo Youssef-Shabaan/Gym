@@ -70,7 +70,7 @@ namespace Gym.BLL.Service.Implementation
                 var allPlans = planRepo.GetAllPlans();  
                 if(!allPlans.Item1)
                 {
-                    return(false,allPlans.Item2, null);
+                    return(false,allPlans.Item2, new List<GetPlanVM>());
                 }
                 var allPlanVM = mapper.Map<IEnumerable<GetPlanVM>>(allPlans.Item3);   
                 return(true, null, allPlanVM);  

@@ -22,6 +22,6 @@ namespace Gym.DAL.Repo.Abstraction
         (bool,IEnumerable<Session>?) GetOnGoingSessions();
         (bool,IEnumerable<Session>?) GetPastSessions();
         int SessionsCount();
-
+        (bool, string, List<Session>) GetSessionforPlan(int planid);
     }
 }
