@@ -1,0 +1,99 @@
+﻿@using Gym.BLL.ModelVM.Plan
+@model AddPlanVM
+
+@{
+    ViewData["Title"] = "Add Plan";
+    Layout = "~/Views/Shared/_AdminDashboardCRUD.cshtml";
+}
+<style>
+    .custom-btn {
+        transition: background-color 0.3s ease;
+    }
+
+        .custom-btn:hover {
+            background-color: #970101 !important;
+            border-color: #970101 !important;
+        }
+</style>
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+} 
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Add Plan</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" asp-controller="AdminPlan" method="post" class="needs-validation">
+
+                    <div class="form-group mb-3">
+                        <label asp-for="TrainerId" class="form-label">Trainer</label>
+                        <select asp-for="TrainerId" class="form-control">
+                            <option value="">-- Select Trainer --</option>
+
+                            @foreach (var item in Model.Trainers)
+                            {
+                                    <option value="@item.TrainerId">@item.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="TrainerId" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="form-label">Plan Name</label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter Plan name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Optional details..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="StartDate" class="form-label">Start Time</label>
+                        <input asp-for="StartDate" type="datetime-local" class="form-control" step="60"
+                               value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="EndDate" class="form-label">End Time</label>
+                        <input asp-for="EndDate" type="datetime-local" class="form-control" step="60"
+                               value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Price" class="form-label">Price</label>
+                        <input asp-for="Price" class="form-control"/>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Capcity" class="form-label">Capactiy</label>
+                        <input asp-for="Capcity" class="form-control"/>
+                        <span asp-validation-for="Capcity" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Plan</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

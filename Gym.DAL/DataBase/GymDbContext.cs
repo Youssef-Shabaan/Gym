@@ -86,6 +86,26 @@ namespace Gym.DAL.DataBase
                 .HasForeignKey(p => p.SessionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Cascade delete for Sessions
+            modelBuilder.Entity<Plan>()
+                .HasMany(p => p.Sessions)
+                .WithOne(s => s.Plan)
+                .HasForeignKey(s => s.PlanId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Cascade delete for MemberPlans
+            modelBuilder.Entity<Plan>()
+                .HasMany(p => p.MemberPlans)
+                .WithOne(mp => mp.Plan)
+                .HasForeignKey(mp => mp.PlanId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //  Prevent deleting Trainer when deleting Plan
+            modelBuilder.Entity<Plan>()
+                .HasOne(p => p.Trainer)
+                .WithMany(t => t.Plans)
+                .HasForeignKey(p => p.TrainerId)
+                .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
         }
     }

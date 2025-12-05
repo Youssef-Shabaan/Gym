@@ -23,5 +23,8 @@ namespace Gym.DAL.Repo.Abstraction
         // ===== Subscription Management =====
         (bool, string) ActivateSubscription(int memberPlanId);
         (bool, string) CancelSubscription(int memberPlanId);
+
+        public (bool, string, List<MemberPlan>) GetMembersForPlan(int planid);
+
     }
 }

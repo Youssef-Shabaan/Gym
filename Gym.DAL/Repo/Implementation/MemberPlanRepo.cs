@@ -228,5 +228,25 @@ namespace Gym.DAL.Repo.Implementation
                 return (false, ex.Message);
             }
         }
+        public (bool, string, List<MemberPlan>) GetMembersForPlan(int planid)
+        {
+            try { 
+                var plan = _context.plans.FirstOrDefault(p => p.Id == planid);
+                if (plan == null)
+                {
+                    return (false, "Plan not found", null);
+                }
+                var memberPlans = _context.memberPlans
+                    .Include(mp => mp.Member).ThenInclude(m => m.User)
+                    .Where(mp => mp.PlanId == planid)
+                    .ToList();
+                
+                return (true, null, memberPlans);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
     }
 }

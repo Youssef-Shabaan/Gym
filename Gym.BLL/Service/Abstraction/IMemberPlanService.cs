@@ -24,5 +24,8 @@ namespace Gym.BLL.Service.Abstraction
         // ===== Subscription Management =====
         (bool, string) ActivateSubscription(int memberPlanId);
         (bool, string) CancelSubscription(int memberPlanId);
+
+         (bool, string, List<GetMembersForPlanVM>) GetMembersForPlan(int planid);
+
     }
 }
