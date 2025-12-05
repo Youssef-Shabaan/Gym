@@ -105,7 +105,7 @@ namespace Gym.DAL.Repo.Implementation
             try
             {
                 var OnGoingSessions = GymDb.sessions
-                    .Include(t => t._Trainer).ThenInclude(u => u.User)
+                    .Include(t => t._Trainer).ThenInclude(u => u.User).Where(s => s.PlanId == null)
                     .Where(a => DateTime.Now >= a.StartTime && DateTime.Now <= a.EndTime).ToList();
                 if (!OnGoingSessions.Any() || OnGoingSessions == null)
                 {
@@ -123,7 +123,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var PastSessions = GymDb.sessions
+                var PastSessions = GymDb.sessions.Where(s => s.PlanId == null)
                     .Include(t => t._Trainer).ThenInclude(u => u.User)
                     .Where(a => a.EndTime <  DateTime.Now).OrderByDescending(s => s.StartTime).Take(20).ToList();
                 if(!PastSessions.Any() || PastSessions == null)
@@ -161,7 +161,7 @@ namespace Gym.DAL.Repo.Implementation
         {
             try
             {
-                var UpcomingSessions = GymDb.sessions
+                var UpcomingSessions = GymDb.sessions.Where(s => s.PlanId == null)
                     .Include(t => t._Trainer).ThenInclude(u => u.User)
                     .Where(a => a.StartTime >= DateTime.Now).ToList();
                 if (!UpcomingSessions.Any() || UpcomingSessions == null)

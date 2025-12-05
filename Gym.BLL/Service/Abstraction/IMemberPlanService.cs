@@ -1,5 +1,6 @@
 ﻿
 using Gym.BLL.ModelVM.MemberPlan;
+using Gym.BLL.ModelVM.MemberSession;
 using Gym.DAL.Entities;
 using System.Dynamic;
 
@@ -9,7 +10,8 @@ namespace Gym.BLL.Service.Abstraction
     {
         (bool, string, IEnumerable<GetMemberPlanVM>) GetAll();
         (bool, GetMemberPlanVM?) GetById(int id);
-        (bool, string) Create(AddMemberPlanVM memberPlan);
+        (bool, string) Add(AddMemberPlanVM vm);
+        (bool, string) AddMemberToPlan(string userId, int planId);
         (bool, string) Update(UpdateMemberPlanVM memberPlan);
         (bool, string) Delete(int id);
 

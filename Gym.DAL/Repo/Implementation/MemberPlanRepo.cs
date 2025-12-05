@@ -248,5 +248,52 @@ namespace Gym.DAL.Repo.Implementation
                 return (false, ex.Message, null);
             }
         }
+
+        public Member GetMemberByUserId(string userid)
+        {
+            try
+            {
+                var member = _context.members
+                    .Include(u => u.User)
+                    .FirstOrDefault(m => m.User.Id == userid);
+                return member;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public Plan GetPlanById(int planId)
+        {
+            try
+            {
+                var plan = _context.plans
+                    .FirstOrDefault(s => s.Id == planId);
+                return plan;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public bool IsMemberBooked(int memberId, int planId)
+        {
+            try
+            {
+                var memberPlan = _context.memberPlans
+                    .FirstOrDefault(ms => ms.MemberId == memberId && ms.PlanId == planId);
+                if (memberPlan == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

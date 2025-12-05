@@ -2,9 +2,11 @@
 using AutoMapper;
 using AutoMapper.Execution;
 using Gym.BLL.ModelVM.MemberPlan;
+using Gym.BLL.ModelVM.MemberSession;
 using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Gym.DAL.Repo.Implementation;
 
 namespace Gym.BLL.Service.Implementation
 {
@@ -48,32 +50,62 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
-        public (bool, string) Create(AddMemberPlanVM memberPlan)
+        public (bool, string) Add(AddMemberPlanVM vm)
         {
             try
             {
-                var plan = _PlanRepo.PlanExists(memberPlan.PlanId);
-                if (!plan)
+                var entity = new MemberPlan
                 {
-                    return (false, "Plan not found");
-                }
-                var member = _memberRepo.MemberExist(memberPlan.MemberId);
-                if (!member)
-                {
-                    return (false, "Member not found");
-                }
+                    MemberId = vm.MemberId,
+                    PlanId = vm.PlanId,
+                    BookingDate = vm.BookingDate,
+                    Status = vm.Status,
+                    Price = vm.Price
+                };
 
-                var memberplan = _mapper.Map<MemberPlan>(memberPlan);
-
-                var result = _memberPlanRepo.Create(memberplan);
+                var result = _memberPlanRepo.Create(entity);
                 return result;
+
             }
             catch (Exception ex)
             {
                 return (false, ex.Message);
             }
         }
+        public (bool, string) AddMemberToPlan(string userId, int planId)
+        {
+            try
+            {
+                var member = _memberPlanRepo.GetMemberByUserId(userId);
+                if (member == null)
+                    return (false, "Member not found");
+                var plan = _memberPlanRepo.GetPlanById(planId);
+                if (plan == null)
+                    return (false, "Session not found");
+                if (plan.Booked >= plan.Capcity)
+                    return (false, "Session is full");
+                var alreadyBooked = _memberPlanRepo.IsMemberBooked(member.MemberId, planId);
+                if (alreadyBooked)
+                    return (false, "Already booked");
+                var addVM = new AddMemberPlanVM
+                {
+                    MemberId = member.MemberId,
+                    PlanId = planId,
+                    BookingDate = DateTime.Now,
+                    Status = "Booked",
+                    Price = plan.Price
+                };
+                var result = Add(addVM);
+                if (!result.Item1)
+                    return result;
+                return (true, "Booked successfully");
 
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
         public (bool, string) Delete(int id)
         {
             return _memberPlanRepo.Delete(id);
@@ -192,5 +224,7 @@ namespace Gym.BLL.Service.Implementation
                 return (false, ex.Message);
             }
         }
+
+
     }
 }

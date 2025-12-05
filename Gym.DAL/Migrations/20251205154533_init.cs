@@ -265,7 +265,7 @@ namespace Gym.DAL.Migrations
                         column: x => x.TrainerId,
                         principalTable: "trainers",
                         principalColumn: "TrainerId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -276,6 +276,9 @@ namespace Gym.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MemberId = table.Column<int>(type: "int", nullable: false),
                     PlanId = table.Column<int>(type: "int", nullable: false),
+                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     JoinDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
@@ -292,7 +295,8 @@ namespace Gym.DAL.Migrations
                         name: "FK_memberPlans_plans_PlanId",
                         column: x => x.PlanId,
                         principalTable: "plans",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -318,7 +322,8 @@ namespace Gym.DAL.Migrations
                         name: "FK_sessions_plans_PlanId",
                         column: x => x.PlanId,
                         principalTable: "plans",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sessions_trainers_TrainerId",
                         column: x => x.TrainerId,
@@ -387,7 +392,8 @@ namespace Gym.DAL.Migrations
                         name: "FK_payments_sessions_SessionId",
                         column: x => x.SessionId,
                         principalTable: "sessions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

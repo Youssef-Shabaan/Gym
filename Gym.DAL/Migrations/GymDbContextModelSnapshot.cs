@@ -157,6 +157,9 @@ namespace Gym.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("ExpireDate")
                         .HasColumnType("datetime2");
 
@@ -171,6 +174,13 @@ namespace Gym.DAL.Migrations
 
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -655,7 +665,7 @@ namespace Gym.DAL.Migrations
                     b.HasOne("Gym.DAL.Entities.Plan", "Plan")
                         .WithMany("MemberPlans")
                         .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Member");
@@ -702,7 +712,8 @@ namespace Gym.DAL.Migrations
 
                     b.HasOne("Gym.DAL.Entities.Session", "Session")
                         .WithMany()
-                        .HasForeignKey("SessionId");
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Member");
 
@@ -714,9 +725,9 @@ namespace Gym.DAL.Migrations
             modelBuilder.Entity("Gym.DAL.Entities.Plan", b =>
                 {
                     b.HasOne("Gym.DAL.Entities.Trainer", "Trainer")
-                        .WithMany()
+                        .WithMany("Plans")
                         .HasForeignKey("TrainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Trainer");
@@ -726,7 +737,8 @@ namespace Gym.DAL.Migrations
                 {
                     b.HasOne("Gym.DAL.Entities.Plan", "Plan")
                         .WithMany("Sessions")
-                        .HasForeignKey("PlanId");
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Gym.DAL.Entities.Trainer", "_Trainer")
                         .WithMany("Sessions")
@@ -824,6 +836,8 @@ namespace Gym.DAL.Migrations
 
             modelBuilder.Entity("Gym.DAL.Entities.Trainer", b =>
                 {
+                    b.Navigation("Plans");
+
                     b.Navigation("Sessions");
                 });
 #pragma warning restore 612, 618
