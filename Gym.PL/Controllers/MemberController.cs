@@ -9,6 +9,7 @@ using System.Security.Claims;
 
 namespace Gym.PL.Controllers
 {
+    [Authorize(Roles =("Member"))]
     public class MemberController : Controller
     {
         private readonly IMemberService _memberService;
@@ -25,7 +26,6 @@ namespace Gym.PL.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles =("Member"))]
         public IActionResult Edit(int id)
         {
             var member = _memberService.GetByID(id);

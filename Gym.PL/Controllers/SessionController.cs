@@ -2,6 +2,7 @@
 using Gym.BLL.ModelVM.Session;
 using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +34,7 @@ namespace Gym.PL.Controllers
             return View(sessions.Item3);
         }
         [HttpGet]
+        [Authorize]
         public IActionResult Details(int id)
         {
             var session = _sessionService.GetById(id).Item2;
@@ -44,26 +46,26 @@ namespace Gym.PL.Controllers
             ViewBag.TotalAmount = session.Price.ToString(System.Globalization.CultureInfo.InvariantCulture);
             return View(session);
         }
-        public IActionResult PastSession()
-        {
-            var sessions = _sessionService.GetPastSessions();
-            if (!sessions.Item1)
-            {
-                ViewBag.ErrorMessage = sessions.Item2;
-                return View(new List<GetSessionVM>());
-            }
-            return View(sessions.Item3);
-        }
-        public IActionResult OnGoingSession()
-        {
-            var sessions = _sessionService.GetOnGoingSessions();
-            if (!sessions.Item1)
-            {
-                ViewBag.ErrorMessage = sessions.Item2;
-                return View(new List<GetSessionVM>());
-            }
-            return View(sessions.Item3);
-        }
+        //public IActionResult PastSession()
+        //{
+        //    var sessions = _sessionService.GetPastSessions();
+        //    if (!sessions.Item1)
+        //    {
+        //        ViewBag.ErrorMessage = sessions.Item2;
+        //        return View(new List<GetSessionVM>());
+        //    }
+        //    return View(sessions.Item3);
+        //}
+        //public IActionResult OnGoingSession()
+        //{
+        //    var sessions = _sessionService.GetOnGoingSessions();
+        //    if (!sessions.Item1)
+        //    {
+        //        ViewBag.ErrorMessage = sessions.Item2;
+        //        return View(new List<GetSessionVM>());
+        //    }
+        //    return View(sessions.Item3);
+        //}
 
         [HttpGet]
         public IActionResult MySessions()

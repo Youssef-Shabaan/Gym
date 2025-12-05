@@ -23,5 +23,7 @@ namespace Gym.DAL.Repo.Abstraction
 		(bool, Trainer?) GetTrainerSessions(int trainerId);
 
         (bool, string?) RestoreTrainer(int id);
+
+        int TrainersCount();
     }
 }

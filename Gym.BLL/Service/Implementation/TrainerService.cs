@@ -168,6 +168,11 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
+        public int TrainersCount()
+        {
+            return trainerRepo.TrainersCount(); 
+        }
+
         public (bool, string) Update(int id, UpdateTrainerVM curr)
         {
             try

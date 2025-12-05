@@ -18,10 +18,10 @@ namespace Gym.DAL.Repo.Abstraction
         // Trainer-related
         (bool, IEnumerable<Session>?) GetSessionsByTrainerId(int trainerId);
 
-        (bool, IEnumerable<Session>?) GetUpcomingSessions();
-        (bool, IEnumerable<Session>?) GetOnGoingSessions();
-        (bool, IEnumerable<Session>?) GetPastSessions();
-        (bool, string, List<Session>) GetSessionforPlan(int planid);
+        (bool,IEnumerable<Session>?) GetUpcomingSessions();
+        (bool,IEnumerable<Session>?) GetOnGoingSessions();
+        (bool,IEnumerable<Session>?) GetPastSessions();
+        int SessionsCount();
 
     }
 }

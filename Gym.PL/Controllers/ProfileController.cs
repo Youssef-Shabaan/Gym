@@ -1,10 +1,12 @@
 ﻿using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gym.PL.Controllers
 {
+	[Authorize]
 	public class ProfileController : Controller
 	{
 		private readonly UserManager<User> _userManager;

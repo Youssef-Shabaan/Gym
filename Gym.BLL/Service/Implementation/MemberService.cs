@@ -217,5 +217,10 @@ namespace Gym.BLL.Service.Implementation
         {
             _memberRepo.DeletePhoto(id);
         }
+
+        public int MembersCount()
+        {
+            return _memberRepo.MembersCount();  
+        }
     }
 }

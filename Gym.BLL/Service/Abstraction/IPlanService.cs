@@ -22,5 +22,7 @@ namespace Gym.BLL.Service.Abstraction
         
         // ===== Analytics / Helper =====
         bool PlanExists(int planId);
+
+        int PlansCount();
     }
 }

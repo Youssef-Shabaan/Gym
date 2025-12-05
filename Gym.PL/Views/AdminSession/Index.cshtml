@@ -129,8 +129,8 @@
                                 <th style="width:5%; text-align:center">Id</th>
                                 <th style="width:20%; text-align:left">Name</th>
                                 <th style="width:15%; text-align:left">Trainer Name</th>
-                                <th style="width:10%; text-align:center">Start Time</th>
-                                <th style="width:10%; text-align:center">End Time</th>
+                                <th style="width:7%; text-align:center">Start Time</th>
+                                <th style="width:7%; text-align:center">End Time</th>
                                 <th style="width:10%; text-align:center">Status</th>
                                 <th style="width:5%; text-align:center">Price</th>
                                 <th style="width:5%; text-align:center">Capacity</th>
@@ -146,8 +146,8 @@
                                     <td style="text-align:center">@i</td>
                                     <td style="text-align:left">@session.Name</td>
                                     <td style="text-align:left">@session.TrainerName</td>
-                                    <td style="text-align:center">@session.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
-                                    <td style="text-align:center">@session.EndTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td style="text-align:center">@session.StartTime.ToString("yyyy-MM-dd  hh:mm tt")</td>
+                                    <td style="text-align:center">@session.EndTime.ToString("yyyy-MM-dd  hh:mm tt")</td>
                                     <td style="text-align:center">
                                         @if (session.Status == "Not Started")
                                         {

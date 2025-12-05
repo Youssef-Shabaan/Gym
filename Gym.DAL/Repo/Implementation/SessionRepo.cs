@@ -176,6 +176,11 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
+        public int SessionsCount()
+        {
+            return GymDb.sessions.Count();
+        }
+
         public (bool, string?) Update(Session session)
         {
             try

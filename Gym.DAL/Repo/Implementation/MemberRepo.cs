@@ -91,6 +91,11 @@ namespace Gym.DAL.Repo.Implementation
             return member != null;
         }
 
+        public int MembersCount()
+        {
+            return DB.members.Count();
+        }
+
         public bool Update(Member newMember, string phoneNumber)
         {
             var result = DB.members.Where(m => m.MemberId == newMember.MemberId).FirstOrDefault();

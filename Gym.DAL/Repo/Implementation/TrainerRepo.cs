@@ -164,5 +164,10 @@ namespace Gym.DAL.Repo.Implementation
         {
             return GymDb.trainers.Count(a => !a.IsDeleted);
         }
+
+        public int TrainersCount()
+        {
+            return GymDb.trainers.Count();
+        }
     }
 }
