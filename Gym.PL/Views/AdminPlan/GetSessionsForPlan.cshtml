@@ -1,0 +1,121 @@
+﻿@using Gym.BLL.ModelVM.Session
+@model List<GetSessionVM>
+<style>
+    .custom-btn {
+        transition: background-color 0.3s ease;
+    }
+
+        .custom-btn:hover {
+            background-color: #970101 !important;
+            border-color: #970101 !important;
+        }
+</style>
+@{
+    ViewData["Title"] = "Plan Sessions";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Plan Sessions</h6>
+                </div>
+                <div class="card-body">
+                @{
+                    int i = 1;
+                }
+                    <table id="myTable">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Id</th>
+                                <th style="text-align:left">Name</th>
+                                <th style="text-align:center">Start Time</th>
+                                <th style="text-align:center">End Time</th>
+                                <th style="text-align:center">Status</th>
+                                <th style="text-align:center">Operations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var session in Model)
+                        {
+                                    <tr>
+                                        <td style="text-align:center">@i</td>
+                                        <td style="text-align:left">@session.Name</td>
+                                        <td style="text-align:center">@session.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td style="text-align:center">@session.EndTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td style="text-align:center">
+                                    @if (session.Status == "Not Started")
+                                    {
+                                                    <span class="badge badge-primary" style="font-size:14px;color:white">@session.Status</span>
+                                    }
+                                    else if (session.Status == "Ongoing")
+                                    {
+                                                    <span class="badge badge-success" style="font-size:14px;color:white">@session.Status</span>
+                                    }
+                                    else if (session.Status == "Ended")
+                                    {
+                                                    <span class="badge badge-danger" style="font-size:14px;color:white">@session.Status</span>
+                                    }
+                                        </td>
+                                        <td style="text-align:center">
+                                                <a asp-controller="AdminPlan" asp-action="EditSessioninPlan" asp-route-id="@session.Id" style="color:#858796; margin:0 10px"> <i class="fas fa-edit fa-sm"></i></a>
+                                            <a href="#" class="delete-btn" data-id="@session.Id" data-toggle="modal" data-target="#deleteConfirmModal" style="color:#858796; margin:0 10px">
+                                                <i class="fas fa-trash fa-sm"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                            i++;
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<!-- Image Preview Modal -->
+@* <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center p-3">
+            <img id="previewImage" src="" alt="Member Image" class="img-fluid rounded" />
+        </div>
+    </div>
+</div> *@
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Are you sure you want to delete this session?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" class="btn btn-danger" asp-controller="AdminPlan" asp-action="DeleteSession">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const Id = this.getAttribute('data-id');
+            const deleteBtn = document.getElementById('confirmDeleteBtn');
+            deleteBtn.setAttribute('href', `/AdminPlan/DeleteSession/${Id}`);
+        });
+    });
+</script>
+@* <script>
+    function showImageModal(imgSrc) {
+        document.getElementById('previewImage').src = imgSrc;
+        $('#imageModal').modal('show');
+    }
+</script> *@

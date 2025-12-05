@@ -95,7 +95,7 @@ namespace Gym.DAL.Repo.Implementation
                 {
                     return (false, null);
                 }
-                return (true, null);
+                return (true, plan);
             }
             catch (Exception ex)
             {

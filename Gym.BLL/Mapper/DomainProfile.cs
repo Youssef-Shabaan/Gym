@@ -99,7 +99,17 @@ namespace Gym.BLL.Mapper
                 .ReverseMap();
 
 
-
+            CreateMap<MemberPlan, GetMembersForPlanVM>()
+               .ForMember(dest => dest.MemberPlanId, opt => opt.MapFrom(src => src.Id))
+               .ForMember(dest => dest.PlanId, opt => opt.MapFrom(src => src.PlanId))
+               .ForMember(dest => dest.MemberPhoto, opt => opt.MapFrom(src => src.Member.Image))
+               .ForMember(dest => dest.MemberUserName, opt => opt.MapFrom(src => src.Member.User.UserName))
+               .ForMember(dest => dest.MemberEmail, opt => opt.MapFrom(src => src.Member.User.Email))
+               .ForMember(dest => dest.MemberPhone, opt => opt.MapFrom(src => src.Member.User.PhoneNumber))
+               .ForMember(dest => dest.MemberAddress, opt => opt.MapFrom(src => src.Member.Address))
+               .ForMember(dest => dest.MemberAge, opt => opt.MapFrom(src => src.Member.Age))
+               .ForMember(dest => dest.MemberGender, opt => opt.MapFrom(src => src.Member.Gender))
+               .ReverseMap();
 
             CreateMap<AddMemberSessionVM, MemberSession>().ReverseMap();
 
@@ -124,7 +134,9 @@ namespace Gym.BLL.Mapper
 
             CreateMap<Plan, GetPlanVM>()
                 .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.Trainer.Name))
-                .ReverseMap();
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src =>
+                DateTime.Now < src.StartDate ? "Not Started" : DateTime.Now >= src.StartDate && DateTime.Now <= src.EndDate ? "Ongoing" : "Ended"))
+              .ReverseMap();
 
             CreateMap<UpdatePlanVM, Plan>().ReverseMap();
 

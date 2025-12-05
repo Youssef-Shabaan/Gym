@@ -17,5 +17,6 @@ namespace Gym.BLL.Service.Abstraction
         (bool, string, IEnumerable<GetSessionVM>?) GetUpcomingSessions();
         (bool, string, IEnumerable<GetSessionVM>?) GetOnGoingSessions();
         (bool, string, IEnumerable<GetSessionVM>?) GetPastSessions();
+        (bool, string, IEnumerable<GetSessionVM>?) GetSessionforPlan(int id);
     }
 }

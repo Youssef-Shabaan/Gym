@@ -55,6 +55,7 @@ namespace Gym.PL
             builder.Services.AddScoped<IMemberSessionService, MemberSessionService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<IPlanService, PlanService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IMemberPlanService, MemberPlanService>();
