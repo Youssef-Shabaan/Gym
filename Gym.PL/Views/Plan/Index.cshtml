@@ -6,7 +6,6 @@
 }
 
 <style>
-    /* نفس CSS الموجود للسيشنز بالضبط */
     .blur-background {
         filter: blur(8px);
         pointer-events: none;
@@ -257,8 +256,12 @@
                                     }
                                     else
                                     {
-                                                <span class="info-value status-available">@availableSeats Seats Left</span>
+                                                <span class="info-value status-available">@(plan.Capcity-plan.Booked) Seats Left</span>
                                     }
+                                    </div>
+
+                                    <div class="text-center mt-3" style="font-size:12px; color:#666;">
+                                        Plan Duration: @((plan.EndDate - plan.StartDate).Days) days
                                     </div>
 
                                     <div style="margin-top: 15px;"></div>

@@ -1,0 +1,375 @@
+﻿@using Gym.BLL.ModelVM.MemberPlan
+@model IEnumerable<GetMemberPlanVM>
+
+@{
+    ViewData["Title"] = "My Plans";
+    var orderedModel = Model.OrderBy(p => p.JoinDate).ToList();
+}
+
+<style>
+
+
+    .blur-background {
+        filter: blur(8px);
+        pointer-events: none;
+        user-select: none;
+        transition: filter 0.3s ease;
+    }
+
+    .desc-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .desc-content {
+        background: linear-gradient(145deg, #1a1a1a, #000);
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 70vh;
+        overflow-y: auto;
+        text-align: center;
+        position: relative;
+        border: 1px solid #333;
+        box-shadow: 0 10px 30px rgba(255, 59, 59, 0.2);
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        cursor: pointer;
+        font-size: 24px;
+        color: #ff3b3b;
+        transition: 0.2s;
+    }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+            color: white;
+        }
+
+    .filter-container {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 10px;
+        border-radius: 50px;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .filter-btn {
+        background: transparent;
+        color: #ccc;
+        border: 2px solid transparent;
+        border-radius: 30px;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin: 0 5px;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+        .filter-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+    .active-filter {
+        background-color: #ff3b3b !important;
+        color: white !important;
+        box-shadow: 0 0 15px rgba(255, 59, 59, 0.6);
+        transform: scale(1.05);
+        border-color: #ff3b3b;
+    }
+
+    .session-card {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.4s ease-out;
+    }
+
+        .session-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    .card {
+        background: #1a1a1a;
+        color: white;
+        border-radius: 16px;
+        border: none;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        position: relative;
+    }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ff3b3b;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        opacity: 0.9;
+        transition: opacity 0.3s;
+    }
+
+    .card:hover .card-img-top {
+        opacity: 1;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .session-title {
+        color: white;
+        font-weight: 800;
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 5px;
+    }
+
+    .info-label {
+        color: #ff3b3b;
+        font-weight: bold;
+    }
+
+    .info-value {
+        color: #ddd;
+        text-align: right;
+    }
+
+    .btn-desc {
+        background: transparent;
+        border: 2px solid #ff3b3b;
+        color: #ff3b3b;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.3s;
+        text-transform: uppercase;
+        font-size: 13px;
+    }
+
+        .btn-desc:hover {
+            background: #ff3b3b;
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 59, 59, 0.4);
+        }
+
+    #noSessionsMsg {
+        display: none;
+        color: #888;
+        font-size: 20px;
+        text-align: center;
+        margin-top: 40px;
+        font-weight: 300;
+    }
+</style>
+
+<main id="pageContent">
+
+    <div class="slider-area2">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 pt-70">
+                            <h2>My Plans</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="contact-section">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <div class="filter-container">
+                    <button class="filter-btn" onclick="filterSessions('expired', this)">Expired</button>
+                    <button class="filter-btn active-filter" onclick="filterSessions('active', this)" id="defaultUpcomingBtn">Active Plans</button>
+                </div>
+            </div>
+
+            <div id="noSessionsMsg">
+                <i class="fa fa-calendar-times-o" aria-hidden="true" style="font-size: 40px; margin-bottom: 10px; display:block;"></i>
+                No Plans Found in this category.
+            </div>
+
+            <div class="row">
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div class="col-12 text-center">
+                        <p style="color:#ff3b3b; font-size:22px; font-weight:bold;">
+                            @ViewBag.ErrorMessage
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    foreach (var item in orderedModel)
+                    {
+                        <div class="col-lg-4 col-md-6 mb-4 session-card"
+                             data-start="@item.JoinDate" data-end="@item.EndTime">
+                            <div class="card">
+                                @{
+                                    var random = new Random();
+                                    int number = random.Next(1, 7);
+                                    string imagePath = $"~/assets/img/gallery/gallery{number}.png";
+                                }
+
+                                <img src="@Url.Content(imagePath)" class="card-img-top" alt="Plan Image" /> <div class="card-body">
+                                    <h4 class="session-title">
+                                        @item.PlanName
+                                    </h4>
+
+                                    <div class="info-row">
+                                        <span class="info-label">Trainer</span>
+                                        <span class="info-value">@item.TrainerName</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">Phone</span>
+                                        <span class="info-value">@item.TrainerPhone</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">Start Date</span> <span class="info-value">@item.StartTime.ToString("MMM dd, yyyy")</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">End Date</span> <span class="info-value">
+                                            @item.EndTime.ToString("MMM dd, yyyy")
+                                        </span>
+                                    </div>
+
+                                    <div class="text-center mt-3" style="font-size:12px; color:#666;">
+                                        Plan Duration: @((item.EndTime - item.StartTime).Days) days
+                                    </div>
+
+                                    <a asp-controller="Plan" asp-action="GetPlanSessions" asp-route-planId="@item.PlanId"
+                                       class="btn btn-desc w-100 mt-3" style="margin-bottom: 10px;">
+                                        View Sessions
+                                    </a>
+
+                                    <a href="javascript:void(0)"
+                                       onclick="openDescription(`@Html.Raw((item.Description ?? "").Replace("`", ""))`)" class="btn btn-desc w-100">
+                                        View Details
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<div id="descModal" class="desc-modal">
+    <div class="desc-content">
+        <span class="close-btn" onclick="closeDescription()">&times;</span>
+        <h3 style="color:#ff3b3b; margin-bottom:20px;">Plan Details</h3> <p id="descText" style="font-size: 18px; line-height: 1.6;"></p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function openDescription(text) {
+            const modal = document.getElementById('descModal');
+            document.getElementById('descText').innerText = text;
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; }, 10);
+            document.getElementById('pageContent').classList.add('blur-background');
+        }
+
+        function closeDescription() {
+            const modal = document.getElementById('descModal');
+            modal.style.opacity = '0';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            document.getElementById('pageContent').classList.remove('blur-background');
+        }
+
+        function filterSessions(type, button) {
+            const now = new Date();
+            const cards = document.querySelectorAll(".session-card");
+            const msg = document.getElementById("noSessionsMsg");
+            let visibleCount = 0;
+
+            document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active-filter"));
+            button.classList.add("active-filter");
+
+            cards.forEach(card => {
+                let startAttr = card.getAttribute("data-start");
+                let endAttr = card.getAttribute("data-end");
+
+                let start = new Date(startAttr);
+                let end = new Date(endAttr);
+                let show = false;
+
+                if (type === "expired" && end < now) show = true;
+                else if (type === "active" && end >= now) show = true;
+
+                if (show) {
+                    visibleCount++;
+                    card.style.display = "block";
+                    setTimeout(() => card.classList.add("show"), 50);
+                } else {
+                    card.classList.remove("show");
+                    setTimeout(() => card.style.display = "none", 400);
+                }
+            });
+
+            msg.style.display = visibleCount === 0 ? "block" : "none";
+        }
+
+        window.onload = function () {
+            const btn = document.getElementById("defaultUpcomingBtn");
+            if(btn) filterSessions('active', btn);
+        };
+    </script>
+}

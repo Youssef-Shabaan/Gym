@@ -147,10 +147,13 @@ namespace Gym.BLL.Mapper
                 .ReverseMap();
 
             CreateMap<MemberPlan, GetMemberPlanVM>()
-                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
-                .ForMember(dest => dest.MemberPhone, opt => opt.MapFrom(src => src.Member.User.PhoneNumber))
-                .ForMember(dest => dest.MemberImage, opt => opt.MapFrom(src => src.Member.Image))
+                .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.Plan.Trainer.Name))
+                .ForMember(dest => dest.TrainerPhone, opt => opt.MapFrom(src => src.Plan.Trainer.User.PhoneNumber))
+                .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.Plan.StartDate))
+                .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.Plan.EndDate))
                 .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.Plan.Name))
+                .ForMember(dest => dest.PlanId, opt => opt.MapFrom(src => src.Plan.Id))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Plan.Description))
                 .ReverseMap();
 
         }

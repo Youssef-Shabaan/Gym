@@ -109,7 +109,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var plan = _context.plans.Include(p => p.Sessions).FirstOrDefault(p => p.Id == planId);
                 if (plan == null)
-                    return (false, "Plan not found.", null);
+                    return (false, "Plan not found", null);
 
                 var sessions = plan.Sessions.ToList();
                 return (true, null, sessions);

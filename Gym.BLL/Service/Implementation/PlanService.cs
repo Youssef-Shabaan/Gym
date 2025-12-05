@@ -106,7 +106,7 @@ namespace Gym.BLL.Service.Implementation
                 var sessions = planRepo.GetPlanSessions(planId);
                 if(!sessions.Item1)
                 {
-                    return (true, sessions.Item2, null);
+                    return (true, sessions.Item2, new List<GetSessionVM>());
                 }
                 var sessionsVM = mapper.Map<IEnumerable<GetSessionVM>>(sessions.Item3);
                 return(true, null,  sessionsVM);

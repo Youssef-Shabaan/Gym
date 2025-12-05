@@ -56,5 +56,10 @@ namespace Gym.DAL.Entities
             Booked += 1;
             return true;
         }
+        public void Cancel()
+        {
+            if(Booked > 0)
+                Booked--;
+        }
     }
 }

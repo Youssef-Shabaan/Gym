@@ -14,7 +14,7 @@ namespace Gym.DAL.Repo.Abstraction
 
         // ===== Member Specific =====
         (bool, string ,IEnumerable<MemberPlan>?) GetMemberPlans(int memberId);
-        (bool, string , IEnumerable<MemberPlan>?) GetActivePlanForMember(int memberId);
+        (bool, string , IEnumerable<MemberPlan>?) GetPlanForMember(int memberId);
 
         // ===== Validation =====
         bool IsMemberSubscribedToPlan(int memberId, int planId);

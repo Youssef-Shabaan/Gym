@@ -17,7 +17,7 @@ namespace Gym.BLL.Service.Abstraction
 
         // ===== Member Specific =====
         (bool, string, IEnumerable<GetMemberPlanVM>?) GetMemberPlans(int memberId);
-        (bool, string, IEnumerable<GetMemberPlanVM>?) GetActivePlanForMember(int memberId);
+        (bool, string, IEnumerable<GetMemberPlanVM>?) GetPlanForMember(int memberId);
 
         // ===== Validation =====
         bool IsMemberSubscribedToPlan(int memberId, int planId);

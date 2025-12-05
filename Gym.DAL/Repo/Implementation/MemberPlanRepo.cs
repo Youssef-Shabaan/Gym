@@ -29,6 +29,13 @@ namespace Gym.DAL.Repo.Implementation
                     return (false, "MemeberPlan already active.");
                 }
                 memberPlan.Active();
+                var plan = _context.plans.FirstOrDefault(m => m.Id == memberPlanId);
+                var ok = plan.Book();
+                if (!ok)
+                {
+                    memberPlan.DeActive();
+                    return (false, "There are no available seats");
+                }
                 _context.SaveChanges();
                 return (true, null);
             }
@@ -71,6 +78,12 @@ namespace Gym.DAL.Repo.Implementation
                 {
                     return(false, "Member is already subscribed to this plan.");
                 }
+                var plan = _context.plans.FirstOrDefault(m => m.Id == memberPlan.PlanId);
+                var ok = plan.Book();
+                if (!ok)
+                {
+                    return (false, "There are no available seats");
+                }
                 _context.memberPlans.Add(memberPlan);
                 _context.SaveChanges();
                 return (true, "Member added to plan successfully.");
@@ -90,6 +103,8 @@ namespace Gym.DAL.Repo.Implementation
                 {
                     return(false, "MemberPlan not found.");
                 }
+                var plan = _context.plans.FirstOrDefault(m => m.Id == memberPlan.PlanId);
+                plan.Cancel();
                 _context.Set<MemberPlan>().Remove(memberPlan);
                 _context.SaveChanges();
                 return (true, null);
@@ -100,14 +115,14 @@ namespace Gym.DAL.Repo.Implementation
             }
         }
 
-        public (bool, string, IEnumerable<MemberPlan>?) GetActivePlanForMember(int memberId)
+        public (bool, string, IEnumerable<MemberPlan>?) GetPlanForMember(int memberId)
         {
             try
             {
                 var memberPlan = _context.memberPlans
                     .Include(m => m.Member).ThenInclude(u => u.User)
-                    .Include(p => p.Plan)
-                    .Where(mp => mp.MemberId == memberId && mp.IsActive).ToList();
+                    .Include(p => p.Plan).ThenInclude(t => t.Trainer).ThenInclude(u => u.User)
+                    .Where(mp => mp.MemberId == memberId).ToList();
                 if(!memberPlan.Any())
                 {
                     return (false, "There are no active plans", null);
