@@ -17,6 +17,7 @@ namespace Gym.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // load config files and environment variables
             builder.Configuration
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -143,6 +144,9 @@ namespace Gym.PL
             app.UseRouting();
 
             app.UseAuthentication();
+
+            app.UseMiddleware<RoleRedirectMiddleware>();
+
             app.UseAuthorization();
 
             app.MapControllerRoute(

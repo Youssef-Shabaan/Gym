@@ -5,6 +5,7 @@ using Gym.BLL.ModelVM.Session;
 using Gym.BLL.Service.Abstraction;
 using Gym.DAL.Entities;
 using Gym.DAL.Repo.Abstraction;
+using Gym.DAL.Repo.Implementation;
 
 namespace Gym.BLL.Service.Implementation
 {
@@ -24,7 +25,7 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var result = planRepo.AddSessionToPlan(planId, sessionId);
-                if(!result)
+                if (!result)
                 {
                     return (false, "Failed to add session to the plan");
                 }
@@ -34,6 +35,11 @@ namespace Gym.BLL.Service.Implementation
             {
                 return (false, ex.Message);
             }
+        }
+
+        public int CountPlanForTrainer(int trainerid)
+        {
+            return planRepo.CountPlanForTrainer(trainerid);
         }
 
         public (bool, string) CreatePlan(AddPlanVM planVM)
@@ -46,7 +52,7 @@ namespace Gym.BLL.Service.Implementation
             }
             catch (Exception ex)
             {
-                return (false, ex.Message); 
+                return (false, ex.Message);
             }
         }
 
@@ -67,17 +73,17 @@ namespace Gym.BLL.Service.Implementation
         {
             try
             {
-                var allPlans = planRepo.GetAllPlans();  
-                if(!allPlans.Item1)
+                var allPlans = planRepo.GetAllPlans();
+                if (!allPlans.Item1)
                 {
-                    return(false,allPlans.Item2, new List<GetPlanVM>());
+                    return (false, allPlans.Item2, new List<GetPlanVM>());
                 }
-                var allPlanVM = mapper.Map<IEnumerable<GetPlanVM>>(allPlans.Item3);   
-                return(true, null, allPlanVM);  
+                var allPlanVM = mapper.Map<IEnumerable<GetPlanVM>>(allPlans.Item3);
+                return (true, null, allPlanVM);
             }
             catch (Exception ex)
             {
-                return (false, ex.Message, null);   
+                return (false, ex.Message, null);
             }
         }
 
@@ -85,15 +91,33 @@ namespace Gym.BLL.Service.Implementation
         {
             try
             {
-                var plan = planRepo.GetPlanById(id);    
-                if(!plan.Item1)
+                var plan = planRepo.GetPlanById(id);
+                if (!plan.Item1)
                 {
-                    return (false, null);   
+                    return (false, null);
                 }
                 var planVM = mapper.Map<GetPlanVM>(plan.Item2);
-                return(true, planVM);
+                return (true, planVM);
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                return (false, null);
+            }
+        }
+
+        public (bool, List<GetPlanVM>?) GetPlanByTrainerId(int id)
+        {
+            try
+            {
+                var TrainerPlans = planRepo.GetPlansByTrainerId(id);
+                if (!TrainerPlans.Item1)
+                {
+                    return (false,  new List<GetPlanVM>());
+                }
+                var plans = mapper.Map<IEnumerable<GetPlanVM>>(TrainerPlans.Item2).ToList();
+                return (true, plans);
+            }
+            catch (Exception ex)
             {
                 return (false, null);
             }
@@ -104,16 +128,16 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var sessions = planRepo.GetPlanSessions(planId);
-                if(!sessions.Item1)
+                if (!sessions.Item1)
                 {
                     return (true, sessions.Item2, null);
                 }
                 var sessionsVM = mapper.Map<IEnumerable<GetSessionVM>>(sessions.Item3);
-                return(true, null,  sessionsVM);
+                return (true, null, sessionsVM);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return(false,  ex.Message, null);   
+                return (false, ex.Message, null);
             }
         }
 
@@ -121,7 +145,7 @@ namespace Gym.BLL.Service.Implementation
         {
             try
             {
-                return planRepo.PlanExists(planId); 
+                return planRepo.PlanExists(planId);
             }
             catch (Exception ex)
             {
@@ -154,12 +178,12 @@ namespace Gym.BLL.Service.Implementation
             try
             {
                 var plan = mapper.Map<Plan>(planVM);
-                var result = planRepo.UpdatePlan(plan); 
+                var result = planRepo.UpdatePlan(plan);
                 return result;
             }
             catch (Exception ex)
             {
-                return (false, ex.Message); 
+                return (false, ex.Message);
             }
         }
     }

@@ -17,6 +17,7 @@ namespace Gym.BLL.ModelVM.Session
         public decimal Price { get; set; }
         public int Capactiy { get; set; }
         public int? PlanId { get; set; }
+        public int TrainerId { get; set; }
         public int Booked { get; set; }
     }
 }

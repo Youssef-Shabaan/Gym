@@ -1,0 +1,223 @@
+﻿@using Gym.BLL.ModelVM.Plan
+@model List<GetPlanVM>
+<style>
+    .custom-btn, .btn-primary {
+        background-color: #ff3b3b !important;
+        border-color: #ff3b3b !important;
+        color: white !important; 
+        transition: all 0.3s ease;
+    }
+
+        .custom-btn:hover, .btn-primary:hover {
+            background-color: #e60000 !important;
+            border-color: #e60000 !important;
+            box-shadow: 0 4px 10px rgba(255, 59, 59, 0.3);
+        }
+
+        .custom-btn i {
+            color: white !important; 
+        }
+
+    .card-header .text-primary {
+        color: #ff3b3b !important;
+        font-weight: 700;
+    }
+
+    #myTable {
+        width: 100% !important;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+        #myTable thead th {
+            background-color: #f3f3f3;
+            color: #6c757d;
+            font-weight: bold;
+            padding: 12px 8px;
+            border-bottom: 2px solid #ff3b3b;
+            white-space: nowrap; 
+        }
+
+        #myTable tbody tr {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+            #myTable tbody tr:hover {
+                background-color: #f7f7f7;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+
+        #myTable tbody td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            border: none;
+            word-break: break-word;
+        }
+
+    .table-actions a {
+        color: #6c757d !important; 
+        margin: 0 6px;
+        transition: color 0.2s, transform 0.2s;
+    }
+
+        .table-actions a:hover {
+            color: #ff3b3b !important; 
+            transform: scale(1.1);
+        }
+
+    a[asp-action="AddSessiontoPlan"] i {
+        color: #28a745 !important; 
+    }
+
+    a[asp-action="AddSessiontoPlan"]:hover i {
+        color: #1e7e34 !important;
+    }
+
+    .view-link {
+        color: #007bff !important; 
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    .badge {
+        font-size: 12px !important;
+        padding: 5px 8px;
+        font-weight: 600;
+        color: white !important;
+    }
+
+    .badge-success {
+        background-color: #28a745 !important; 
+    }
+
+    .badge-warning {
+        background-color: #ffc107 !important; 
+        color: #343a40 !important; 
+    }
+
+    .badge-danger {
+        background-color: #dc3545 !important; 
+    }
+</style>
+@{
+    ViewData["Title"] = "Plans";
+    Layout = "~/Views/Shared/_TrainerDashboard.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Plans</h1>
+    <a asp-controller="TrainerPlan" asp-action="Create" class="custom-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-plus fa-sm me-1"></i>
+        Add Plan
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">My Plans</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    @{
+                        int i = 1;
+                    }
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th style="width:3%; text-align:center">Id</th>
+                                <th style="width:15%; text-align:left">Name</th>
+                                <th style="width:10%; text-align:center">Start Time</th>
+                                <th style="width:10%; text-align:center">End Time</th>
+                                <th style="width:8%; text-align:center">Status</th>
+                                <th style="width:7%; text-align:center">Price</th>
+                                <th style="width:5%; text-align:center">Capacity</th>
+                                <th style="width:5%; text-align:center">Booked</th>
+                                <th style="width:7%; text-align:center">Members</th>
+                                <th style="width:7%; text-align:center">Sessions</th>
+                                <th style="width:8%; text-align:center">Operations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var plan in Model)
+                            {
+                                    <tr>
+                                        <td style="text-align:center">@i</td>
+                                        <td style="text-align:left">@plan.Name</td>
+                                        <td style="text-align:center">@plan.StartDate.ToString("yyyy-MM-dd")</td>
+                                        <td style="text-align:center">@plan.EndDate.ToString("yyyy-MM-dd")</td>
+                                        <td style="text-align:center">
+                                        @if (plan.Status == "Not Started")
+                                        {
+                                                    <span class="badge badge-success">@plan.Status</span> 
+                                        }
+                                        else if (plan.Status == "Ongoing")
+                                        {
+                                                    <span class="badge badge-warning">@plan.Status</span>
+                                        }
+                                        else if (plan.Status == "Ended")
+                                        {
+                                                    <span class="badge badge-danger">@plan.Status</span> 
+                                        }
+                                        </td>
+                                        <td style="text-align:center">@plan.Price USD</td>
+                                        <td style="text-align:center">@plan.Capcity</td>
+                                        <td style="text-align:center">@plan.Booked</td>
+                                        <td style="text-align:center">
+                                            <a asp-controller="TrainerPlan" asp-action="GetMembersForPlan" asp-route-id="@plan.Id" class="view-link">View (@plan.Booked)</a>
+                                        </td>
+                                        <td style="text-align:center">
+                                                <a asp-controller="TrainerPlan" asp-action="GetSessionsForMyPlan" asp-route-id="@plan.Id" class="view-link">View</a>
+                                        </td>
+                                        <td style="text-align:center" class="table-actions">
+                                                <a asp-controller="TrainerPlan" asp-action="AddSessiontoPlan" asp-route-id="@plan.Id" title="Add Session">
+                                                <i class="fas fa-plus-circle fa-lg"></i>
+                                            </a>
+                                                <a asp-controller="TrainerPlan" asp-action="Edit" asp-route-id="@plan.Id" title="Edit Plan">
+                                                <i class="fas fa-edit fa-lg"></i>
+                                            </a>
+                                            <a href="#" class="delete-btn" data-id="@plan.Id" data-toggle="modal" data-target="#deleteConfirmModal" title="Delete Plan">
+                                                <i class="fas fa-trash-alt fa-lg"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel"><i class="fas fa-exclamation-triangle"></i> Delete Confirmation</h5>
+                <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Are you sure you want to delete this plan? This action cannot be undone.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" class="custom-btn btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            const deleteBtn = document.getElementById('confirmDeleteBtn');
+            deleteBtn.setAttribute('href', `@Url.Action("Delete", "TrainerPlan", new { id = "__ID__" })`.replace('__ID__', id));
+        });
+    });
+</script>

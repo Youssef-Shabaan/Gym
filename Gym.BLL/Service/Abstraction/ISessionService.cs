@@ -19,5 +19,7 @@ namespace Gym.BLL.Service.Abstraction
         (bool, string, IEnumerable<GetSessionVM>?) GetPastSessions();
         int SessionsCount();
         (bool, string, IEnumerable<GetSessionVM>?) GetSessionforPlan(int id);
+        int CountSessionForTrainer(int trainerid);
+
     }
 }

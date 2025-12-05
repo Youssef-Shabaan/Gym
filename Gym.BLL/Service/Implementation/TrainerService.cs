@@ -47,6 +47,8 @@ namespace Gym.BLL.Service.Implementation
                     return (false, errors);
                 }
 
+                await userManager.AddToRoleAsync(user, "Trainer");
+
                 // Create Trainer
                 string imagepath = null;
                 if (newtrainer.Image != null)

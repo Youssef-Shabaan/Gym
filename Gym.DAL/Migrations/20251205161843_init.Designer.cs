@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20251205154533_init")]
+    [Migration("20251205161843_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -293,7 +293,6 @@ namespace Gym.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")

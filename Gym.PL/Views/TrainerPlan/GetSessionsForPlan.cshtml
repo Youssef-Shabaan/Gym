@@ -1,0 +1,148 @@
+﻿@using Gym.BLL.ModelVM.Session
+@model List<GetSessionVM>
+<style>
+    .custom-btn, .btn-primary {
+        background-color: #ff3b3b !important;
+        border-color: #ff3b3b !important;
+        color: white !important; 
+        transition: all 0.3s ease;
+    }
+
+        .custom-btn:hover, .btn-primary:hover {
+            background-color: #e60000 !important;
+            border-color: #e60000 !important;
+            box-shadow: 0 4px 10px rgba(255, 59, 59, 0.3);
+        }
+
+    .card-header .text-primary {
+        color: #ff3b3b !important;
+        font-weight: 700;
+    }
+
+    #myTable {
+        width: 100% !important;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+        #myTable thead th {
+            background-color: #f3f3f3;
+            color: #6c757d;
+            font-weight: bold;
+            padding: 12px 8px;
+            border-bottom: 2px solid #ff3b3b;
+            white-space: nowrap;
+        }
+
+        #myTable tbody tr {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+            #myTable tbody tr:hover {
+                background-color: #f7f7f7;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+
+        #myTable tbody td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            border: none;
+            word-break: break-word;
+        }
+
+    .table-actions a {
+        color: #6c757d !important; 
+        margin: 0 6px;
+        transition: color 0.2s, transform 0.2s;
+    }
+
+        .table-actions a:hover {
+            color: #ff3b3b !important; 
+            transform: scale(1.1);
+        }
+
+    .badge {
+        font-size: 12px !important;
+        padding: 5px 8px;
+        font-weight: 600;
+        color: white !important;
+    }
+
+    .badge-success {
+        background-color: #28a745 !important; 
+    }
+
+    .badge-warning {
+        background-color: #ffc107 !important; 
+        color: #343a40 !important; 
+    }
+
+    .badge-danger {
+        background-color: #dc3545 !important; 
+    }
+</style>
+@{
+    ViewData["Title"] = "Plan Sessions";
+    Layout = "~/Views/Shared/_TrainerDashboard.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Plan Sessions</h1>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Sessions for this Plan</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    @{
+                        int i = 1;
+                    }
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th style="width:10%; text-align:center">Id</th>
+                                <th style="width:30%; text-align:left">Name</th>
+                                <th style="width:20%; text-align:center">Start Time</th>
+                                <th style="width:20%; text-align:center">End Time</th>
+                                <th style="width:10%; text-align:center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var session in Model)
+                            {
+                                    <tr>
+                                        <td style="text-align:center">@i</td>
+                                        <td style="text-align:left">@session.Name</td>
+                                        <td style="text-align:center">@session.StartTime.ToString("yyyy-MM-dd hh:mm tt")</td>
+                                        <td style="text-align:center">@session.EndTime.ToString("yyyy-MM-dd hh:mm tt")</td>
+                                        <td style="text-align:center">
+                                        @if (session.Status == "Not Started")
+                                        {
+                                                    <span class="badge badge-success">@session.Status</span> 
+                                        }
+                                        else if (session.Status == "Ongoing")
+                                        {
+                                                    <span class="badge badge-warning">@session.Status</span> 
+                                        }
+                                        else if (session.Status == "Ended")
+                                        {
+                                                    <span class="badge badge-danger">@session.Status</span> 
+                                        }
+                                        </td>
+                                        
+                                    </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

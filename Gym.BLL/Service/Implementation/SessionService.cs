@@ -35,6 +35,10 @@ namespace Gym.BLL.Service.Implementation
             }
         }
 
+        public int CountSessionForTrainer(int trainerid)
+        {
+            return sessionRepo.CountSessionForTrainer(trainerid);        }
+
         public (bool, string?) Delete(int id)
         {
             try
@@ -141,7 +145,7 @@ namespace Gym.BLL.Service.Implementation
                 var TrainerSessions = sessionRepo.GetSessionsByTrainerId(trainerId);
                 if (!TrainerSessions.Item1)
                 {
-                    return (false, "There are no sessions", null);
+                    return (false, "There are no sessions", new List<GetSessionVM>());
                 }
                 var sessions = mapper.Map<IEnumerable<GetSessionVM>>(TrainerSessions.Item2);
                 return (true, null, sessions);

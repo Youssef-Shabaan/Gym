@@ -10,6 +10,7 @@ namespace Gym.BLL.Service.Abstraction
         // ===== Plans CRUD =====
         (bool,string, IEnumerable<GetPlanVM>) GetAllPlans();
         (bool,GetPlanVM?) GetPlanById(int id);
+        (bool, List<GetPlanVM>?) GetPlanByTrainerId(int id);
         (bool, string) CreatePlan(AddPlanVM plan);
         (bool, string) UpdatePlan(UpdatePlanVM plan);
         (bool, string) DeletePlan(int id);
@@ -22,6 +23,7 @@ namespace Gym.BLL.Service.Abstraction
         
         // ===== Analytics / Helper =====
         bool PlanExists(int planId);
+        int CountPlanForTrainer(int trainerid);
 
         int PlansCount();
     }

@@ -144,7 +144,7 @@ namespace Gym.DAL.Repo.Implementation
             {
                 var sessions = GymDb.sessions
                     .Include(t => t._Trainer).ThenInclude(u => u.User)
-                    .Where(a => a.TrainerId == trainerId).ToList();
+                    .Where(a => a.TrainerId == trainerId && a.PlanId == null).ToList();
                 if(!sessions.Any() || sessions == null)
                 {
                     return(false, null);
@@ -218,6 +218,11 @@ namespace Gym.DAL.Repo.Implementation
             catch (Exception ex) { 
                 return (false, ex.Message, null);
             }
+        }
+
+        public int CountSessionForTrainer(int trainerid)
+        {
+            return GymDb.sessions.Where(s => (s.TrainerId == trainerid && s.PlanId == null)).Count();
         }
     }
 }
