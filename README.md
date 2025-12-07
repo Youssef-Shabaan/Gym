@@ -132,8 +132,8 @@ Press **F5** to launch the system.
 
 ## 👥 Contributors
 
-* **Hussein Hashiem**
-* **Youssef Shaaban**
+* **[Hussein Hashiem](https://github.com/Hussein-Hashiem)**  
+* **[Youssef Shaaban](https://github.com/Youssef-Shabaan)**
 
 ---
 
